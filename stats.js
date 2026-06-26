@@ -100,38 +100,37 @@ function loadNodesLatest(latestTs) {
   };
 }
 
-// ---- 3. validators.csv latest snapshot (streamed — 278MB) -----------------
+// ---- 3. validators.csv latest snapshot (TAIL-READ — the file is large) -----
+// The newest tick's rows are at the end of the file, so we read only the last
+// few MB instead of streaming the whole multi-hundred-MB file on every build.
+// This keeps each publish fast and light (it was straining MSYS2's fork limits).
+// Column order is fixed: ts,validator_pubkey,bam_node_connection,stake,stake_pct.
 function loadValidatorsLatest(latestTs) {
-  return new Promise((resolve) => {
-    const rl = readline.createInterface({ input: fs.createReadStream(VALIDATORS), crlfDelay: Infinity });
-    let hdr = null, I = null;
-    const vals = [];
-    rl.on("line", (l) => {
-      if (!hdr) {
-        hdr = l.split(",");
-        I = { ts: hdr.indexOf("ts"), pk: hdr.indexOf("validator_pubkey"),
-              node: hdr.indexOf("bam_node_connection"), stake: hdr.indexOf("stake") };
-        return;
-      }
-      // cheap prefix check before splitting the whole line
-      if (l.lastIndexOf(latestTs, 0) !== 0) return;
-      const c = l.split(",");
-      if (c[I.ts] !== latestTs) return;
-      vals.push({ pk: c[I.pk], node: c[I.node], region: city(c[I.node]), stake: num(c[I.stake]) });
-    });
-    rl.on("close", () => {
-      vals.sort((a, b) => b.stake - a.stake);
-      const tot = vals.reduce((a, v) => a + v.stake, 0) || 1;
-      vals.forEach((v) => (v.share = (100 * v.stake) / tot));
-      const cumShare = (n) => vals.slice(0, n).reduce((a, v) => a + v.share, 0);
-      resolve({
-        count: vals.length,
-        valNakamoto: nakamoto(vals.map((v) => v.stake)),
-        top1Share: cumShare(1), top5Share: cumShare(5), top10Share: cumShare(10),
-        whales: vals.slice(0, 12).map((v) => ({ pk: v.pk, pkShort: v.pk.slice(0, 4) + "…" + v.pk.slice(-4), node: v.node, region: v.region, stake: v.stake, share: v.share })),
-      });
-    });
-  });
+  const fd = fs.openSync(VALIDATORS, "r");
+  const size = fs.fstatSync(fd).size;
+  const want = Math.min(size, 4 * 1024 * 1024); // 4MB tail ≫ one tick (~35KB)
+  const buf = Buffer.alloc(want);
+  fs.readSync(fd, buf, 0, want, size - want);
+  fs.closeSync(fd);
+  let text = buf.toString("utf8");
+  if (want < size) { const nl = text.indexOf("\n"); if (nl >= 0) text = text.slice(nl + 1); } // drop partial first line
+  const vals = [];
+  for (const l of text.split(/\r?\n/)) {
+    if (!l) continue;
+    const c = l.split(",");
+    if (c.length < 5 || c[0] !== latestTs) continue; // header row ("ts,…") and older ticks fall out here
+    vals.push({ pk: c[1], node: c[2], region: city(c[2]), stake: num(c[3]) });
+  }
+  vals.sort((a, b) => b.stake - a.stake);
+  const tot = vals.reduce((a, v) => a + v.stake, 0) || 1;
+  vals.forEach((v) => (v.share = (100 * v.stake) / tot));
+  const cumShare = (n) => vals.slice(0, n).reduce((a, v) => a + v.share, 0);
+  return {
+    count: vals.length,
+    valNakamoto: nakamoto(vals.map((v) => v.stake)),
+    top1Share: cumShare(1), top5Share: cumShare(5), top10Share: cumShare(10),
+    whales: vals.slice(0, 12).map((v) => ({ pk: v.pk, pkShort: v.pk.slice(0, 4) + "…" + v.pk.slice(-4), node: v.node, region: v.region, stake: v.stake, share: v.share })),
+  };
 }
 
 // ---- 4. detections ---------------------------------------------------------
