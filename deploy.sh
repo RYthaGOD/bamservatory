@@ -6,6 +6,9 @@
 #
 # Requires: git auth configured for push (gh auth / credential manager / SSH).
 set -euo pipefail
+# The ambient GITHUB_TOKEN env var is invalid and masks the working gh keyring
+# credentials; clear it so `git push` (via the gh credential helper) authenticates.
+unset GITHUB_TOKEN GH_TOKEN
 cd "$(dirname "$0")"
 DIR="${1:-d:/bam-net-ticks}"
 
