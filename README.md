@@ -4,7 +4,7 @@
 Marketplace (BAM).** No token, no chain — a public-good dashboard built entirely
 from the public BAM API.
 
-🔗 **Live:** https://bamservatory.xyz _(once the domain + Pages are connected)_
+🔗 **Live:** https://rythagod.github.io/bamservatory/ &nbsp;·&nbsp; _custom domain (bamservatory.xyz) coming_
 
 ---
 
