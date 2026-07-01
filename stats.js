@@ -175,10 +175,17 @@ function loadDetections() {
   const live = readLog(DETLOG);
   const liveCutovers = live.filter((e) => e.kind === "CUTOVER").length;
   const liveSignals = live.filter((e) => e.kind && e.kind.startsWith("SIGNAL")).length;
+  // A cutover only counts as "structural" if its precursor lead is PLAUSIBLE
+  // (>0 and ≤60 min). The live detector naively matches a cutover to the first
+  // same-region signal ever seen, so whale-driven flips get matched to stale
+  // week-old signals (lead_min in the hundreds/thousands) — those are NOT
+  // structural rollovers and must not be labelled as such on the dashboard.
   const feed = live.slice(-12).reverse().map((e) => ({
     ts: e.ts, kind: e.kind, region: e.kv.region,
     detail: e.kind === "CUTOVER" ? `${e.kv.old} → ${e.kv.new}` : `new ${e.kv.new_node}`,
-    structural: e.kind === "CUTOVER" ? e.kv.first_signal !== "none" : null,
+    structural: e.kind === "CUTOVER"
+      ? (e.kv.first_signal !== "none" && num(e.kv.lead_min) > 0 && num(e.kv.lead_min) <= 60)
+      : null,
   }));
 
   return { validated, rolloverPrecursors, liveCutovers, liveSignals, feed };
