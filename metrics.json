@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-01T00:18:07.369Z",
+  "generatedAt": "2026-07-01T00:34:07.897Z",
   "window": {
     "from": "2026-06-20T15:08:27Z",
-    "to": "2026-07-01T00:16:47Z",
-    "snapshots": 12039
+    "to": "2026-07-01T00:32:46Z",
+    "snapshots": 12047
   },
   "headline": {
     "bamStakeSOL": 141299410.55,
@@ -34,25 +34,25 @@
     "pct": {
       "min": 28.8026,
       "max": 34.5269,
-      "avg": 33.74513206246137,
+      "avg": 33.74470416701025,
       "cur": 33.0736
     },
     "hhi": {
       "min": 0.120123,
       "max": 0.136675,
-      "avg": 0.12165694575961379,
+      "avg": 0.1216566528596323,
       "cur": 0.12122
     },
     "vals": {
       "min": 336,
       "max": 391,
-      "avg": 383.7751474374948,
+      "avg": 383.7729725242799,
       "cur": 379
     },
     "nodes": {
       "min": 12,
       "max": 18,
-      "avg": 13.273361574881635,
+      "avg": 13.273844110566946,
       "cur": 14
     }
   },
@@ -1745,7 +1745,7 @@
       "nodes": 14
     },
     {
-      "ts": "2026-07-01T00:16:47Z",
+      "ts": "2026-07-01T00:32:46Z",
       "pct": 33.0736,
       "hhi": 0.12122,
       "vals": 379,
@@ -1817,7 +1817,7 @@
       "share": 3.749134522044129
     },
     {
-      "node": "dub-mainnet-bam-1-tee",
+      "node": "dub-mainnet-bam-2-tee",
       "region": "dub",
       "vals": 4,
       "stake": 4796553.34,
@@ -1958,7 +1958,7 @@
     {
       "pk": "krakeNd6ednDPEXxHAmoBs1qKVM8kLg79PvWF2mhXV1",
       "pkShort": "krak…hXV1",
-      "node": "dub-mainnet-bam-1-tee",
+      "node": "dub-mainnet-bam-2-tee",
       "region": "dub",
       "stake": 2999079.84,
       "share": 2.122499894904551
@@ -2147,8 +2147,15 @@
     ],
     "rolloverPrecursors": 15,
     "liveCutovers": 18,
-    "liveSignals": 8,
+    "liveSignals": 9,
     "feed": [
+      {
+        "ts": "2026-07-01T00:22:46Z",
+        "kind": "SIGNAL_XREGION",
+        "region": "dub",
+        "detail": "new dub-mainnet-bam-2-tee",
+        "structural": null
+      },
       {
         "ts": "2026-06-30T22:56:45Z",
         "kind": "SIGNAL",
@@ -2225,13 +2232,6 @@
         "region": "fra",
         "detail": "ams-mainnet-bam-1-tee → fra-mainnet-bam-2-tee",
         "structural": false
-      },
-      {
-        "ts": "2026-06-29T22:04:46Z",
-        "kind": "CUTOVER",
-        "region": "ams",
-        "detail": "fra-mainnet-bam-2-tee → ams-mainnet-bam-1-tee",
-        "structural": true
       }
     ]
   }
