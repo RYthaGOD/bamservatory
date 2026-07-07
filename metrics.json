@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-06T23:44:13.242Z",
+  "generatedAt": "2026-07-07T00:00:07.911Z",
   "window": {
     "from": "2026-06-20T15:08:27Z",
-    "to": "2026-07-06T23:42:46Z",
-    "snapshots": 16956
+    "to": "2026-07-06T23:58:47Z",
+    "snapshots": 16964
   },
   "headline": {
     "bamStakeSOL": 143145177.99,
@@ -34,25 +34,25 @@
     "pct": {
       "min": 27.3315,
       "max": 34.5269,
-      "avg": 33.25110179877248,
+      "avg": 33.25114470054151,
       "cur": 33.3328
     },
     "hhi": {
       "min": 0.119032,
       "max": 0.155007,
-      "avg": 0.12464933657702325,
+      "avg": 0.12465140214572072,
       "cur": 0.129035
     },
     "vals": {
       "min": 291,
       "max": 391,
-      "avg": 376.87538334512857,
+      "avg": 376.87726951190757,
       "cur": 380
     },
     "nodes": {
       "min": 12,
       "max": 18,
-      "avg": 13.899858457183297,
+      "avg": 13.90179203018156,
       "cur": 18
     }
   },
@@ -1759,7 +1759,7 @@
       "nodes": 18
     },
     {
-      "ts": "2026-07-06T23:42:46Z",
+      "ts": "2026-07-06T23:58:47Z",
       "pct": 33.3328,
       "hhi": 0.129035,
       "vals": 380,
@@ -1845,7 +1845,7 @@
       "share": 1.384192557486525
     },
     {
-      "node": "dfw-mainnet-bam-1-tee",
+      "node": "dfw-mainnet-bam-2-tee",
       "region": "dfw",
       "vals": 6,
       "stake": 1169830.53,
@@ -2348,8 +2348,15 @@
     ],
     "rolloverPrecursors": 15,
     "liveCutovers": 47,
-    "liveSignals": 82,
+    "liveSignals": 83,
     "feed": [
+      {
+        "ts": "2026-07-06T23:56:47Z",
+        "kind": "SIGNAL_XREGION",
+        "region": "dfw",
+        "detail": "new dfw-mainnet-bam-2-tee",
+        "structural": null
+      },
       {
         "ts": "2026-07-06T21:46:49Z",
         "kind": "SIGNAL_XREGION",
@@ -2422,13 +2429,6 @@
       },
       {
         "ts": "2026-07-04T18:36:50Z",
-        "kind": "SIGNAL",
-        "region": "ams",
-        "detail": "new ams-mainnet-bam-dev",
-        "structural": null
-      },
-      {
-        "ts": "2026-07-04T17:53:47Z",
         "kind": "SIGNAL",
         "region": "ams",
         "detail": "new ams-mainnet-bam-dev",
