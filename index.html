@@ -45,15 +45,15 @@
 <header>
   <h1><span>BAM</span>servatory</h1>
   <div class="sub">An independent transparency &amp; early-warning layer for Jito's Block Assembly Marketplace.</div>
-  <div class="meta">Window 2026-06-20 → 2026-07-24 · 30,738 snapshots @ ~60s · generated 2026-07-24T04:48Z · source: public BAM API</div>
+  <div class="meta">Window 2026-06-20 → 2026-07-24 · 30,744 snapshots @ ~60s · generated 2026-07-24T05:06Z · source: public BAM API</div>
 </header>
 
 <h2>BAM at a glance</h2>
 <div class="grid g4">
   <div class="card kpi big"><div class="v">33.2%</div><div class="l">of ALL Solana stake routed through BAM</div><div class="n">142.1M SOL</div></div>
-  <div class="card kpi"><div class="v">384</div><div class="l">validators connected</div><div class="n">across 15 regions</div></div>
+  <div class="card kpi"><div class="v">385</div><div class="l">validators connected</div><div class="n">across 15 regions</div></div>
   <div class="card kpi"><div class="v">17</div><div class="l">BAM nodes live</div><div class="n">busiest: fra (96 validators)</div></div>
-  <div class="card kpi"><div class="v">22.6%</div><div class="l">stake on the top node</div><div class="n mono">ams-mainnet-bam-1-tee</div></div>
+  <div class="card kpi"><div class="v">22.6%</div><div class="l">stake on the top node</div><div class="n mono">ams-mainnet-bam-2-tee</div></div>
 </div>
 
 <h2>Decentralization — how concentrated is BAM?</h2>
@@ -61,9 +61,9 @@
   <div class="card kpi"><div class="v bad">3</div><div class="l">Nakamoto coefficient (nodes)</div><div class="n">min nodes controlling &gt;50% of BAM stake</div></div>
   <div class="card kpi"><div class="v ok">27</div><div class="l">Nakamoto coefficient (validators)</div><div class="n">min validators controlling &gt;50%</div></div>
   <div class="card kpi"><div class="v bad">3</div><div class="l">Nakamoto coefficient (regions)</div><div class="n">geographic concentration</div></div>
-  <div class="card kpi"><div class="v">27%</div><div class="l">held by the top 10 validators</div><div class="n">top 1: 8.6% · top 5: 17.7%</div></div>
+  <div class="card kpi"><div class="v">27%</div><div class="l">held by the top 10 validators</div><div class="n">top 1: 8.6% · top 5: 17.6%</div></div>
 </div>
-<div class="note">A Nakamoto coefficient of <b>3</b> means just 3 BAM nodes control a majority of the stake flowing through the marketplace — and the network's single largest node by stake changed hands <b>60 times</b> in this window, driven by a handful of whale validators toggling between nodes (see Whale Watch). These are exactly the concentration dynamics a transparency layer should surface.</div>
+<div class="note">A Nakamoto coefficient of <b>3</b> means just 3 BAM nodes control a majority of the stake flowing through the marketplace — and the network's single largest node by stake changed hands <b>61 times</b> in this window, driven by a handful of whale validators toggling between nodes (see Whale Watch). These are exactly the concentration dynamics a transparency layer should surface.</div>
 
 <h2>Trends</h2>
 <div class="grid g2">
@@ -90,13 +90,13 @@
   </div>
 <div class="note">BAM periodically migrates validators between TEE nodes in coordinated, region-by-region rollovers. The Observatory detects these <b>before</b> they complete: when a new node appears in a region, a cutover in that region typically follows within ~30 minutes. <b>Validated on the 2026-06-24 event with 22-minute lead time (n=1 structural event; detector is live and accumulating more).</b> Live "leadership flips" below are mostly whale-driven stake toggles, not structural rollovers — the Observatory labels them as such rather than counting them as early-warning wins.</div>
 <div class="card" style="margin-top:12px;padding:4px 0">
-  <table><thead><tr><th>time (UTC)</th><th>event</th><th>type</th><th>detail</th></tr></thead><tbody><tr><td class="mono dim">07-24T02:10</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new slc-mainnet-bam-2-tee</td></tr><tr><td class="mono dim">07-23T23:43</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new dub-mainnet-bam-1-tee</td></tr><tr><td class="mono dim">07-23T20:13</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new sea-mainnet-bam-1-tee</td></tr><tr><td class="mono dim">07-23T20:10</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new tyo-mainnet-bam-dev-tee</td></tr><tr><td class="mono dim">07-23T18:34</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new slc-mainnet-bam-2-tee</td></tr><tr><td class="mono dim">07-23T18:34</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new slc-mainnet-bam-1-tee</td></tr><tr><td class="mono dim">07-23T04:54</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new tyo-mainnet-bam-dev-tee</td></tr><tr><td class="mono dim">07-22T20:45</td><td>CUTOVER</td><td><span class="pill warn">whale flip</span></td><td class="mono">ams-mainnet-bam-2-tee → ams-mainnet-bam-1-tee</td></tr><tr><td class="mono dim">07-22T20:45</td><td>SIGNAL</td><td><span class="pill dim">precursor</span></td><td class="mono">new ams-mainnet-bam-1-tee</td></tr><tr><td class="mono dim">07-22T20:30</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new fra-mainnet-bam-2-tee</td></tr><tr><td class="mono dim">07-22T20:30</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new ewr-mainnet-bam-1-tee</td></tr><tr><td class="mono dim">07-22T20:24</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new tyo-mainnet-bam-2-tee</td></tr></tbody></table>
+  <table><thead><tr><th>time (UTC)</th><th>event</th><th>type</th><th>detail</th></tr></thead><tbody><tr><td class="mono dim">07-24T05:04</td><td>CUTOVER</td><td><span class="pill warn">whale flip</span></td><td class="mono">ams-mainnet-bam-1-tee → ams-mainnet-bam-2-tee</td></tr><tr><td class="mono dim">07-24T05:04</td><td>SIGNAL</td><td><span class="pill dim">precursor</span></td><td class="mono">new ams-mainnet-bam-2-tee</td></tr><tr><td class="mono dim">07-24T04:52</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new tyo-mainnet-bam-1-tee</td></tr><tr><td class="mono dim">07-24T04:49</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new sqq-mainnet-bam-2-tee</td></tr><tr><td class="mono dim">07-24T02:10</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new slc-mainnet-bam-2-tee</td></tr><tr><td class="mono dim">07-23T23:43</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new dub-mainnet-bam-1-tee</td></tr><tr><td class="mono dim">07-23T20:13</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new sea-mainnet-bam-1-tee</td></tr><tr><td class="mono dim">07-23T20:10</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new tyo-mainnet-bam-dev-tee</td></tr><tr><td class="mono dim">07-23T18:34</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new slc-mainnet-bam-2-tee</td></tr><tr><td class="mono dim">07-23T18:34</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new slc-mainnet-bam-1-tee</td></tr><tr><td class="mono dim">07-23T04:54</td><td>SIGNAL_XREGION</td><td><span class="pill dim">precursor</span></td><td class="mono">new tyo-mainnet-bam-dev-tee</td></tr><tr><td class="mono dim">07-22T20:45</td><td>CUTOVER</td><td><span class="pill warn">whale flip</span></td><td class="mono">ams-mainnet-bam-2-tee → ams-mainnet-bam-1-tee</td></tr></tbody></table>
 </div>
 
 <h2>Current topology — 17 nodes</h2>
 <div class="card" style="padding:4px 0">
   <table><thead><tr><th>node</th><th>region</th><th class="r">validators</th><th class="r">stake</th><th class="r">share</th><th></th></tr></thead><tbody><tr>
-  <td class="mono">ams-mainnet-bam-1-tee</td><td>ams</td>
+  <td class="mono">ams-mainnet-bam-2-tee</td><td>ams</td>
   <td class="r">63</td><td class="r">32.16M</td>
   <td class="r">22.6%</td>
   <td class="barcell"><span class="bar" style="width:90.5084754635165%"></span></td></tr><tr>
@@ -104,7 +104,7 @@
   <td class="r">96</td><td class="r">25.63M</td>
   <td class="r">18.0%</td>
   <td class="barcell"><span class="bar" style="width:72.11771445810002%"></span></td></tr><tr>
-  <td class="mono">sqq-mainnet-bam-1-tee</td><td>sqq</td>
+  <td class="mono">sqq-mainnet-bam-2-tee</td><td>sqq</td>
   <td class="r">19</td><td class="r">18.02M</td>
   <td class="r">12.7%</td>
   <td class="barcell"><span class="bar" style="width:50.72228574771854%"></span></td></tr><tr>
@@ -116,7 +116,7 @@
   <td class="r">23</td><td class="r">16.26M</td>
   <td class="r">11.4%</td>
   <td class="barcell"><span class="bar" style="width:45.76508183576365%"></span></td></tr><tr>
-  <td class="mono">tyo-mainnet-bam-2-tee</td><td>tyo</td>
+  <td class="mono">tyo-mainnet-bam-1-tee</td><td>tyo</td>
   <td class="r">43</td><td class="r">11.69M</td>
   <td class="r">8.2%</td>
   <td class="barcell"><span class="bar" style="width:32.886589226834296%"></span></td></tr><tr>
@@ -171,52 +171,52 @@
   <table><thead><tr><th class="r">#</th><th>validator</th><th>node region</th><th class="r">stake</th><th class="r">share</th><th></th></tr></thead><tbody><tr>
   <td class="r dim">1</td><td class="mono">DRpb…21hy</td>
   <td>ewr</td><td class="r">12.19M</td>
-  <td class="r">8.59%</td>
-  <td class="barcell"><span class="bar amber" style="width:68.7523050819137%"></span></td></tr><tr>
+  <td class="r">8.58%</td>
+  <td class="barcell"><span class="bar amber" style="width:68.6344541676147%"></span></td></tr><tr>
   <td class="r dim">2</td><td class="mono">5EhG…ULeC</td>
   <td>tyo</td><td class="r">3.60M</td>
-  <td class="r">2.54%</td>
-  <td class="barcell"><span class="bar amber" style="width:20.286544160493165%"></span></td></tr><tr>
+  <td class="r">2.53%</td>
+  <td class="barcell"><span class="bar amber" style="width:20.251770231467326%"></span></td></tr><tr>
   <td class="r dim">3</td><td class="mono">Fc6N…ULGD</td>
   <td>sin</td><td class="r">3.31M</td>
-  <td class="r">2.34%</td>
-  <td class="barcell"><span class="bar amber" style="width:18.68903207833778%"></span></td></tr><tr>
+  <td class="r">2.33%</td>
+  <td class="barcell"><span class="bar amber" style="width:18.656996504909785%"></span></td></tr><tr>
   <td class="r dim">4</td><td class="mono">krak…hXV1</td>
   <td>dub</td><td class="r">3.01M</td>
   <td class="r">2.12%</td>
-  <td class="barcell"><span class="bar amber" style="width:16.983134045062197%"></span></td></tr><tr>
+  <td class="barcell"><span class="bar amber" style="width:16.95402261567101%"></span></td></tr><tr>
   <td class="r dim">5</td><td class="mono">GBQ2…AAAA</td>
   <td>ams</td><td class="r">2.94M</td>
   <td class="r">2.07%</td>
-  <td class="barcell"><span class="bar amber" style="width:16.59276881964543%"></span></td></tr><tr>
+  <td class="barcell"><span class="bar amber" style="width:16.564326529982303%"></span></td></tr><tr>
   <td class="r dim">6</td><td class="mono">6y7V…syrK</td>
   <td>sqq</td><td class="r">2.92M</td>
-  <td class="r">2.06%</td>
-  <td class="barcell"><span class="bar amber" style="width:16.44497150224993%"></span></td></tr><tr>
+  <td class="r">2.05%</td>
+  <td class="barcell"><span class="bar amber" style="width:16.416782557532336%"></span></td></tr><tr>
   <td class="r dim">7</td><td class="mono">GSTa…3XKc</td>
   <td>ams</td><td class="r">2.50M</td>
   <td class="r">1.76%</td>
-  <td class="barcell"><span class="bar amber" style="width:14.109305380659343%"></span></td></tr><tr>
+  <td class="barcell"><span class="bar amber" style="width:14.085120089166155%"></span></td></tr><tr>
   <td class="r dim">8</td><td class="mono">5ejb…Yj1z</td>
   <td>sqq</td><td class="r">2.50M</td>
   <td class="r">1.76%</td>
-  <td class="barcell"><span class="bar amber" style="width:14.109305324276605%"></span></td></tr><tr>
+  <td class="barcell"><span class="bar amber" style="width:14.085120032880065%"></span></td></tr><tr>
   <td class="r dim">9</td><td class="mono">BSVc…Edwq</td>
   <td>sqq</td><td class="r">2.50M</td>
   <td class="r">1.76%</td>
-  <td class="barcell"><span class="bar amber" style="width:14.109166961032068%"></span></td></tr><tr>
+  <td class="barcell"><span class="bar amber" style="width:14.084981906809174%"></span></td></tr><tr>
   <td class="r dim">10</td><td class="mono">76rc…TBBJ</td>
   <td>ams</td><td class="r">2.50M</td>
   <td class="r">1.76%</td>
-  <td class="barcell"><span class="bar amber" style="width:14.109123659087569%"></span></td></tr><tr>
+  <td class="barcell"><span class="bar amber" style="width:14.084938679090168%"></span></td></tr><tr>
   <td class="r dim">11</td><td class="mono">HpcB…uKac</td>
   <td>sqq</td><td class="r">2.50M</td>
   <td class="r">1.76%</td>
-  <td class="barcell"><span class="bar amber" style="width:14.095690358461354%"></span></td></tr><tr>
+  <td class="barcell"><span class="bar amber" style="width:14.071528404990248%"></span></td></tr><tr>
   <td class="r dim">12</td><td class="mono">DUND…zYw4</td>
   <td>tyo</td><td class="r">2.50M</td>
   <td class="r">1.76%</td>
-  <td class="barcell"><span class="bar amber" style="width:14.095685002101034%"></span></td></tr></tbody></table>
+  <td class="barcell"><span class="bar amber" style="width:14.071523057811467%"></span></td></tr></tbody></table>
 </div>
 <div class="note">Stake leadership of the BAM network is steered by a small set of large validators. Surfacing <i>who</i> they are and <i>where</i> they route makes BAM's power distribution legible to the Solana ecosystem — a public good no tool provides today.</div>
 
