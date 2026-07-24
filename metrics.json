@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-24T05:22:00.200Z",
+  "generatedAt": "2026-07-24T05:36:58.368Z",
   "window": {
     "from": "2026-06-20T15:08:27Z",
-    "to": "2026-07-24T05:19:47Z",
-    "snapshots": 30749
+    "to": "2026-07-24T05:34:46Z",
+    "snapshots": 30754
   },
   "headline": {
     "bamStakeSOL": 141799082.72,
@@ -13,7 +13,7 @@
     "topNode": "ams-mainnet-bam-2-tee",
     "topNodeShare": 22.680087,
     "busiestByVals": {
-      "node": "fra-mainnet-bam-2-tee",
+      "node": "fra-mainnet-bam-1-tee",
       "region": "fra",
       "vals": 95,
       "stake": 25381779.51,
@@ -34,25 +34,25 @@
     "pct": {
       "min": 27.3315,
       "max": 34.5269,
-      "avg": 33.02858932323074,
+      "avg": 33.028619171490604,
       "cur": 33.1678
     },
     "hhi": {
       "min": 0.119032,
       "max": 0.155007,
-      "avg": 0.12647508276691558,
+      "avg": 0.12647697193860594,
       "cur": 0.138185
     },
     "vals": {
       "min": 291,
       "max": 391,
-      "avg": 376.83326287033725,
+      "avg": 376.83442804188076,
       "cur": 383
     },
     "nodes": {
       "min": 12,
       "max": 18,
-      "avg": 14.931314839506976,
+      "avg": 14.931683683423294,
       "cur": 17
     }
   },
@@ -1745,7 +1745,7 @@
       "nodes": 17
     },
     {
-      "ts": "2026-07-24T05:19:47Z",
+      "ts": "2026-07-24T05:34:46Z",
       "pct": 33.1678,
       "hhi": 0.138185,
       "vals": 383,
@@ -1761,7 +1761,7 @@
       "share": 22.68008741723403
     },
     {
-      "node": "fra-mainnet-bam-2-tee",
+      "node": "fra-mainnet-bam-1-tee",
       "region": "fra",
       "vals": 95,
       "stake": 25381779.51,
@@ -2399,8 +2399,15 @@
     ],
     "rolloverPrecursors": 15,
     "liveCutovers": 60,
-    "liveSignals": 147,
+    "liveSignals": 148,
     "feed": [
+      {
+        "ts": "2026-07-24T05:25:47Z",
+        "kind": "SIGNAL_XREGION",
+        "region": "fra",
+        "detail": "new fra-mainnet-bam-1-tee",
+        "structural": null
+      },
       {
         "ts": "2026-07-24T05:19:47Z",
         "kind": "SIGNAL_XREGION",
@@ -2476,13 +2483,6 @@
         "kind": "SIGNAL_XREGION",
         "region": "slc",
         "detail": "new slc-mainnet-bam-2-tee",
-        "structural": null
-      },
-      {
-        "ts": "2026-07-23T18:34:46Z",
-        "kind": "SIGNAL_XREGION",
-        "region": "slc",
-        "detail": "new slc-mainnet-bam-1-tee",
         "structural": null
       }
     ]
