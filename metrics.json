@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-07-30T13:54:51.982Z",
+  "generatedAt": "2026-07-30T14:12:48.989Z",
   "window": {
     "from": "2026-06-20T15:08:27Z",
-    "to": "2026-07-30T13:52:45Z",
-    "snapshots": 34166
+    "to": "2026-07-30T14:10:46Z",
+    "snapshots": 34172
   },
   "headline": {
     "bamStakeSOL": 139369003.7,
@@ -34,25 +34,25 @@
     "pct": {
       "min": 17.9618,
       "max": 34.5269,
-      "avg": 33.01466392905192,
+      "avg": 33.01457765421948,
       "cur": 32.5548
     },
     "hhi": {
       "min": 0.119032,
       "max": 0.208317,
-      "avg": 0.12763470236492186,
+      "avg": 0.1276365854793375,
       "cur": 0.138111
     },
     "vals": {
       "min": 235,
       "max": 391,
-      "avg": 377.23608265527133,
+      "avg": 377.2364801591947,
       "cur": 380
     },
     "nodes": {
       "min": 10,
       "max": 18,
-      "avg": 15.045132587952935,
+      "avg": 15.045270982090601,
       "cur": 16
     }
   },
@@ -1745,7 +1745,7 @@
       "nodes": 16
     },
     {
-      "ts": "2026-07-30T13:52:45Z",
+      "ts": "2026-07-30T14:10:46Z",
       "pct": 32.5548,
       "hhi": 0.138111,
       "vals": 380,
@@ -2402,8 +2402,15 @@
     ],
     "rolloverPrecursors": 15,
     "liveCutovers": 62,
-    "liveSignals": 164,
+    "liveSignals": 165,
     "feed": [
+      {
+        "ts": "2026-07-30T14:04:45Z",
+        "kind": "SIGNAL_XREGION",
+        "region": "tyo",
+        "detail": "new tyo-mainnet-bam-dev-tee",
+        "structural": null
+      },
       {
         "ts": "2026-07-29T19:29:45Z",
         "kind": "SIGNAL_XREGION",
@@ -2479,13 +2486,6 @@
         "kind": "SIGNAL_XREGION",
         "region": "lax",
         "detail": "new lax-mainnet-bam-2-tee",
-        "structural": null
-      },
-      {
-        "ts": "2026-07-27T23:48:46Z",
-        "kind": "SIGNAL_XREGION",
-        "region": "tyo",
-        "detail": "new tyo-mainnet-bam-dev-tee",
         "structural": null
       }
     ]
