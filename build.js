@@ -13,6 +13,9 @@ const inArg = process.argv.indexOf("--in");
 const IN = inArg >= 0 ? process.argv[inArg + 1] : path.join(__dirname, "metrics.json");
 const outArg = process.argv.indexOf("--out");
 const OUT = outArg >= 0 ? process.argv[outArg + 1] : path.join(__dirname, "index.html");
+// Absolute origin — needed for social-card (og:/twitter:) URLs, which cannot be relative.
+const siteArg = process.argv.indexOf("--site");
+const SITE = (siteArg >= 0 ? process.argv[siteArg + 1] : "https://rythagod.github.io/bamservatory").replace(/\/$/, "");
 
 const M = JSON.parse(fs.readFileSync(IN, "utf8"));
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -71,10 +74,34 @@ const validated = det.validated.map((v) => `
     </div>
   </div>`).join("");
 
+// ---- brand: social blurb + BAMsey sentinel state ---------------------------
+// The sentinel badge is driven by live data, not decoration: it goes amber the
+// moment node concentration crosses the alert threshold (Nakamoto <= 3).
+const social = `BAM routes ${fmt(hl.bamStakePct, 1)}% of all Solana stake (${fmt(hl.bamStakeSOL / 1e6, 1)}M SOL) through ${fmt(hl.nodeCount)} nodes for ${fmt(hl.validatorCount)} validators. Node Nakamoto coefficient: ${d.nodeNakamoto}. Independent, open telemetry — concentration, whale watch and structural-rollover early warning.`;
+const alerting = d.nodeNakamoto <= 3;
+const concentrationNote = `Just ${d.nodeNakamoto} of the ${fmt(hl.nodeCount)} live BAM nodes hold a majority of marketplace stake, the largest holding ${fmt(hl.topNodeShare, 1)}% on its own — and the top node by stake changed hands <b>${M.leadershipChanges.length} times</b> in this window, driven by a handful of whale validators toggling between nodes (see Whale Watch). These are exactly the concentration dynamics a transparency layer should surface.`;
+const sentinel = alerting
+  ? { cls: "alert", label: `Alert · Nakamoto ${d.nodeNakamoto}`, title: `Node Nakamoto coefficient is ${d.nodeNakamoto} — ${d.nodeNakamoto} BAM nodes control a majority of marketplace stake.` }
+  : { cls: "", label: "Sentinel active", title: `Node Nakamoto coefficient is ${d.nodeNakamoto}. Concentration within normal range.` };
+
 const html = `<!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>BAMservatory — independent transparency for Jito's Block Assembly Marketplace</title>
+<meta name="description" content="${esc(social)}">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="BAMservatory">
+<meta property="og:title" content="BAMservatory — independent transparency for Jito's Block Assembly Marketplace">
+<meta property="og:description" content="${esc(social)}">
+<meta property="og:url" content="${SITE}/">
+<meta property="og:image" content="${SITE}/assets/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="BAMservatory — independent transparency for BAM">
+<meta name="twitter:description" content="${esc(social)}">
+<meta name="twitter:image" content="${SITE}/assets/og.jpg">
 <style>
   :root{--bg:#0a0e14;--card:#121822;--card2:#0e141d;--ln:#1f2a37;--tx:#dbe4ee;--dim:#7488a0;--teal:#5eead4;--amber:#fbbf24;--red:#f87171;--green:#34d399}
   *{box-sizing:border-box}
@@ -85,7 +112,23 @@ const html = `<!doctype html>
   h1{margin:0 0 4px;font-size:22px;letter-spacing:-.3px}
   h1 span{color:var(--teal)}
   .sub{color:var(--dim);font-size:13px}
-  .meta{color:var(--dim);font-size:12px;margin-top:8px}
+  .meta{color:var(--dim);font-size:12px;margin-top:12px}
+  .brand{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+  .mark{width:48px;height:48px;flex:none;border-radius:11px;border:1px solid var(--ln);background:var(--card2);display:block}
+  .sentinel{display:flex;align-items:center;gap:10px;margin-left:auto;background:var(--card2);border:1px solid var(--ln);border-radius:30px;padding:7px 15px 7px 7px}
+  .sentinel img{width:34px;height:34px;flex:none;border-radius:50%;object-fit:cover;border:1px solid var(--teal);background:#000}
+  .sentinel .s1{display:block;font-size:11px;font-weight:600;line-height:1.3;color:var(--teal)}
+  .sentinel .s2{display:block;font-size:10px;color:var(--dim);line-height:1.3}
+  .sentinel.alert{border-color:rgba(251,191,36,.35)}
+  .sentinel.alert img{border-color:var(--amber)}
+  .sentinel.alert .s1{color:var(--amber)}
+  .alertcard{display:flex;gap:16px;align-items:center;background:var(--card2);border:1px solid var(--ln);border-left:3px solid var(--amber);border-radius:8px;padding:14px 16px;margin-top:10px}
+  .alertcard img{width:84px;height:84px;flex:none;border-radius:8px;object-fit:cover;border:1px solid var(--ln)}
+  .alertcard .t{font-size:12.5px;color:var(--dim)}
+  .alertcard .t b{color:var(--tx)}
+  .fbrand{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+  .fbrand img{width:56px;height:56px;flex:none;border-radius:50%;object-fit:cover;object-position:52% 26%;border:1px solid var(--ln)}
+  @media(max-width:640px){.sentinel{margin-left:0}.alertcard img{width:64px;height:64px}}
   h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin:30px 0 12px;font-weight:600}
   .grid{display:grid;gap:14px}
   .g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
@@ -96,6 +139,8 @@ const html = `<!doctype html>
   .kpi .n{font-size:11px;color:var(--dim);margin-top:6px}
   .big .v{font-size:34px}
   .v.bad{color:var(--red)}.v.warn{color:var(--amber)}.v.ok{color:var(--green)}
+  .tblcard{padding:4px 0;overflow-x:auto}
+  .tblcard table{min-width:560px}
   table{width:100%;border-collapse:collapse;font-size:13px}
   th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--ln)}
   th{color:var(--dim);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
@@ -116,8 +161,20 @@ const html = `<!doctype html>
 <body><div class="wrap">
 
 <header>
-  <h1><span>BAM</span>servatory</h1>
-  <div class="sub">An independent transparency &amp; early-warning layer for Jito's Block Assembly Marketplace.</div>
+  <div class="brand">
+    <img class="mark" src="assets/logo.png" width="48" height="48" alt="BAMservatory emblem">
+    <div>
+      <h1><span>BAM</span>servatory</h1>
+      <div class="sub">An independent transparency &amp; early-warning layer for Jito's Block Assembly Marketplace.</div>
+    </div>
+    <div class="sentinel ${sentinel.cls}" title="${esc(sentinel.title)}">
+      <img src="assets/bamsey.png" width="34" height="34" alt="BAMsey, the Observatory sentinel">
+      <div>
+        <span class="s1 mono">BAMsey · ${esc(sentinel.label)}</span>
+        <span class="s2">observatory telemetry sentinel</span>
+      </div>
+    </div>
+  </div>
   <div class="meta">Window ${day(M.window.from)} → ${day(M.window.to)} · ${fmt(M.window.snapshots)} snapshots @ ~60s · generated ${esc(M.generatedAt.slice(0, 16))}Z · source: public BAM API</div>
 </header>
 
@@ -136,7 +193,12 @@ const html = `<!doctype html>
   <div class="card kpi"><div class="v ${nk(d.regionNakamoto)}">${d.regionNakamoto}</div><div class="l">Nakamoto coefficient (regions)</div><div class="n">geographic concentration</div></div>
   <div class="card kpi"><div class="v">${fmt(d.top10ValShare, 0)}%</div><div class="l">held by the top 10 validators</div><div class="n">top 1: ${fmt(d.top1ValShare, 1)}% · top 5: ${fmt(d.top5ValShare, 1)}%</div></div>
 </div>
-<div class="note">A Nakamoto coefficient of <b>${d.nodeNakamoto}</b> means just ${d.nodeNakamoto} BAM nodes control a majority of the stake flowing through the marketplace — and the network's single largest node by stake changed hands <b>${M.leadershipChanges.length} times</b> in this window, driven by a handful of whale validators toggling between nodes (see Whale Watch). These are exactly the concentration dynamics a transparency layer should surface.</div>
+${alerting
+  ? `<div class="alertcard">
+      <img src="assets/bamsey-alert.jpg" width="84" height="84" alt="BAMsey in alert state">
+      <div class="t"><b>Concentration alert — node Nakamoto coefficient is ${d.nodeNakamoto}.</b> ${concentrationNote}</div>
+     </div>`
+  : `<div class="note">A Nakamoto coefficient of <b>${d.nodeNakamoto}</b> means just ${d.nodeNakamoto} BAM nodes control a majority of the stake flowing through the marketplace. ${concentrationNote}</div>`}
 
 <h2>Trends</h2>
 <div class="grid g2">
@@ -147,22 +209,26 @@ const html = `<!doctype html>
 <h2>Early warning — structural rollover detection</h2>
 ${validated}
 <div class="note">BAM periodically migrates validators between TEE nodes in coordinated, region-by-region rollovers. The Observatory detects these <b>before</b> they complete: when a new node appears in a region, a cutover in that region typically follows within ~30 minutes. <b>Validated on the 2026-06-24 event with ${det.validated[0] ? det.validated[0].lead_min : 0}-minute lead time (n=1 structural event; detector is live and accumulating more).</b> Live "leadership flips" below are mostly whale-driven stake toggles, not structural rollovers — the Observatory labels them as such rather than counting them as early-warning wins.</div>
-<div class="card" style="margin-top:12px;padding:4px 0">
+<div class="card tblcard" style="margin-top:12px">
   <table><thead><tr><th>time (UTC)</th><th>event</th><th>type</th><th>detail</th></tr></thead><tbody>${feedRows}</tbody></table>
 </div>
 
 <h2>Current topology — ${fmt(hl.nodeCount)} nodes</h2>
-<div class="card" style="padding:4px 0">
+<div class="card tblcard">
   <table><thead><tr><th>node</th><th>region</th><th class="r">validators</th><th class="r">stake</th><th class="r">share</th><th></th></tr></thead><tbody>${nodeRows}</tbody></table>
 </div>
 
 <h2>Whale watch — who controls BAM stake</h2>
-<div class="card" style="padding:4px 0">
+<div class="card tblcard">
   <table><thead><tr><th class="r">#</th><th>validator</th><th>node region</th><th class="r">stake</th><th class="r">share</th><th></th></tr></thead><tbody>${whaleRows}</tbody></table>
 </div>
 <div class="note">Stake leadership of the BAM network is steered by a small set of large validators. Surfacing <i>who</i> they are and <i>where</i> they route makes BAM's power distribution legible to the Solana ecosystem — a public good no tool provides today.</div>
 
 <footer>
+  <div class="fbrand">
+    <img src="assets/bamsey-hero.jpg" width="56" height="56" alt="BAMsey, the BAMservatory sentinel">
+    <div><b style="color:var(--tx)">BAMsey</b> — the Observatory's sentinel. Every 60 seconds he re-reads the public BAM API, recomputes concentration, and flags a structural rollover the moment its precursor appears. ${fmt(M.window.snapshots)} snapshots so far, no gaps, no paywall.</div>
+  </div>
   <b>Methodology.</b> All figures are computed from the public BAM API (<code>/nodes</code>, <code>/validators</code>, <code>/bam_stake</code>), sampled every ~60 seconds and flattened to CSV. Nakamoto coefficient = minimum entities whose cumulative stake exceeds 50%. HHI = Herfindahl–Hirschman index of node stake shares. Early-warning detection compares consecutive node sets and times region cutovers against precursor node appearances. No private data, no token, no chain — an independent observatory.<br><br>
   Built for review by the Jito &amp; Solana Foundations as a candidate ecosystem public good. Numbers reflect the capture window above and update as new data lands.
 </footer>

@@ -1,3 +1,5 @@
+<img src="assets/logo.png" width="88" align="left" alt="BAMservatory emblem">
+
 # BAMservatory
 
 **An independent transparency & early-warning layer for Jito's Block Assembly
@@ -5,6 +7,8 @@ Marketplace (BAM).** No token, no chain — a public-good dashboard built entire
 from the public BAM API.
 
 🔗 **Live:** https://rythagod.github.io/bamservatory/ &nbsp;·&nbsp; _custom domain (bamservatory.xyz) coming_
+
+<br clear="left">
 
 ---
 
@@ -60,6 +64,18 @@ region cutovers against precursor node appearances.
 - Data is reverse-engineered from the public API; BAM operators have richer
   internal telemetry. This project's value is **independence and indexing**, not
   privileged access.
+
+## BAMsey
+
+<img src="assets/bamsey.png" width="72" align="left" alt="BAMsey, the Observatory sentinel">
+
+The Observatory's sentinel. Every 60 seconds he re-reads the public BAM API,
+recomputes concentration, and raises a flag the moment a structural rollover's
+precursor appears. The status badge in the site header is driven by live data,
+not decoration: it turns amber whenever the node Nakamoto coefficient falls to 3
+or below.
+
+<br clear="left">
 
 ## License
 
