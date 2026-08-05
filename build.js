@@ -18,6 +18,9 @@ const siteArg = process.argv.indexOf("--site");
 const SITE = (siteArg >= 0 ? process.argv[siteArg + 1] : "https://rythagod.github.io/bamservatory").replace(/\/$/, "");
 
 const M = JSON.parse(fs.readFileSync(IN, "utf8"));
+// Optional — the dashboard builds fine without it (fresh clone, or brief.js unrun).
+const BRIEF = path.join(path.dirname(IN), "briefing.json");
+const B = fs.existsSync(BRIEF) ? JSON.parse(fs.readFileSync(BRIEF, "utf8")) : null;
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const fmt = (n, d = 0) => Number(n).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
 const day = (ts) => ts.slice(0, 10);
@@ -84,6 +87,21 @@ const sentinel = alerting
   ? { cls: "alert", label: `Alert · Nakamoto ${d.nodeNakamoto}`, title: `Node Nakamoto coefficient is ${d.nodeNakamoto} — ${d.nodeNakamoto} BAM nodes control a majority of marketplace stake.` }
   : { cls: "", label: "Sentinel active", title: `Node Nakamoto coefficient is ${d.nodeNakamoto}. Concentration within normal range.` };
 
+// ---- BAMsey's briefing ------------------------------------------------------
+// Provenance is stated on the page: a machine-written note is only credible here
+// if the reader can see how it was produced and that its figures were checked.
+const briefing = !B ? "" : `
+<div class="brief">
+  <img src="assets/bamsey.png" width="44" height="44" alt="BAMsey">
+  <div>
+    <div class="who">BAMsey's read</div>
+    <div class="say">${esc(B.text)}</div>
+    <div class="prov">${B.source === "llm"
+      ? `Written by <code>${esc(B.model)}</code> from the published metrics · <span class="ok">✓ every figure cross-checked against the dataset before publishing</span>`
+      : `Generated deterministically from the published metrics`} · ${esc(B.generatedAt.slice(0, 16))}Z</div>
+  </div>
+</div>`;
+
 const html = `<!doctype html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -126,6 +144,12 @@ const html = `<!doctype html>
   .alertcard img{width:84px;height:84px;flex:none;border-radius:8px;object-fit:cover;border:1px solid var(--ln)}
   .alertcard .t{font-size:12.5px;color:var(--dim)}
   .alertcard .t b{color:var(--tx)}
+  .brief{display:flex;gap:16px;background:linear-gradient(180deg,rgba(94,234,212,.05),transparent);border:1px solid var(--ln);border-radius:10px;padding:16px 18px;margin-top:14px}
+  .brief>img{width:44px;height:44px;flex:none;border-radius:50%;object-fit:cover;border:1px solid var(--teal);background:#000}
+  .brief .who{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--teal);margin-bottom:5px}
+  .brief .say{font-size:14.5px;line-height:1.62}
+  .brief .prov{margin-top:9px;font-size:11px;color:var(--dim)}
+  .brief .prov .ok{color:var(--green)}
   .fbrand{display:flex;gap:14px;align-items:center;margin-bottom:14px}
   .fbrand img{width:56px;height:56px;flex:none;border-radius:50%;object-fit:cover;object-position:52% 26%;border:1px solid var(--ln)}
   @media(max-width:640px){.sentinel{margin-left:0}.alertcard img{width:64px;height:64px}}
@@ -185,6 +209,7 @@ const html = `<!doctype html>
   <div class="card kpi"><div class="v">${fmt(hl.nodeCount)}</div><div class="l">BAM nodes live</div><div class="n">busiest: ${esc(hl.busiestByVals.region)} (${fmt(hl.busiestByVals.vals)} validators)</div></div>
   <div class="card kpi"><div class="v">${fmt(hl.topNodeShare, 1)}%</div><div class="l">stake on the top node</div><div class="n mono">${esc(hl.topNode)}</div></div>
 </div>
+${briefing}
 
 <h2>Decentralization — how concentrated is BAM?</h2>
 <div class="grid g4">

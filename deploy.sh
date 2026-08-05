@@ -13,13 +13,16 @@ cd "$(dirname "$0")"
 DIR="${1:-d:/bam-net-ticks}"
 
 node stats.js --dir "$DIR"
+# BAMsey's briefing is best-effort: it self-throttles, and a bad key or an API
+# outage must never block a data publish. It always leaves a usable briefing.json.
+node brief.js || echo "brief.js failed — publishing with the previous briefing."
 node build.js
 
-if git diff --quiet -- index.html metrics.json; then
+if git diff --quiet -- index.html metrics.json briefing.json; then
   echo "no change — nothing to publish."
   exit 0
 fi
-git add index.html metrics.json
+git add index.html metrics.json briefing.json
 git commit -m "data refresh $(date -u +%Y-%m-%dT%H:%MZ)" --quiet
 git push --quiet
 echo "published $(date -u +%Y-%m-%dT%H:%MZ)."

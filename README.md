@@ -31,14 +31,17 @@ Observatory surfaces:
 | File | Role |
 |---|---|
 | `stats.js` | Streams the captured BAM data → `metrics.json` (all computation lives here) |
-| `build.js` | Renders `metrics.json` → a single self-contained `index.html` (inline CSS, server-rendered SVG, no JS, no deps) |
+| `brief.js` | Writes `briefing.json` — BAMsey's situational note (see below) |
+| `build.js` | Renders `metrics.json` + `briefing.json` → a single self-contained `index.html` (inline CSS, server-rendered SVG, no JS, no deps) |
 | `metrics.json` | Open data export — the numbers behind the dashboard |
+| `briefing.json` | The published briefing, with its provenance |
 | `index.html` | The dashboard GitHub Pages serves |
 
 Rebuild from a capture directory (defaults to `d:/bam-net-ticks`):
 
 ```bash
 node stats.js --dir /path/to/capture   # → metrics.json
+node brief.js                          # → briefing.json
 node build.js                          # → index.html
 ```
 
@@ -76,6 +79,40 @@ not decoration: it turns amber whenever the node Nakamoto coefficient falls to 3
 or below.
 
 <br clear="left">
+
+### The briefing, and why you can trust its numbers
+
+`brief.js` asks a language model for the short situational note at the top of the
+dashboard. A dashboard whose whole claim is *verifiable numbers* cannot hand a
+language model a microphone, so the model is deliberately boxed in:
+
+1. **It never sees the raw data and never does arithmetic.** Every figure is
+   computed by `stats.js` and handed over as a closed `FACTS` set. The model's job
+   is to decide what *matters*, not what is *true*.
+2. **Every numeral it writes back is checked** against that set before publication
+   (with a tolerance for presentation rounding). A note citing any figure that
+   isn't in the data is rejected and regenerated.
+3. **If it fails twice, it is discarded** and a deterministic, template-generated
+   briefing is published instead. The page can therefore never show an invented
+   number — the worst case is a duller sentence.
+4. **The provenance is printed on the page**: which model wrote it, when, and
+   whether the figures were cross-checked.
+
+It self-throttles to at most one call per hour and refreshes at least every six
+hours, so it costs cents per month and cannot spam the API.
+
+```bash
+# Configure (never commit the key — .env is gitignored)
+echo 'OPENAI_API_KEY=sk-...' > .env
+OPENAI_MODEL=gpt-4o-mini node brief.js --force
+
+node brief.js --dry-run       # show the exact prompt + allowed numbers, call nothing
+node brief.js --list-models   # what this key can reach
+```
+
+There is no browser-side API call anywhere on this site, and no key is ever
+shipped to a visitor — the briefing is generated at build time and baked into the
+static HTML.
 
 ## License
 
