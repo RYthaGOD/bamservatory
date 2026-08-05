@@ -95,7 +95,7 @@
       </div>
     </div>
   </div>
-  <div class="meta">Window 2026-06-20 → 2026-08-05 · 36,926 snapshots @ ~60s · generated 2026-08-05T08:20Z · source: public BAM API</div>
+  <div class="meta">Window 2026-06-20 → 2026-08-05 · 36,932 snapshots @ ~60s · generated 2026-08-05T08:38Z · source: public BAM API</div>
 </header>
 
 <h2>BAM at a glance</h2>
@@ -110,8 +110,8 @@
   <img src="assets/bamsey.png" width="44" height="44" alt="BAMsey">
   <div>
     <div class="who">BAMsey's read</div>
-    <div class="say">Just 3 of the 16 live BAM nodes hold a majority of marketplace stake, with the largest at 23.2% and 93 validators concentrated on the busiest node in fra. BAM currently routes 32.0% of all Solana stake (141.9M SOL) across 374 validators. The top node by stake changed hands 70 times in this window — whale-driven routing, not structural rollovers.</div>
-    <div class="prov">Generated deterministically from the published metrics · 2026-08-05T08:20Z</div>
+    <div class="say">BAM routing is concentrated but broadly distributed across 16 live nodes, 374 validators, and 15 regions, with 32.01% of Solana stake routed through BAM. The largest node, ams-mainnet-bam-1-tee, holds 23.2% of BAM stake, while the busiest region is fra and the busiest node serves 93 validators. One validated structural rollover was seen on 2026-06-24 with 22 minutes of early warning; the top node changed hands 70 times in this window, which reads as churn rather than a single whale-driven flip.</div>
+    <div class="prov">Written by <code>gpt-5.4-mini-2026-03-17</code> from the published metrics · <span class="ok">✓ every figure cross-checked against the dataset before publishing</span> · 2026-08-05T08:23Z</div>
   </div>
 </div>
 
@@ -281,7 +281,7 @@
 <footer>
   <div class="fbrand">
     <img src="assets/bamsey-hero.jpg" width="56" height="56" alt="BAMsey, the BAMservatory sentinel">
-    <div><b style="color:var(--tx)">BAMsey</b> — the Observatory's sentinel. Every 60 seconds he re-reads the public BAM API, recomputes concentration, and flags a structural rollover the moment its precursor appears. 36,926 snapshots so far, no gaps, no paywall.</div>
+    <div><b style="color:var(--tx)">BAMsey</b> — the Observatory's sentinel. Every 60 seconds he re-reads the public BAM API, recomputes concentration, and flags a structural rollover the moment its precursor appears. 36,932 snapshots so far, no gaps, no paywall.</div>
   </div>
   <b>Methodology.</b> All figures are computed from the public BAM API (<code>/nodes</code>, <code>/validators</code>, <code>/bam_stake</code>), sampled every ~60 seconds and flattened to CSV. Nakamoto coefficient = minimum entities whose cumulative stake exceeds 50%. HHI = Herfindahl–Hirschman index of node stake shares. Early-warning detection compares consecutive node sets and times region cutovers against precursor node appearances. No private data, no token, no chain — an independent observatory.<br><br>
   Built for review by the Jito &amp; Solana Foundations as a candidate ecosystem public good. Numbers reflect the capture window above and update as new data lands.
