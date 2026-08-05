@@ -39,7 +39,10 @@ const DRY = has("--dry-run");
 // churning, but refresh at least every 6h so the note cannot read as stale.
 const MIN_INTERVAL_MIN = Number(process.env.BAMSEY_MIN_INTERVAL_MIN || 60);
 const MAX_AGE_HOURS = Number(process.env.BAMSEY_MAX_AGE_HOURS || 6);
-const MODEL = process.env.OPENAI_MODEL || "gpt-4o-mini";
+// gpt-5.5 was chosen by comparison, not by default: on this prompt the mini tier
+// padded to 95 words and enumerated metrics the tables already show, while 5.5
+// led with the change in ~55 words. At <=1 call/hour the price difference is noise.
+const MODEL = process.env.OPENAI_MODEL || "gpt-5.5";
 const API = process.env.OPENAI_BASE_URL || "https://api.openai.com/v1";
 
 // ---- key loading ------------------------------------------------------------
@@ -66,22 +69,38 @@ function buildFacts(M) {
   const last = S[S.length - 1];
 
   // Deltas are what make a briefing worth reading — otherwise it just restates
-  // the KPI cards. Series points are ~60s apart but gaps exist, so seek by time.
+  // the KPI cards. The chart series is DOWNSAMPLED (median gap runs into hours),
+  // so an exact 24h/7d point rarely exists. Rather than force a fixed window and
+  // silently drop the delta when nothing lands close enough, seek the nearest
+  // point and report the interval actually measured, so the note can say "over
+  // the past 23 hours" truthfully instead of claiming a round 24.
+  const gaps = [];
+  for (let i = 1; i < S.length; i++) gaps.push(new Date(S[i].ts) - new Date(S[i - 1].ts));
+  gaps.sort((a, b) => a - b);
+  const medianGap = gaps.length ? gaps[Math.floor(gaps.length / 2)] : 0;
+  const tol = Math.max(3 * 3600e3, medianGap * 2);
+
   const at = (hoursAgo) => {
-    if (!last) return null;
-    const target = new Date(last.ts).getTime() - hoursAgo * 3600e3;
+    if (!last || S.length < 2) return null;
+    const now = new Date(last.ts).getTime();
+    const target = now - hoursAgo * 3600e3;
     let best = null, bestGap = Infinity;
     for (const p of S) {
       const gap = Math.abs(new Date(p.ts).getTime() - target);
       if (gap < bestGap) { bestGap = gap; best = p; }
     }
-    // Reject a match more than 90 min off target — better no delta than a wrong one.
-    return bestGap <= 90 * 60e3 ? best : null;
+    if (bestGap > tol) return null;
+    const hours = (now - new Date(best.ts).getTime()) / 3600e3;
+    if (hours < 1) return null;
+    return { p: best, hours: Math.round(hours), days: Math.round(hours / 24) };
   };
   const p24 = at(24), p168 = at(168);
 
   const f = {
-    bamSharePct: { n: round(hl.bamStakePct, 2), unit: "% of all Solana stake routed through BAM" },
+    // 1dp to match the KPI card exactly — the briefing sits directly above it, and
+    // "32.01%" beside a card reading "32.0%" reads as two different measurements.
+    // `display` pins the trailing zero that Number() would otherwise drop.
+    bamSharePct: { n: round(hl.bamStakePct, 1), display: hl.bamStakePct.toFixed(1) + "%", unit: "% of all Solana stake routed through BAM" },
     bamStakeM: { n: round(hl.bamStakeSOL / 1e6, 1), unit: "million SOL routed through BAM" },
     nodeCount: { n: hl.nodeCount, unit: "live BAM nodes" },
     validatorCount: { n: hl.validatorCount, unit: "validators connected" },
@@ -102,11 +121,13 @@ function buildFacts(M) {
   };
 
   if (p24) {
-    f.bamSharePct24hAgo = { n: round(p24.pct, 2), unit: "% BAM share 24 hours ago" };
-    f.bamShareChange24hPts = { n: round(hl.bamStakePct - p24.pct, 2), unit: "percentage-point change in BAM share over 24h (negative = down)" };
+    f.bamShareChangePts = { n: round(hl.bamStakePct - p24.p.pct, 2), unit: `percentage-point change in BAM share over the last ${p24.hours} hours (negative = down)` };
+    f.bamShareChangeHours = { n: p24.hours, unit: "hours covered by the change figure above — cite this interval, not a rounded 24" };
+    f.bamSharePctThen = { n: round(p24.p.pct, 2), unit: `% BAM share ${p24.hours} hours ago` };
   }
-  if (p168) {
-    f.bamShareChange7dPts = { n: round(hl.bamStakePct - p168.pct, 2), unit: "percentage-point change in BAM share over 7 days (negative = down)" };
+  if (p168 && p168.days >= 2) {
+    f.bamShareChangeLongPts = { n: round(hl.bamStakePct - p168.p.pct, 2), unit: `percentage-point change in BAM share over the last ${p168.days} days (negative = down)` };
+    f.bamShareChangeLongDays = { n: p168.days, unit: "days covered by the longer change figure above" };
   }
   if (last && typeof last.hhi === "number") {
     f.nodeHHI = { n: round(last.hhi, 3), unit: "Herfindahl-Hirschman index of node stake shares (higher = more concentrated)" };
@@ -188,15 +209,24 @@ const SYSTEM = `You are BAMsey, the sentinel of BAMservatory — an independent 
 ABSOLUTE RULES
 - Use ONLY figures present in the FACTS object. Never invent, estimate, extrapolate, or infer a number that is not there.
 - Every numeral you write must correspond to a FACTS value. If you cannot support a claim with FACTS, omit the claim.
+- Where a fact carries a "display" value, write the number exactly as it appears there, trailing zeroes included. It must match the figure shown on the dashboard beneath you.
 - Never discuss token price, market cap, investment merit, or make predictions about future values.
 - Never claim BAM operators are acting improperly. You report structure, not motive.
 
+ESTABLISHED CONTEXT (findings of this project — treat as ground truth, never contradict)
+- Changes in which node holds the most stake are caused by a small number of very large validators moving between nodes. Describe them as "whale-driven routing" or "whale-driven leadership changes" — do not use the internal label "whale flip" verbatim. They are NOT structural rollovers and must never be described as general churn, network instability, or validator turnover.
+- A STRUCTURAL ROLLOVER is different and rare: BAM migrates validators between TEE nodes region by region, and a new node appearing in a region precedes the cutover. Exactly ONE has been validated to date. Never imply there have been more.
+- Validator count drifts by a few units as validators connect and disconnect. That is normal and not newsworthy on its own.
+
 STYLE
-- 2 to 4 sentences. Maximum 75 words. Plain prose — no lists, no headings, no emoji, no markdown.
+- 2 to 4 sentences. Maximum 70 words. Plain prose — no lists, no headings, no emoji, no markdown.
 - Calm, precise, technical. An analyst's read, not a mascot's catchphrase.
-- Lead with what CHANGED or what matters most right now. Do not simply restate every metric.
+- LEAD WITH WHAT CHANGED. If a 24h or 7d change figure is present in FACTS, it belongs in the first sentence. A briefing that merely lists current values has failed.
+- Do NOT enumerate metrics. Pick the two or three that matter now and say why they matter. The reader can see every number in the tables below you.
 - If concentration is elevated, say so plainly and without alarmism.
-- Distinguish whale-driven leadership flips from structural rollovers; they are not the same event.`;
+- Write complete, grammatical sentences. Do not compress into telegraphic notation.
+- Prefer words to symbols: "fell 0.67 percentage points", not "-0.67 pts".
+- Name metrics in full: "the node Nakamoto coefficient is 3", not "the node Nakamoto is 3".`;
 
 function userMessage(facts) {
   return `FACTS (the only figures you may cite):
@@ -219,9 +249,15 @@ async function callOpenAI(key, messages) {
   // Parameter support varies across model families (some reject `temperature`,
   // some renamed `max_tokens`). Start strict, then retry on the exact complaint
   // so this keeps working whichever model is configured.
-  let body = { model: MODEL, messages, temperature: 0.4, max_tokens: 300 };
+  //
+  // The cap is generous on purpose: reasoning models spend hidden tokens before
+  // emitting a word, and a cap sized to the ~70-word answer gets consumed by
+  // reasoning alone, returning empty content. Billing is on tokens produced, not
+  // on the cap, so a high ceiling costs nothing and prevents that failure.
+  let cap = 2000;
+  let body = { model: MODEL, messages, temperature: 0.4, max_tokens: cap };
 
-  for (let attempt = 0; attempt < 4; attempt++) {
+  for (let attempt = 0; attempt < 6; attempt++) {
     const res = await fetch(`${API}/chat/completions`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
@@ -229,9 +265,19 @@ async function callOpenAI(key, messages) {
     });
     if (res.ok) {
       const j = await res.json();
-      const text = j.choices?.[0]?.message?.content?.trim();
-      if (!text) throw new Error("empty completion");
-      return { text, usage: j.usage || null, model: j.model || MODEL };
+      const choice = j.choices?.[0];
+      const text = choice?.message?.content?.trim();
+      if (text) return { text, usage: j.usage || null, model: j.model || MODEL };
+
+      // Empty content: almost always reasoning exhausting the budget. Escalate once.
+      if (choice?.finish_reason === "length" && cap < 16000) {
+        cap *= 4;
+        if ("max_completion_tokens" in body) body.max_completion_tokens = cap;
+        else body.max_tokens = cap;
+        console.warn(`empty completion (finish_reason=length) — raising token cap to ${cap}`);
+        continue;
+      }
+      throw new Error(`empty completion (finish_reason=${choice?.finish_reason || "unknown"})`);
     }
 
     const errText = await res.text();
@@ -266,14 +312,14 @@ function templateBriefing(facts) {
   const f = facts.f;
   const bits = [];
   const share = f.bamSharePct.n.toFixed(1);
-  bits.push(`Just ${f.nodeNakamoto.n} of the ${f.nodeCount.n} live BAM nodes hold a majority of marketplace stake, with the largest at ${f.topNodeSharePct.n}% and ${f.busiestNodeValidators.n} validators concentrated on the busiest node in ${f.busiestRegion.t}.`);
-  if (f.bamShareChange24hPts) {
-    const c = f.bamShareChange24hPts.n;
-    const dir = Math.abs(c) < 0.05 ? "held flat at" : c > 0 ? "rose to" : "eased to";
-    bits.push(`BAM's share of Solana stake ${dir} ${share}% (${f.bamStakeM.n}M SOL) over the past 24 hours.`);
+  if (f.bamShareChangePts) {
+    const c = f.bamShareChangePts.n;
+    const dir = Math.abs(c) < 0.05 ? "held flat at" : c > 0 ? "climbed to" : "eased to";
+    bits.push(`BAM's share of Solana stake ${dir} ${share}% (${f.bamStakeM.n}M SOL) over the past ${f.bamShareChangeHours.n} hours.`);
   } else {
     bits.push(`BAM currently routes ${share}% of all Solana stake (${f.bamStakeM.n}M SOL) across ${f.validatorCount.n} validators.`);
   }
+  bits.push(`Just ${f.nodeNakamoto.n} of the ${f.nodeCount.n} live nodes hold a majority of marketplace stake, with the largest at ${f.topNodeSharePct.n}% and ${f.busiestNodeValidators.n} validators concentrated on the busiest node in ${f.busiestRegion.t}.`);
   bits.push(`The top node by stake changed hands ${f.leadershipChanges.n} times in this window — whale-driven routing, not structural rollovers.`);
   return bits.join(" ");
 }
@@ -336,7 +382,7 @@ function templateBriefing(facts) {
       const bad = findUncitedNumbers(clean, allowed, facts);
       const words = clean.split(/\s+/).length;
 
-      if (bad.length === 0 && words <= 95) {
+      if (bad.length === 0 && words <= 85) {
         write({ text: clean, source: "llm", model, generatedAt: new Date().toISOString(), fingerprint: fp, validated: true, words, usage });
         return;
       }

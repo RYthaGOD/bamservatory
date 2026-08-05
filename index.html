@@ -110,8 +110,8 @@
   <img src="assets/bamsey.png" width="44" height="44" alt="BAMsey">
   <div>
     <div class="who">BAMsey's read</div>
-    <div class="say">BAM routing is concentrated but broadly distributed across 16 live nodes, 374 validators, and 15 regions, with 32.01% of Solana stake routed through BAM. The largest node, ams-mainnet-bam-1-tee, holds 23.2% of BAM stake, while the busiest region is fra and the busiest node serves 93 validators. One validated structural rollover was seen on 2026-06-24 with 22 minutes of early warning; the top node changed hands 70 times in this window, which reads as churn rather than a single whale-driven flip.</div>
-    <div class="prov">Written by <code>gpt-5.4-mini-2026-03-17</code> from the published metrics · <span class="ok">✓ every figure cross-checked against the dataset before publishing</span> · 2026-08-05T08:23Z</div>
+    <div class="say">BAM share fell 0.65 percentage points over the last 25 hours and 0.52 percentage points over 7 days, leaving 32.0% of Solana stake routed through BAM. Concentration is elevated: the largest node holds 23.2% of BAM stake, and the node Nakamoto coefficient is 3. The 70 top-node leadership changes in this window are whale-driven routing, not evidence of structural rollover.</div>
+    <div class="prov">Written by <code>gpt-5.5-2026-04-23</code> from the published metrics · <span class="ok">✓ every figure cross-checked against the dataset before publishing</span> · 2026-08-05T12:18Z</div>
   </div>
 </div>
 
@@ -284,6 +284,7 @@
     <div><b style="color:var(--tx)">BAMsey</b> — the Observatory's sentinel. Every 60 seconds he re-reads the public BAM API, recomputes concentration, and flags a structural rollover the moment its precursor appears. 37,003 snapshots so far, no gaps, no paywall.</div>
   </div>
   <b>Methodology.</b> All figures are computed from the public BAM API (<code>/nodes</code>, <code>/validators</code>, <code>/bam_stake</code>), sampled every ~60 seconds and flattened to CSV. Nakamoto coefficient = minimum entities whose cumulative stake exceeds 50%. HHI = Herfindahl–Hirschman index of node stake shares. Early-warning detection compares consecutive node sets and times region cutovers against precursor node appearances. No private data, no token, no chain — an independent observatory.<br><br>
+  <b>On BAMsey's read.</b> The briefing at the top of this page is written by a language model, and it is constrained so that it cannot affect the integrity of anything else here. The model never touches raw data and performs no arithmetic: it receives only the figures already computed above and may cite nothing else. Every numeral it returns is checked against that set before publishing; a note citing an unverifiable figure is rejected and regenerated, and on repeated failure a deterministic template is published in its place. It is editorial judgement about which numbers matter — never a source of numbers.<br><br>
   Built for review by the Jito &amp; Solana Foundations as a candidate ecosystem public good. Numbers reflect the capture window above and update as new data lands.
 </footer>
 

@@ -104,11 +104,19 @@ hours, so it costs cents per month and cannot spam the API.
 ```bash
 # Configure (never commit the key — .env is gitignored)
 echo 'OPENAI_API_KEY=sk-...' > .env
-OPENAI_MODEL=gpt-4o-mini node brief.js --force
+node brief.js --force
 
 node brief.js --dry-run       # show the exact prompt + allowed numbers, call nothing
 node brief.js --list-models   # what this key can reach
+OPENAI_MODEL=... node brief.js --force   # override the model
 ```
+
+The default model is `gpt-5.5`, chosen by comparison rather than habit: on this
+prompt the mini tier padded to 95 words and re-listed metrics the tables already
+show, while `gpt-5.5` led with the change in ~55. At one call per hour the price
+difference is immaterial. Any chat-completions model works — parameter differences
+(`max_tokens` vs `max_completion_tokens`, unsupported `temperature`) and reasoning
+models that exhaust their budget before emitting text are all handled by retry.
 
 There is no browser-side API call anywhere on this site, and no key is ever
 shipped to a visitor — the briefing is generated at build time and baked into the
