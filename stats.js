@@ -15,6 +15,7 @@
 const fs = require("fs");
 const readline = require("readline");
 const path = require("path");
+const crypto = require("crypto");
 
 const dirArg = process.argv.indexOf("--dir");
 const DIR = dirArg >= 0 ? process.argv[dirArg + 1] : "d:/bam-net-ticks";
@@ -218,8 +219,43 @@ async function main() {
   const validatorsLatest = await loadValidatorsLatest(latest.ts);
   const detections = loadDetections();
 
+  // metrics.json is a derived artifact: every figure below is a pure function of
+  // the capture files. Recording a digest of those inputs lets anyone pin which
+  // capture state produced these numbers and recompute them from the published
+  // archive at github.com/RYthaGOD/bamservatory-data.
+  //
+  // summary.csv, nodes.csv and detections.log are hashed whole because they are
+  // read whole. validators.csv is not: it is tail-read for a single snapshot, so
+  // hashing hundreds of megabytes to cover a few hundred contributing rows would
+  // cost far more than it establishes. It is identified by snapshot instead.
+  const digest = (p) => {
+    try {
+      return "sha256:" + crypto.createHash("sha256").update(fs.readFileSync(p)).digest("hex");
+    } catch {
+      return null;
+    }
+  };
+
   const metrics = {
     generatedAt: new Date().toISOString(),
+    // Consumers pin on this. Additive changes keep the version; removing or
+    // repurposing a field is a bump, so an aggregator can fail loudly rather
+    // than silently mis-read a renamed number.
+    schemaVersion: 1,
+    provenance: {
+      collector: process.env.BAM_NET_REF || null,
+      // Both come from the environment and default to null rather than to a
+      // hardcoded URL. A transparency artifact should never point at an archive
+      // that does not resolve — publishing null says "not configured", which is
+      // true, where a dead link would imply a record that cannot be inspected.
+      archive: process.env.ARCHIVE_URL || null,
+      inputs: {
+        "summary.csv": digest(SUMMARY),
+        "nodes.csv": digest(NODES),
+        "detections.log": digest(DETLOG),
+        "validators.csv": { tailReadOnly: true, snapshotTs: latest.ts, validators: latest.vals },
+      },
+    },
     window: { from: first.ts, to: latest.ts, snapshots: summary.length },
     headline: {
       bamStakeSOL: latest.stake,
