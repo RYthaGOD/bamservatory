@@ -1,6 +1,12 @@
-# markdown: publish ONLY the README — everything else (GRANT.md, notes, drafts) stays private
+# markdown: private by default — GRANT.md, notes and drafts stay local.
+#
+# Public docs must be allow-listed explicitly. The default-deny is deliberate,
+# but it fails silently: a doc added here is simply never committed, and the
+# first sign of trouble is someone following a link to a file that was never
+# published. Add the filename below when a doc is meant to be public.
 *.md
 !README.md
+!SCHEMA.md
 
 # secrets — the OpenAI key for brief.js lives here and must never be published
 .env
