@@ -52,10 +52,38 @@ A capture directory holds the flattened public-API snapshots
 ## Methodology
 
 All figures derive from the public BAM API (`/nodes`, `/validators`,
-`/bam_stake`), sampled ~every 60 seconds. **Nakamoto coefficient** = minimum
+`/bam_stake`), sampled every 60 seconds. **Nakamoto coefficient** = minimum
 entities whose cumulative stake exceeds 50%. **HHI** = Herfindahl–Hirschman index
 of node stake shares. **Early-warning** compares consecutive node sets and times
 region cutovers against precursor node appearances.
+
+### Sampling rate, honestly
+
+The 60-second figure was accurate at launch and again from 2026-08-08, but not
+in between. Capture ran at a full 1440/day in late June, then decayed to roughly
+480/day — one sample every three minutes — for most of July and early August.
+The collector scans its own capture log to reach the last two records, so as
+that log passed a gigabyte each run outran its 60-second slot and the
+single-instance guard dropped the overlapping minutes. Moving capture to a
+hosted node with log rotation restored the full rate.
+
+Nothing here is asserted on trust: per-day capture counts are published in
+[bamservatory-data](https://github.com/RYthaGOD/bamservatory-data), and its
+`verify.sh` prints coverage against the expected 1440/day for every day on
+record — including the bad ones.
+
+### Verifying these numbers
+
+Every figure on this page is a pure function of published inputs. The raw
+captures are public, so the whole chain can be recomputed independently:
+
+```bash
+git clone https://github.com/RYthaGOD/bamservatory-data.git
+cd bamservatory-data && ./verify.sh      # hashes, record counts, coverage
+```
+
+`metrics.json` carries a `provenance` block naming the collector build and a
+SHA-256 of each input it was computed from.
 
 ## Honest scope
 
