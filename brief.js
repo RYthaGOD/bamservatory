@@ -168,6 +168,19 @@ function buildAllowed(facts) {
     const a = Math.abs(x);
     allowed.add(a);
     for (const dp of [0, 1, 2, 3]) allowed.add(Number(a.toFixed(dp)));
+    // How large figures are actually written. 142168324.51 legitimately appears
+    // as "142.2 million", "142M" or "142,168,325", and none of those are decimal
+    // roundings of it — so without enumerating them here the only thing that
+    // could accept them was a loose proportional tolerance, which on a
+    // nine-figure number also accepted anything within ~700,000 of the truth.
+    for (const scale of [1e3, 1e6, 1e9]) {
+      const s = a / scale;
+      if (s >= 1) for (const dp of [0, 1, 2, 3]) allowed.add(Number(s.toFixed(dp)));
+    }
+    // Significant-figure rounding, e.g. 142168324.51 -> 142000000.
+    for (const sf of [2, 3, 4, 5, 6]) {
+      if (a > 0) allowed.add(Number(a.toPrecision(sf)));
+    }
   };
   for (const k of Object.keys(facts.f)) if (typeof facts.f[k].n === "number") add(facts.f[k].n);
   for (const n of facts.topNodes) { add(n.validators); add(n.sharePct); }
@@ -192,11 +205,19 @@ function findUncitedNumbers(text, allowed, facts) {
     const val = Number(raw.replace(/,/g, ""));
     if (!Number.isFinite(val)) continue;
     if (allowed.has(val)) continue;
-    // Tolerate presentation rounding of an allowed value (e.g. 32.06 -> 32.1).
+    // Every legitimate rounding is now enumerated in buildAllowed, so this is
+    // only a guard against floating-point representation, not a licence to be
+    // approximately right.
+    //
+    // It used to allow anything within 0.5% of a fact. On percentages and counts
+    // that is harmless, because the 0.051 floor dominates — but on the stake
+    // figure it meant a fabricated number up to 700,000 SOL off was published as
+    // validated. The page's entire claim is that its numerals are checked, and
+    // "within half a percent of nine figures" is not checking.
     let near = false;
     for (const a of allowed) {
       if (a === 0) continue;
-      if (Math.abs(a - val) <= Math.max(0.051, Math.abs(a) * 0.005)) { near = true; break; }
+      if (Math.abs(a - val) <= Math.max(1e-9, Math.abs(a) * 1e-9)) { near = true; break; }
     }
     if (!near) bad.push(raw);
   }
