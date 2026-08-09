@@ -68,18 +68,46 @@ function loadSummary() {
   return dedup;
 }
 
+// Read the last `want` bytes of a file as whole lines.
+//
+// The first line of a byte-slice is almost always cut mid-record, so it is
+// discarded — which also disposes of the CSV header when the file is smaller
+// than the window. Callers must therefore not assume a header row.
+function tailLines(file, want) {
+  const fd = fs.openSync(file, "r");
+  try {
+    const size = fs.fstatSync(fd).size;
+    const n = Math.min(size, want);
+    const buf = Buffer.alloc(n);
+    fs.readSync(fd, buf, 0, n, size - n);
+    let text = buf.toString("utf8");
+    const nl = text.indexOf("\n");
+    if (nl >= 0) text = text.slice(nl + 1);
+    return text.split(/\r?\n/).filter(Boolean);
+  } finally {
+    fs.closeSync(fd);
+  }
+}
+
 // ---- 2. nodes.csv latest snapshot + region rollup -------------------------
+// TAIL-READ, for the same reason validators.csv is. Only the newest tick's rows
+// are used, but the file gains one row per node per capture — around 1.9 MB a
+// day, and nothing trims it. Reading it whole works fine at 50 MB and quietly
+// stops working at 500 MB, which is the failure mode that took the original
+// collector down to a third of its capture rate without anything looking wrong.
+//
+// The column order is fixed by flatten.awk, so the header is not needed to
+// interpret a tail slice: ts,bam_node,region,connected_validators,node_stake,
+// node_stake_share.
 function loadNodesLatest(latestTs) {
-  const lines = fs.readFileSync(NODES, "utf8").trim().split(/\r?\n/);
-  const hdr = lines[0].split(",");
-  const I = {
-    ts: hdr.indexOf("ts"), node: hdr.indexOf("bam_node"),
-    vals: hdr.indexOf("connected_validators"), stake: hdr.indexOf("node_stake"),
-  };
+  const I = { ts: 0, node: 1, vals: 3, stake: 4 };
+  const lines = tailLines(NODES, 2 * 1024 * 1024); // ≫ one tick (~1.3 KB)
   const nodes = [];
-  for (let i = 1; i < lines.length; i++) {
+  // From 0, not 1: a tail slice has no header to skip, and tailLines has
+  // already dropped the partial line at the cut point.
+  for (let i = 0; i < lines.length; i++) {
     const c = lines[i].split(",");
-    if (c[I.ts] !== latestTs) continue;
+    if (c.length < 5 || c[I.ts] !== latestTs) continue;
     nodes.push({ node: c[I.node], region: city(c[I.node]), vals: num(c[I.vals]), stake: num(c[I.stake]) });
   }
   nodes.sort((a, b) => b.stake - a.stake);
