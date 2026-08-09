@@ -85,6 +85,19 @@ cd bamservatory-data && ./verify.sh      # hashes, record counts, coverage
 `metrics.json` carries a `provenance` block naming the collector build and a
 SHA-256 of each input it was computed from.
 
+## How the data is gathered
+
+Three collectors run continuously in **US-East, Singapore and Amsterdam**, each
+recording the public BAM API independently and publishing its own separate
+archive to
+[bamservatory-data](https://github.com/RYthaGOD/bamservatory-data). Nothing runs
+on a personal machine.
+
+Three rather than one is the point. A single collector cannot tell "the API said
+X" apart from "the API said X *to us*"; three make a view served to only one of
+them detectable, and `compare.mjs` checks that minute by minute. Three rather
+than two means a disagreement can be resolved rather than merely flagged.
+
 ## Honest scope
 
 - **n = 1** validated structural rollover so far; the detector is live and
@@ -95,6 +108,12 @@ SHA-256 of each input it was computed from.
 - Data is reverse-engineered from the public API; BAM operators have richer
   internal telemetry. This project's value is **independence and indexing**, not
   privileged access.
+- **Agreement across vantages is corroboration, not proof.** All three
+  collectors could in principle be shown the same false view, and no number of
+  vantages fixes that. BAM describes its ordering attestations as a public audit
+  trail, but no endpoint currently serves them (re-checked 2026-08-09); until
+  one does, "verified" here means *faithfully recorded and independently
+  recomputable*, not *proven true at source*.
 
 ## BAMsey
 
