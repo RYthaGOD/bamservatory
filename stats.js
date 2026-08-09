@@ -180,15 +180,29 @@ function readLog(p) {
   if (!fs.existsSync(p)) return [];
   return fs.readFileSync(p, "utf8").trim().split(/\r?\n/).filter(Boolean).map(parseEvent);
 }
+// The longest lead that still counts as a precursor rather than coincidence.
+// One definition, used everywhere — detect.sh applies the same bound when it
+// decides whether to record first_signal at all. It was previously written
+// three times with two different comparisons (< here, <= in the feed and in the
+// detector), so a cutover with exactly this lead would have been logged with a
+// precursor and shown as structural in the feed while never counting as
+// validated: the dashboard contradicting itself about its headline metric.
+const LEAD_WINDOW_MIN = 60;
+const isStructural = (kv) =>
+  kv.first_signal !== undefined &&
+  kv.first_signal !== "none" &&
+  num(kv.lead_min) > 0 &&
+  num(kv.lead_min) <= LEAD_WINDOW_MIN;
+
 function loadDetections() {
   // VALIDATED — from the backtest replay. A genuine structural cutover is one
-  // whose matched precursor was a same-region SIGNAL with a short (<60min) lead.
+  // whose matched precursor was a same-region SIGNAL with a short lead.
   const replay = readLog(path.join(DIR, "detections_replay.log"));
   const validated = [];
   for (const e of replay) {
     if (e.kind !== "CUTOVER") continue;
     const lead = num(e.kv.lead_min);
-    if (e.kv.first_signal && e.kv.first_signal !== "none" && lead > 0 && lead < 60) {
+    if (isStructural(e.kv)) {
       // the precursor node that fired the matched SIGNAL
       const sig = replay.find((s) => s.kind === "SIGNAL" && s.ts === e.kv.first_signal);
       validated.push({
@@ -212,9 +226,7 @@ function loadDetections() {
   const feed = live.slice(-12).reverse().map((e) => ({
     ts: e.ts, kind: e.kind, region: e.kv.region,
     detail: e.kind === "CUTOVER" ? `${e.kv.old} → ${e.kv.new}` : `new ${e.kv.new_node}`,
-    structural: e.kind === "CUTOVER"
-      ? (e.kv.first_signal !== "none" && num(e.kv.lead_min) > 0 && num(e.kv.lead_min) <= 60)
-      : null,
+    structural: e.kind === "CUTOVER" ? isStructural(e.kv) : null,
   }));
 
   return { validated, rolloverPrecursors, liveCutovers, liveSignals, feed };
