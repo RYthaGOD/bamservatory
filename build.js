@@ -32,11 +32,27 @@ function chart(series, key, { w = 520, h = 120, color = "#5eead4", fill = "rgba(
   const min = Math.min(...vals), max = Math.max(...vals);
   const pad = (max - min) * 0.12 || 1;
   const lo = min - pad, hi = max + pad;
-  const X = (i) => (i / (series.length - 1)) * (w - 2) + 1;
+
+  // Position by timestamp, not by array index.
+  //
+  // The series is downsampled by sample count, and capture rate has not been
+  // constant — it ran at 1440/day, decayed to 480/day for much of July, and is
+  // back at 1440/day. Spacing points evenly therefore drew a horizontal axis of
+  // "sample number" underneath labels showing dates, so densely captured periods
+  // occupied more width than their duration and sparse ones less. The shape of
+  // every trend was distorted by how often the collector happened to be running,
+  // which is exactly the sort of quiet misreading this dashboard exists to avoid.
+  const t0 = Date.parse(series[0].ts);
+  const t1 = Date.parse(series[series.length - 1].ts);
+  const span = t1 - t0;
+  const X = (p, i) => (span > 0
+    ? ((Date.parse(p.ts) - t0) / span) * (w - 2) + 1
+    : (i / Math.max(1, series.length - 1)) * (w - 2) + 1);
   const Y = (v) => h - 6 - ((v - lo) / (hi - lo)) * (h - 12);
-  const pts = series.map((p, i) => `${X(i).toFixed(1)},${Y(p[key]).toFixed(1)}`);
+  const pts = series.map((p, i) => `${X(p, i).toFixed(1)},${Y(p[key]).toFixed(1)}`);
   const line = "M" + pts.join(" L");
-  const area = `M${X(0).toFixed(1)},${h} L` + pts.join(" L") + ` L${X(series.length - 1).toFixed(1)},${h} Z`;
+  const area = `M${X(series[0], 0).toFixed(1)},${h} L` + pts.join(" L") +
+    ` L${X(series[series.length - 1], series.length - 1).toFixed(1)},${h} Z`;
   return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" class="chart" role="img">
     <path d="${area}" fill="${fill}" stroke="none"/>
     <path d="${line}" fill="none" stroke="${color}" stroke-width="1.5"/>
