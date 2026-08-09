@@ -20,13 +20,20 @@ and a conditional request against `ETag` avoids re-downloading it.
 
 ## Stability contract
 
-Pin on `schemaVersion` (currently `1`).
+Pin on `schemaVersion` (currently `2`).
 
 - **Adding** a field keeps the version.
 - **Removing** a field, or changing what an existing one means, bumps it.
 
 So a consumer can treat an unexpected `schemaVersion` as a reason to stop and
 look, rather than silently misreading a renamed number.
+
+### History
+
+| Version | Change |
+|---|---|
+| `2` | `stats.*.avg` became time-weighted rather than a mean over captures. Values shift slightly; see [`stats`](#stats). |
+| `1` | Initial published contract. |
 
 ## Conventions that are easy to get wrong
 
@@ -142,6 +149,20 @@ Nakamoto here is the minimum count whose cumulative share **strictly exceeds**
 Each of `pct`, `hhi`, `vals`, `nodes` is `{ min, max, avg, cur }` computed across
 **every** capture in the window — the full `snapshots` count, not the
 downsampled `series`. `cur` equals the latest value.
+
+**`avg` is time-weighted, not a mean over captures** (since `schemaVersion` 2).
+
+A plain mean answers "what did the average capture see", which equals "what was
+the average value" only when captures are evenly spaced. They have not been —
+the collector ran at 1440/day, decayed to 480/day for much of July, and is back
+at 1440/day — so a sample mean would weight densely-captured periods more
+heavily and move with collector uptime rather than with BAM. On the current
+window the two differ by about 0.16 percentage points on stake share.
+
+Each interval is capped at 10 minutes when weighting. Beyond that the collector
+was down and nothing is known about the interval, so the samples either side of
+an outage must not dominate. `min` and `max` are unweighted: an extreme is an
+extreme however often it was sampled.
 
 ### `series`
 

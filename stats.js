@@ -244,10 +244,35 @@ async function main() {
     if (summary[i].topNode !== summary[i - 1].topNode)
       leadershipChanges.push({ ts: summary[i].ts, from: summary[i - 1].topNode, to: summary[i].topNode });
 
+  // Averages are weighted by time, not by sample count.
+  //
+  // A plain mean over captures answers "what did the average capture see", which
+  // is only the same as "what was the average value" when captures are evenly
+  // spaced. They have not been: the collector ran at 1440/day, decayed to
+  // 480/day through much of July, and is back at 1440/day — so a sample mean
+  // silently weights densely-captured periods more heavily, and the published
+  // figure moves with collector uptime rather than with BAM. On the current
+  // window that biased the stake share by 0.16pp.
+  //
+  // Each interval is capped: beyond it the collector was down, and we have no
+  // information about what happened, so a long outage must not let the sample
+  // either side of it dominate. min/max are untouched — extremes are extremes
+  // however often they were sampled.
+  const GAP_CAP_MIN = 10;
   const reduceStat = (key) => {
-    let min = Infinity, max = -Infinity, sum = 0;
-    for (const r of summary) { min = Math.min(min, r[key]); max = Math.max(max, r[key]); sum += r[key]; }
-    return { min, max, avg: sum / summary.length, cur: latest[key] };
+    let min = Infinity, max = -Infinity, num = 0, den = 0;
+    for (let i = 0; i < summary.length; i++) {
+      const v = summary[i][key];
+      min = Math.min(min, v);
+      max = Math.max(max, v);
+      if (i === 0) continue;
+      let dt = (Date.parse(summary[i].ts) - Date.parse(summary[i - 1].ts)) / 60000;
+      if (!(dt > 0)) continue;
+      if (dt > GAP_CAP_MIN) dt = GAP_CAP_MIN;
+      num += ((v + summary[i - 1][key]) / 2) * dt;
+      den += dt;
+    }
+    return { min, max, avg: den > 0 ? num / den : latest[key], cur: latest[key] };
   };
 
   // downsample series for charts (~240 points max)
@@ -281,7 +306,12 @@ async function main() {
     // Consumers pin on this. Additive changes keep the version; removing or
     // repurposing a field is a bump, so an aggregator can fail loudly rather
     // than silently mis-read a renamed number.
-    schemaVersion: 1,
+    //
+    // 2 — stats.*.avg became time-weighted rather than a mean over captures.
+    //     The values shift slightly and the definition genuinely changed, so
+    //     this bumps even though nothing was added or removed. A contract only
+    //     means something if it is honoured when the change is inconvenient.
+    schemaVersion: 2,
     provenance: {
       collector: process.env.BAM_NET_REF || null,
       // Both come from the environment and default to null rather than to a
