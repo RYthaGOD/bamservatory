@@ -10,6 +10,23 @@ from the public BAM API.
 
 <br clear="left">
 
+[![verify](https://github.com/RYthaGOD/bamservatory-data/actions/workflows/verify.yml/badge.svg)](https://github.com/RYthaGOD/bamservatory-data/actions/workflows/verify.yml)
+
+| | |
+|---|---|
+| **Open data** | [`metrics.json`](https://rythagod.github.io/bamservatory/metrics.json) — static, CORS-enabled, refreshed every ~15 min |
+| **Field reference** | [SCHEMA.md](SCHEMA.md) — units, denominators, and a `schemaVersion` stability contract |
+| **Raw archive** | [bamservatory-data](https://github.com/RYthaGOD/bamservatory-data) — every capture, hashed, day by day |
+| **Collector** | [bam-net](https://github.com/RYthaGOD/bam-net) — the Rust client doing the capturing |
+
+That badge is the shortest version of this project's claim. It runs on GitHub's
+infrastructure rather than ours, and checks three things nobody here can quietly
+influence: every archived day still hashes to what its manifest recorded, three
+independent collectors still agree, and this dashboard has not gone stale.
+
+Every figure below is a pure function of published inputs. You can recompute the
+lot without asking us for anything — see [Verifying these numbers](#verifying-these-numbers).
+
 ---
 
 ## Why

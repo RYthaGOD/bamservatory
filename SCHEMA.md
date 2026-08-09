@@ -5,8 +5,18 @@ Written for anyone consuming this as a data source rather than reading the
 dashboard.
 
 **Endpoint:** `https://rythagod.github.io/bamservatory/metrics.json`
-Served by GitHub Pages with `Access-Control-Allow-Origin: *`, so it is fetchable
-directly from a browser. Refreshed roughly every 15 minutes.
+
+| | |
+|---|---|
+| CORS | `Access-Control-Allow-Origin: *` — fetchable directly from a browser |
+| Content type | `application/json; charset=utf-8` |
+| Rebuilt | every ~15 minutes, from capture running at 60-second resolution |
+| Cache | `Cache-Control: max-age=600` (GitHub Pages), plus `ETag` and `Last-Modified` |
+
+Worst-case staleness is therefore about 25 minutes: up to 15 waiting for the next
+rebuild, plus up to 10 of edge cache. Poll faster than that and you will mostly
+be served the same bytes — `generatedAt` tells you which build you actually have,
+and a conditional request against `ETag` avoids re-downloading it.
 
 ## Stability contract
 
