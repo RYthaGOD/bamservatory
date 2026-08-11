@@ -183,6 +183,8 @@ function loadVerification() {
     disp: ix("disputed_stake_sol"), matched: ix("onchain_matched"),
     rep: ix("stake_reported_sol"), chain: ix("stake_onchain_sol"),
     diff: ix("stake_abs_diff_sol"), maxRel: ix("stake_max_rel_pct"),
+    medRel: ix("stake_median_rel_pct"),
+    kobeTotal: ix("kobe_total_validators"), chainVals: ix("chain_validators"),
     hStake: ix("bam_headline_stake_sol"), hShare: ix("bam_headline_share_pct"),
     shRep: ix("bam_share_reported_pct"), shChain: ix("bam_share_onchain_pct"),
   };
@@ -198,6 +200,9 @@ function loadVerification() {
       onchainMatched: num(c[I.matched]),
       stakeReportedSol: num(c[I.rep]), stakeOnchainSol: num(c[I.chain]),
       stakeAbsDiffSol: num(c[I.diff]), stakeMaxRelPct: num(c[I.maxRel]),
+      stakeMedianRelPct: I.medRel >= 0 ? num(c[I.medRel]) : 0,
+      kobeTotalValidators: I.kobeTotal >= 0 ? num(c[I.kobeTotal]) : 0,
+      chainValidators: I.chainVals >= 0 ? num(c[I.chainVals]) : 0,
       // Absent from rows written before the headline was captured, so these read
       // 0 for early readings rather than being missing — consumers should treat
       // 0 as "not recorded", which is why the panel tests before displaying.
@@ -212,7 +217,7 @@ function loadVerification() {
   const step = Math.max(1, Math.floor(rows.length / 240));
   const series = rows
     .filter((_, i) => i % step === 0 || i === rows.length - 1)
-    .map((r) => ({ ts: r.ts, onlyExplorer: r.onlyExplorer, disputedStakeSol: r.disputedStakeSol, stakeMaxRelPct: r.stakeMaxRelPct }));
+    .map((r) => ({ ts: r.ts, onlyExplorer: r.onlyExplorer, disputedStakeSol: r.disputedStakeSol, stakeMedianRelPct: r.stakeMedianRelPct }));
 
   return { latest: rows[rows.length - 1], readings: rows.length, since: rows[0].ts, series };
 }

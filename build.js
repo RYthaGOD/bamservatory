@@ -117,7 +117,9 @@ const sentinel = alerting
 const V = M.verification;
 const verificationPanel = !V ? "" : (() => {
   const v = V.latest;
-  const stakeHolds = v.stakeMaxRelPct < 0.01;
+  // Median, not max: one validator moving stake between BAM's snapshot and ours
+  // decides a max over hundreds and says nothing about the reporting.
+  const stakeHolds = (v.stakeMedianRelPct ?? v.stakeMaxRelPct) < 0.01;
   const agree = v.onlyExplorer === 0 && v.onlyKobe === 0;
   const disputed = v.onlyExplorer + v.onlyKobe;
   const ENOUGH = 24;   // ~12 hours at one reading per half hour
@@ -125,7 +127,7 @@ const verificationPanel = !V ? "" : (() => {
   const trend = V.series.length >= ENOUGH
     ? `<div class="grid g2" style="margin-top:12px">
         <div class="card"><div class="dim" style="font-size:12px;margin-bottom:8px">Validators the two sources disagree on</div>${chart(V.series, "onlyExplorer", { color: "#fbbf24", fill: "rgba(251,191,36,.10)" })}</div>
-        <div class="card"><div class="dim" style="font-size:12px;margin-bottom:8px">Largest per-validator stake deviation (%)</div>${chart(V.series, "stakeMaxRelPct", { color: "#5eead4", fill: "rgba(94,234,212,.12)" })}</div>
+        <div class="card"><div class="dim" style="font-size:12px;margin-bottom:8px">Typical per-validator stake deviation (%)</div>${chart(V.series, "stakeMedianRelPct", { color: "#5eead4", fill: "rgba(94,234,212,.12)" })}</div>
        </div>`
     : (() => {
         // Measured from the readings themselves rather than restating the
@@ -143,7 +145,7 @@ const verificationPanel = !V ? "" : (() => {
 <div class="note">Everything above is gathered from BAM's own API, which makes it an index of what BAM says. This section checks it. Stake is verified against Solana itself, where the chain is the authority and BAM's figures either match or they do not. Membership is cross-checked against Jito's separate Kobe API, which publishes the same fact independently.
 <br><br><b>Read at ${esc(v.ts.replace("T", " ").replace("Z", " UTC"))}</b>, on its own slower cycle than the figures above — it queries three services and a full Solana vote-account set, so it runs less often than the 60-second capture. Counts here will therefore differ slightly from the headline, which is the more recent reading, not a contradiction of it.</div>
 <div class="grid g4" style="margin-top:12px">
-  <div class="card kpi"><div class="v ${stakeHolds ? "ok" : "bad"}">${stakeHolds ? "Matches" : "Differs"}</div><div class="l">BAM's reported stake vs Solana</div><div class="n">${fmt(v.onchainMatched)} validators checked · largest deviation ${fmt(v.stakeMaxRelPct, 4)}%</div></div>
+  <div class="card kpi"><div class="v ${stakeHolds ? "ok" : "bad"}">${stakeHolds ? "Matches" : "Differs"}</div><div class="l">BAM's reported stake vs Solana</div><div class="n">${fmt(v.onchainMatched)} validators checked · typical deviation ${fmt(v.stakeMedianRelPct ?? 0, 4)}% · worst ${fmt(v.stakeMaxRelPct, 4)}%</div></div>
   <div class="card kpi"><div class="v">${v.bamHeadlineSharePct ? fmt(Math.abs(v.bamHeadlineSharePct - v.bamShareOnchainPct), 3) + "pp" : "—"}</div><div class="l">gap between BAM's claim and the chain</div><div class="n">${v.bamHeadlineSharePct ? `BAM publishes ${fmt(v.bamHeadlineSharePct, 4)}% · chain gives ${fmt(v.bamShareOnchainPct, 4)}%` : "awaiting a reading"}</div></div>
   <div class="card kpi"><div class="v ${agree ? "ok" : "warn"}">${agree ? "Agree" : fmt(disputed)}</div><div class="l">${agree ? "Jito's two sources agree" : "validators the two sources disagree on"}</div><div class="n">BAM explorer lists ${fmt(v.explorerValidators)} · Kobe flags ${fmt(v.kobeRunningBam)}</div></div>
   <div class="card kpi"><div class="v ${agree ? "ok" : "warn"}">${agree ? "0" : fmt(v.disputedStakeSol / 1e3, 0) + "k"}</div><div class="l">SOL under disagreement</div><div class="n">stake attached to the validators in dispute</div></div>
