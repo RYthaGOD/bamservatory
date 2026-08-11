@@ -1,24 +1,24 @@
 {
-  "generatedAt": "2026-08-11T02:37:41.128Z",
+  "generatedAt": "2026-08-11T02:53:40.820Z",
   "schemaVersion": 2,
   "provenance": {
     "collector": "0fcd020edfd9d71e7c36d971dad47ba88442a520",
     "archive": "https://github.com/RYthaGOD/bamservatory-data",
     "inputs": {
-      "summary.csv": "sha256:f636286c0b0e4b5eebb61bc44234660900417b1db7dd7a4abee0819eb3a6049e",
-      "nodes.csv": "sha256:75613c34ddd7cd425d46b63229092866df9b39a7af4b53c79438cdb39568d184",
+      "summary.csv": "sha256:a07587c5730012582a9fab488fa7056a968f783bbfa94d4e4490034f2ca7f461",
+      "nodes.csv": "sha256:0156a1b77a24b21a7fa8f13eda55c25b30183568518e17a14294ff85aa96eaf2",
       "detections.log": "sha256:056a0f212550816f345239c9a4f8e19aa5ff44a72a6821ffee480e3795c77d47",
       "validators.csv": {
         "tailReadOnly": true,
-        "snapshotTs": "2026-08-11T02:37:40Z",
+        "snapshotTs": "2026-08-11T02:53:40Z",
         "validators": 374
       }
     }
   },
   "window": {
     "from": "2026-06-20T15:08:27Z",
-    "to": "2026-08-11T02:37:40Z",
-    "snapshots": 42408
+    "to": "2026-08-11T02:53:40Z",
+    "snapshots": 42424
   },
   "headline": {
     "bamStakeSOL": 141547697.28,
@@ -36,7 +36,7 @@
     }
   },
   "decentralization": {
-    "nodeStakeHHI": 0.138487,
+    "nodeStakeHHI": 0.138891,
     "nodeNakamoto": 3,
     "regionNakamoto": 3,
     "validatorNakamoto": 27,
@@ -49,25 +49,25 @@
     "pct": {
       "min": 17.7183,
       "max": 34.5269,
-      "avg": 32.77097284378287,
+      "avg": 32.77093115001575,
       "cur": 32.5644
     },
     "hhi": {
       "min": 0.119032,
       "max": 0.258565,
-      "avg": 0.1317371773455318,
-      "cur": 0.138487
+      "avg": 0.1317386969297361,
+      "cur": 0.138891
     },
     "vals": {
       "min": 190,
       "max": 391,
-      "avg": 375.9962081714118,
+      "avg": 375.9958640695765,
       "cur": 374
     },
     "nodes": {
       "min": 10,
       "max": 18,
-      "avg": 15.456130007916649,
+      "avg": 15.456029345876383,
       "cur": 15
     }
   },
@@ -1760,9 +1760,16 @@
       "nodes": 15
     },
     {
-      "ts": "2026-08-11T02:37:40Z",
+      "ts": "2026-08-11T02:46:39Z",
       "pct": 32.5644,
       "hhi": 0.138487,
+      "vals": 374,
+      "nodes": 15
+    },
+    {
+      "ts": "2026-08-11T02:53:40Z",
+      "pct": 32.5644,
+      "hhi": 0.138891,
       "vals": 374,
       "nodes": 15
     }
@@ -1799,9 +1806,9 @@
     {
       "node": "sin-mainnet-bam-1-tee",
       "region": "sin",
-      "vals": 41,
-      "stake": 14722008.64,
-      "share": 10.400740472547467
+      "vals": 42,
+      "stake": 15021405.97,
+      "share": 10.612257392802695
     },
     {
       "node": "tyo-mainnet-bam-2-tee",
@@ -1846,18 +1853,18 @@
       "share": 1.1732353841105714
     },
     {
-      "node": "dfw-mainnet-bam-2-tee",
-      "region": "dfw",
-      "vals": 7,
-      "stake": 1500681.98,
-      "share": 1.0601952619020245
-    },
-    {
       "node": "slc-mainnet-bam-1-tee",
       "region": "slc",
       "vals": 9,
       "stake": 1397945.17,
       "share": 0.9876142083300156
+    },
+    {
+      "node": "dfw-mainnet-bam-2-tee",
+      "region": "dfw",
+      "vals": 6,
+      "stake": 1201284.65,
+      "share": 0.848678341646797
     },
     {
       "node": "iad-mainnet-bam-2-tee",
@@ -1905,10 +1912,10 @@
     },
     {
       "region": "sin",
-      "vals": 41,
-      "stake": 14722008.64,
+      "vals": 42,
+      "stake": 15021405.97,
       "nodes": 1,
-      "share": 10.400740472547467
+      "share": 10.612257392802695
     },
     {
       "region": "tyo",
@@ -1953,18 +1960,18 @@
       "share": 1.1732353841105714
     },
     {
-      "region": "dfw",
-      "vals": 7,
-      "stake": 1500681.98,
-      "nodes": 1,
-      "share": 1.0601952619020245
-    },
-    {
       "region": "slc",
       "vals": 9,
       "stake": 1397945.17,
       "nodes": 1,
       "share": 0.9876142083300156
+    },
+    {
+      "region": "dfw",
+      "vals": 6,
+      "stake": 1201284.65,
+      "nodes": 1,
+      "share": 0.848678341646797
     },
     {
       "region": "iad",
