@@ -127,11 +127,21 @@ const verificationPanel = !V ? "" : (() => {
         <div class="card"><div class="dim" style="font-size:12px;margin-bottom:8px">Validators the two sources disagree on</div>${chart(V.series, "onlyExplorer", { color: "#fbbf24", fill: "rgba(251,191,36,.10)" })}</div>
         <div class="card"><div class="dim" style="font-size:12px;margin-bottom:8px">Largest per-validator stake deviation (%)</div>${chart(V.series, "stakeMaxRelPct", { color: "#5eead4", fill: "rgba(94,234,212,.12)" })}</div>
        </div>`
-    : `<div class="note" style="margin-top:12px">Readings are still accumulating — ${V.readings} so far since ${day(V.since)}, one every 30 minutes. Trends appear once there are enough to distinguish a persistent disagreement from a transient one.</div>`;
+    : (() => {
+        // Measured from the readings themselves rather than restating the
+        // configured interval, which drifts the moment the schedule changes —
+        // the same way this sentence already said "30 minutes" after the
+        // collector had moved to 15.
+        const ts = V.series.map((r) => Date.parse(r.ts)).sort((a, b) => a - b);
+        const gaps = ts.slice(1).map((t, i) => (t - ts[i]) / 60000).sort((a, b) => a - b);
+        const cadence = gaps.length ? Math.round(gaps[Math.floor(gaps.length / 2)]) : null;
+        return `<div class="note" style="margin-top:12px">Readings are still accumulating — ${V.readings} so far since ${day(V.since)}${cadence ? `, roughly one every ${cadence} minutes` : ""}. Trends appear once there are enough to distinguish a persistent disagreement from a transient one.</div>`;
+      })();
 
   return `
 <h2>Verification — checking what BAM reports</h2>
-<div class="note">Everything above is gathered from BAM's own API, which makes it an index of what BAM says. This section checks it. Stake is verified against Solana itself, where the chain is the authority and BAM's figures either match or they do not. Membership is cross-checked against Jito's separate Kobe API, which publishes the same fact independently.</div>
+<div class="note">Everything above is gathered from BAM's own API, which makes it an index of what BAM says. This section checks it. Stake is verified against Solana itself, where the chain is the authority and BAM's figures either match or they do not. Membership is cross-checked against Jito's separate Kobe API, which publishes the same fact independently.
+<br><br><b>Read at ${esc(v.ts.replace("T", " ").replace("Z", " UTC"))}</b>, on its own slower cycle than the figures above — it queries three services and a full Solana vote-account set, so it runs less often than the 60-second capture. Counts here will therefore differ slightly from the headline, which is the more recent reading, not a contradiction of it.</div>
 <div class="grid g4" style="margin-top:12px">
   <div class="card kpi"><div class="v ${stakeHolds ? "ok" : "bad"}">${stakeHolds ? "Matches" : "Differs"}</div><div class="l">BAM's reported stake vs Solana</div><div class="n">${fmt(v.onchainMatched)} validators checked · largest deviation ${fmt(v.stakeMaxRelPct, 4)}%</div></div>
   <div class="card kpi"><div class="v">${v.bamHeadlineSharePct ? fmt(Math.abs(v.bamHeadlineSharePct - v.bamShareOnchainPct), 3) + "pp" : "—"}</div><div class="l">gap between BAM's claim and the chain</div><div class="n">${v.bamHeadlineSharePct ? `BAM publishes ${fmt(v.bamHeadlineSharePct, 4)}% · chain gives ${fmt(v.bamShareOnchainPct, 4)}%` : "awaiting a reading"}</div></div>
