@@ -183,6 +183,7 @@ function loadVerification() {
     disp: ix("disputed_stake_sol"), matched: ix("onchain_matched"),
     rep: ix("stake_reported_sol"), chain: ix("stake_onchain_sol"),
     diff: ix("stake_abs_diff_sol"), maxRel: ix("stake_max_rel_pct"),
+    hStake: ix("bam_headline_stake_sol"), hShare: ix("bam_headline_share_pct"),
     shRep: ix("bam_share_reported_pct"), shChain: ix("bam_share_onchain_pct"),
   };
 
@@ -197,6 +198,11 @@ function loadVerification() {
       onchainMatched: num(c[I.matched]),
       stakeReportedSol: num(c[I.rep]), stakeOnchainSol: num(c[I.chain]),
       stakeAbsDiffSol: num(c[I.diff]), stakeMaxRelPct: num(c[I.maxRel]),
+      // Absent from rows written before the headline was captured, so these read
+      // 0 for early readings rather than being missing — consumers should treat
+      // 0 as "not recorded", which is why the panel tests before displaying.
+      bamHeadlineStakeSol: I.hStake >= 0 ? num(c[I.hStake]) : 0,
+      bamHeadlineSharePct: I.hShare >= 0 ? num(c[I.hShare]) : 0,
       bamShareReportedPct: num(c[I.shRep]), bamShareOnchainPct: num(c[I.shChain]),
     });
   }
