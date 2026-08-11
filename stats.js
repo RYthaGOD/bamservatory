@@ -29,6 +29,15 @@ const DETLOG = path.join(DIR, "detections.log");
 
 const city = (nodeName) => String(nodeName).split("-")[0];
 const num = (x) => { const n = parseFloat(x); return Number.isFinite(n) ? n : 0; };
+// For columns that can legitimately be empty, where 0 would be a lie rather than
+// a default: a blank means the reading predates the column, and reading it as
+// zero is how "typical deviation 0.0000%" came to be displayed under forty
+// readings that never recorded one.
+const numOrNull = (x) => {
+  if (x === undefined || String(x).trim() === "") return null;
+  const n = parseFloat(x);
+  return Number.isFinite(n) ? n : null;
+};
 // min entities (sorted desc) whose cumulative share first exceeds `frac` of total
 function nakamoto(values, frac = 0.5) {
   const sorted = [...values].sort((a, b) => b - a);
@@ -164,8 +173,10 @@ function loadValidatorsLatest(latestTs) {
 
 // ---- 3b. cross-source verification ------------------------------------------
 // The one input here that checks BAM rather than describing it. Written by
-// verify-sources.mjs every ~30 minutes: BAM's reported stake against Solana, and
-// BAM's membership list against Jito's own Kobe API.
+// verify-sources.mjs on its own slower cycle: BAM's reported stake against
+// Solana, and BAM's membership list against Jito's own Kobe API. The cadence is
+// not restated here — the readings carry their own timestamps, and a number
+// written into a comment is wrong from the first time the schedule changes.
 //
 // Absent on a witness, and on the primary until the first run, so every consumer
 // must treat null as normal rather than as breakage.
@@ -200,14 +211,15 @@ function loadVerification() {
       onchainMatched: num(c[I.matched]),
       stakeReportedSol: num(c[I.rep]), stakeOnchainSol: num(c[I.chain]),
       stakeAbsDiffSol: num(c[I.diff]), stakeMaxRelPct: num(c[I.maxRel]),
-      stakeMedianRelPct: I.medRel >= 0 ? num(c[I.medRel]) : 0,
-      kobeTotalValidators: I.kobeTotal >= 0 ? num(c[I.kobeTotal]) : 0,
-      chainValidators: I.chainVals >= 0 ? num(c[I.chainVals]) : 0,
-      // Absent from rows written before the headline was captured, so these read
-      // 0 for early readings rather than being missing — consumers should treat
-      // 0 as "not recorded", which is why the panel tests before displaying.
-      bamHeadlineStakeSol: I.hStake >= 0 ? num(c[I.hStake]) : 0,
-      bamHeadlineSharePct: I.hShare >= 0 ? num(c[I.hShare]) : 0,
+      // null on readings taken before the column existed. Every consumer must
+      // test for that rather than rendering it, because these are the fields
+      // where a substituted zero reads as a measurement — "no disagreement",
+      // "no deviation" — instead of as the absence of one.
+      stakeMedianRelPct: I.medRel >= 0 ? numOrNull(c[I.medRel]) : null,
+      kobeTotalValidators: I.kobeTotal >= 0 ? numOrNull(c[I.kobeTotal]) : null,
+      chainValidators: I.chainVals >= 0 ? numOrNull(c[I.chainVals]) : null,
+      bamHeadlineStakeSol: I.hStake >= 0 ? numOrNull(c[I.hStake]) : null,
+      bamHeadlineSharePct: I.hShare >= 0 ? numOrNull(c[I.hShare]) : null,
       bamShareReportedPct: num(c[I.shRep]), bamShareOnchainPct: num(c[I.shChain]),
     });
   }

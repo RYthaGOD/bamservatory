@@ -119,34 +119,63 @@ const verificationPanel = !V ? "" : (() => {
   const v = V.latest;
   // Median, not max: one validator moving stake between BAM's snapshot and ours
   // decides a max over hundreds and says nothing about the reporting.
-  const stakeHolds = (v.stakeMedianRelPct ?? v.stakeMaxRelPct) < 0.01;
+  //
+  // null on a reading taken before the median was recorded, where the max is
+  // genuinely all there is. The fallback has to be reached through a value that
+  // can actually be absent — when the reader substituted 0 for a missing median
+  // this test read "0 < 0.01" for every historical reading and the tile said
+  // "Matches" without consulting anything.
+  const med = v.stakeMedianRelPct;
+  const stakeHolds = (med ?? v.stakeMaxRelPct) < 0.01;
   const agree = v.onlyExplorer === 0 && v.onlyKobe === 0;
   const disputed = v.onlyExplorer + v.onlyKobe;
-  const ENOUGH = 24;   // ~12 hours at one reading per half hour
 
-  const trend = V.series.length >= ENOUGH
-    ? `<div class="grid g2" style="margin-top:12px">
-        <div class="card"><div class="dim" style="font-size:12px;margin-bottom:8px">Validators the two sources disagree on</div>${chart(V.series, "onlyExplorer", { color: "#fbbf24", fill: "rgba(251,191,36,.10)" })}</div>
-        <div class="card"><div class="dim" style="font-size:12px;margin-bottom:8px">Typical per-validator stake deviation (%)</div>${chart(V.series, "stakeMedianRelPct", { color: "#5eead4", fill: "rgba(94,234,212,.12)" })}</div>
-       </div>`
-    : (() => {
-        // Measured from the readings themselves rather than restating the
-        // configured interval, which drifts the moment the schedule changes —
-        // the same way this sentence already said "30 minutes" after the
-        // collector had moved to 15.
-        const ts = V.series.map((r) => Date.parse(r.ts)).sort((a, b) => a - b);
-        const gaps = ts.slice(1).map((t, i) => (t - ts[i]) / 60000).sort((a, b) => a - b);
-        const cadence = gaps.length ? Math.round(gaps[Math.floor(gaps.length / 2)]) : null;
-        return `<div class="note" style="margin-top:12px">Readings are still accumulating — ${V.readings} so far since ${day(V.since)}${cadence ? `, roughly one every ${cadence} minutes` : ""}. Trends appear once there are enough to distinguish a persistent disagreement from a transient one.</div>`;
-      })();
+  // Enough to draw a line: half a day of coverage and enough readings to shape
+  // it. Measured, because a bare count meant different things as the cadence
+  // changed — 24 readings was twelve hours at one every thirty minutes and six
+  // at one every fifteen, and the constant went on claiming twelve.
+  const HOURS = 12, POINTS = 12;
+  const covers = (s) => s.length >= POINTS &&
+    Date.parse(s[s.length - 1].ts) - Date.parse(s[0].ts) >= HOURS * 3600e3;
+
+  // The median arrived later than the columns beside it, so it is charted from
+  // the readings that actually carry one and gated on their span, not the
+  // panel's. Charting it against the full series would draw the years before it
+  // existed as a flat line at zero — a period of perfect agreement that was
+  // never observed.
+  const medSeries = V.series.filter((r) => r.stakeMedianRelPct !== null);
+
+  // Cadence from the readings themselves rather than the configured interval,
+  // which drifts the moment the schedule changes.
+  const ts = V.series.map((r) => Date.parse(r.ts)).sort((a, b) => a - b);
+  const gaps = ts.slice(1).map((t, i) => (t - ts[i]) / 60000).sort((a, b) => a - b);
+  const cadence = gaps.length ? Math.round(gaps[Math.floor(gaps.length / 2)]) : null;
+
+  const card = (title, series, key, color, fill) =>
+    `<div class="card"><div class="dim" style="font-size:12px;margin-bottom:8px">${title}</div>${chart(series, key, { color, fill })}</div>`;
+  const plural = (n) => `${n} reading${n === 1 ? "" : "s"}`;
+
+  const cards = [
+    covers(V.series) ? card("Validators the two sources disagree on", V.series, "onlyExplorer", "#fbbf24", "rgba(251,191,36,.10)") : "",
+    covers(medSeries) ? card("Typical per-validator stake deviation (%)", medSeries, "stakeMedianRelPct", "#5eead4", "rgba(94,234,212,.12)") : "",
+  ].filter(Boolean);
+
+  const waiting = [
+    covers(V.series) ? "" : `the disagreement count (${plural(V.readings)} since ${day(V.since)}${cadence ? `, roughly one every ${cadence} minutes` : ""})`,
+    covers(medSeries) ? "" : `typical deviation (${plural(medSeries.length)}, recorded only since the collector began measuring it)`,
+  ].filter(Boolean);
+
+  const trend =
+    (cards.length ? `<div class="grid g2" style="margin-top:12px">${cards.join("")}</div>` : "") +
+    (waiting.length ? `<div class="note" style="margin-top:12px">Still accumulating: ${waiting.join("; and ")}. Each is charted once it covers ${HOURS} hours — long enough to tell a persistent disagreement from a transient one.</div>` : "");
 
   return `
 <h2>Verification — checking what BAM reports</h2>
 <div class="note">Everything above is gathered from BAM's own API, which makes it an index of what BAM says. This section checks it. Stake is verified against Solana itself, where the chain is the authority and BAM's figures either match or they do not. Membership is cross-checked against Jito's separate Kobe API, which publishes the same fact independently.
 <br><br><b>Read at ${esc(v.ts.replace("T", " ").replace("Z", " UTC"))}</b>, on its own slower cycle than the figures above — it queries three services and a full Solana vote-account set, so it runs less often than the 60-second capture. Counts here will therefore differ slightly from the headline, which is the more recent reading, not a contradiction of it.</div>
 <div class="grid g4" style="margin-top:12px">
-  <div class="card kpi"><div class="v ${stakeHolds ? "ok" : "bad"}">${stakeHolds ? "Matches" : "Differs"}</div><div class="l">BAM's reported stake vs Solana</div><div class="n">${fmt(v.onchainMatched)} validators checked · typical deviation ${fmt(v.stakeMedianRelPct ?? 0, 4)}% · worst ${fmt(v.stakeMaxRelPct, 4)}%</div></div>
-  <div class="card kpi"><div class="v">${v.bamHeadlineSharePct ? fmt(Math.abs(v.bamHeadlineSharePct - v.bamShareOnchainPct), 3) + "pp" : "—"}</div><div class="l">gap between BAM's claim and the chain</div><div class="n">${v.bamHeadlineSharePct ? `BAM publishes ${fmt(v.bamHeadlineSharePct, 4)}% · chain gives ${fmt(v.bamShareOnchainPct, 4)}%` : "awaiting a reading"}</div></div>
+  <div class="card kpi"><div class="v ${stakeHolds ? "ok" : "bad"}">${stakeHolds ? "Matches" : "Differs"}</div><div class="l">BAM's reported stake vs Solana</div><div class="n">${fmt(v.onchainMatched)} validators checked · ${med === null ? `deviation ${fmt(v.stakeMaxRelPct, 4)}% at the worst validator; typical not recorded for this reading` : `typical deviation ${fmt(med, 4)}% · worst ${fmt(v.stakeMaxRelPct, 4)}%`}</div></div>
+  <div class="card kpi"><div class="v">${v.bamHeadlineSharePct == null ? "—" : fmt(Math.abs(v.bamHeadlineSharePct - v.bamShareOnchainPct), 4) + "pp"}</div><div class="l">gap between BAM's claim and the chain</div><div class="n">${v.bamHeadlineSharePct == null ? "awaiting a reading" : `BAM publishes ${fmt(v.bamHeadlineSharePct, 4)}% · chain gives ${fmt(v.bamShareOnchainPct, 4)}%`}</div></div>
   <div class="card kpi"><div class="v ${agree ? "ok" : "warn"}">${agree ? "Agree" : fmt(disputed)}</div><div class="l">${agree ? "Jito's two sources agree" : "validators the two sources disagree on"}</div><div class="n">BAM explorer lists ${fmt(v.explorerValidators)} · Kobe flags ${fmt(v.kobeRunningBam)}</div></div>
   <div class="card kpi"><div class="v ${agree ? "ok" : "warn"}">${agree ? "0" : fmt(v.disputedStakeSol / 1e3, 0) + "k"}</div><div class="l">SOL under disagreement</div><div class="n">stake attached to the validators in dispute</div></div>
 </div>
