@@ -162,6 +162,55 @@ function loadValidatorsLatest(latestTs) {
   };
 }
 
+// ---- 3b. cross-source verification ------------------------------------------
+// The one input here that checks BAM rather than describing it. Written by
+// verify-sources.mjs every ~30 minutes: BAM's reported stake against Solana, and
+// BAM's membership list against Jito's own Kobe API.
+//
+// Absent on a witness, and on the primary until the first run, so every consumer
+// must treat null as normal rather than as breakage.
+function loadVerification() {
+  const p = path.join(DIR, "verification.csv");
+  if (!fs.existsSync(p)) return null;
+  const lines = fs.readFileSync(p, "utf8").trim().split(/\r?\n/);
+  if (lines.length < 2) return null;
+
+  const hdr = lines[0].split(",");
+  const ix = (n) => hdr.indexOf(n);
+  const I = {
+    ts: ix("ts"), ev: ix("explorer_validators"), kb: ix("kobe_running_bam"),
+    both: ix("in_both"), oe: ix("only_explorer"), ok: ix("only_kobe"),
+    disp: ix("disputed_stake_sol"), matched: ix("onchain_matched"),
+    rep: ix("stake_reported_sol"), chain: ix("stake_onchain_sol"),
+    diff: ix("stake_abs_diff_sol"), maxRel: ix("stake_max_rel_pct"),
+    shRep: ix("bam_share_reported_pct"), shChain: ix("bam_share_onchain_pct"),
+  };
+
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const c = lines[i].split(",");
+    if (c.length < hdr.length || !c[I.ts]) continue;
+    rows.push({
+      ts: c[I.ts],
+      explorerValidators: num(c[I.ev]), kobeRunningBam: num(c[I.kb]), inBoth: num(c[I.both]),
+      onlyExplorer: num(c[I.oe]), onlyKobe: num(c[I.ok]), disputedStakeSol: num(c[I.disp]),
+      onchainMatched: num(c[I.matched]),
+      stakeReportedSol: num(c[I.rep]), stakeOnchainSol: num(c[I.chain]),
+      stakeAbsDiffSol: num(c[I.diff]), stakeMaxRelPct: num(c[I.maxRel]),
+      bamShareReportedPct: num(c[I.shRep]), bamShareOnchainPct: num(c[I.shChain]),
+    });
+  }
+  if (!rows.length) return null;
+
+  // Downsampled the same way the main series is, for the same reason.
+  const step = Math.max(1, Math.floor(rows.length / 240));
+  const series = rows
+    .filter((_, i) => i % step === 0 || i === rows.length - 1)
+    .map((r) => ({ ts: r.ts, onlyExplorer: r.onlyExplorer, disputedStakeSol: r.disputedStakeSol, stakeMaxRelPct: r.stakeMaxRelPct }));
+
+  return { latest: rows[rows.length - 1], readings: rows.length, since: rows[0].ts, series };
+}
+
 // ---- 4. detections ---------------------------------------------------------
 // Two distinct things, kept honest and separate:
 //   • VALIDATED structural rollover (from the replay backtest on the 2026-06-24
@@ -353,6 +402,10 @@ async function main() {
     whales: validatorsLatest.whales,
     leadershipChanges,
     detections,
+    // Additive, so schemaVersion stays where it is. Null until the first
+    // verification run, and null on a witness — never absent, so a consumer can
+    // test the field rather than its existence.
+    verification: loadVerification(),
   };
 
   fs.writeFileSync(OUT, JSON.stringify(metrics, null, 2));

@@ -103,6 +103,45 @@ const sentinel = alerting
   ? { cls: "alert", label: `Alert · Nakamoto ${d.nodeNakamoto}`, title: `Node Nakamoto coefficient is ${d.nodeNakamoto} — ${d.nodeNakamoto} BAM nodes control a majority of marketplace stake.` }
   : { cls: "", label: "Sentinel active", title: `Node Nakamoto coefficient is ${d.nodeNakamoto}. Concentration within normal range.` };
 
+// ---- cross-source verification ----------------------------------------------
+// The only panel here that checks BAM rather than reporting it, so it says
+// plainly what was checked, what held, and what is still taken on trust.
+//
+// Status colours, not series colours: each figure is a state (holds / disagrees),
+// and every one is paired with words. A reader who cannot distinguish the hues
+// loses nothing, which is the whole point of keeping the status palette reserved.
+//
+// No chart until there are enough readings to mean something. A line through
+// three points implies a trend that has not been observed, and this panel is the
+// last place on the page that should overstate its evidence.
+const V = M.verification;
+const verificationPanel = !V ? "" : (() => {
+  const v = V.latest;
+  const stakeHolds = v.stakeMaxRelPct < 0.01;
+  const agree = v.onlyExplorer === 0 && v.onlyKobe === 0;
+  const disputed = v.onlyExplorer + v.onlyKobe;
+  const ENOUGH = 24;   // ~12 hours at one reading per half hour
+
+  const trend = V.series.length >= ENOUGH
+    ? `<div class="grid g2" style="margin-top:12px">
+        <div class="card"><div class="dim" style="font-size:12px;margin-bottom:8px">Validators the two sources disagree on</div>${chart(V.series, "onlyExplorer", { color: "#fbbf24", fill: "rgba(251,191,36,.10)" })}</div>
+        <div class="card"><div class="dim" style="font-size:12px;margin-bottom:8px">Largest per-validator stake deviation (%)</div>${chart(V.series, "stakeMaxRelPct", { color: "#5eead4", fill: "rgba(94,234,212,.12)" })}</div>
+       </div>`
+    : `<div class="note" style="margin-top:12px">Readings are still accumulating — ${V.readings} so far since ${day(V.since)}, one every 30 minutes. Trends appear once there are enough to distinguish a persistent disagreement from a transient one.</div>`;
+
+  return `
+<h2>Verification — checking what BAM reports</h2>
+<div class="note">Everything above is gathered from BAM's own API, which makes it an index of what BAM says. This section checks it. Stake is verified against Solana itself, where the chain is the authority and BAM's figures either match or they do not. Membership is cross-checked against Jito's separate Kobe API, which publishes the same fact independently.</div>
+<div class="grid g4" style="margin-top:12px">
+  <div class="card kpi"><div class="v ${stakeHolds ? "ok" : "bad"}">${stakeHolds ? "Matches" : "Differs"}</div><div class="l">BAM's reported stake vs Solana</div><div class="n">${fmt(v.onchainMatched)} validators checked · largest deviation ${fmt(v.stakeMaxRelPct, 4)}%</div></div>
+  <div class="card kpi"><div class="v">${fmt(v.bamShareOnchainPct, 2)}%</div><div class="l">BAM share, computed from chain</div><div class="n">not taken from BAM's API · they report ${fmt(v.bamShareReportedPct, 2)}%</div></div>
+  <div class="card kpi"><div class="v ${agree ? "ok" : "warn"}">${agree ? "Agree" : fmt(disputed)}</div><div class="l">${agree ? "Jito's two sources agree" : "validators the two sources disagree on"}</div><div class="n">BAM explorer lists ${fmt(v.explorerValidators)} · Kobe flags ${fmt(v.kobeRunningBam)}</div></div>
+  <div class="card kpi"><div class="v ${agree ? "ok" : "warn"}">${agree ? "0" : fmt(v.disputedStakeSol / 1e3, 0) + "k"}</div><div class="l">SOL under disagreement</div><div class="n">stake attached to the validators in dispute</div></div>
+</div>
+${trend}
+<div class="note" style="margin-top:12px"><b>What this does not establish.</b> Which validators run BAM still comes from Jito — a BAM-produced block is indistinguishable from any other on chain, because BAM changes how a block is assembled, not what ends up in it. That membership claim is now cross-checked between two of Jito's own systems rather than taken on faith, and the stake attached to it is verified outright against Solana — but it is not independently derived, and no amount of cross-checking makes it so. That gap closes with published attestations, not with more sources.</div>`;
+})();
+
 // ---- BAMsey's briefing ------------------------------------------------------
 // Provenance is stated on the page: a machine-written note is only credible here
 // if the reader can see how it was produced and that its figures were checked.
@@ -246,6 +285,8 @@ ${alerting
   <div class="card"><div class="dim" style="font-size:12px;margin-bottom:8px">BAM share of Solana stake (%)</div>${chart(M.series, "pct", { color: "#5eead4", fill: "rgba(94,234,212,.12)" })}</div>
   <div class="card"><div class="dim" style="font-size:12px;margin-bottom:8px">Node-stake concentration (HHI)</div>${chart(M.series, "hhi", { color: "#fbbf24", fill: "rgba(251,191,36,.10)" })}</div>
 </div>
+
+${verificationPanel}
 
 <h2>Early warning — structural rollover detection</h2>
 ${validated}
