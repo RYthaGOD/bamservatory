@@ -132,6 +132,11 @@ function loadSummary() {
   // metrics.json: a figure quietly removed from a public statistic is its own
   // kind of unverifiable claim, and a reader is entitled to see the count.
   kept.excluded = excluded;
+  // The order captures were actually written in, exclusions included. The
+  // detector compared each capture against whichever one preceded it at the
+  // time, so judging its output needs that adjacency and not the tidied one
+  // left behind afterwards.
+  kept.capturedOrder = dedup.map((r) => r.ts);
   return kept;
 }
 
@@ -346,7 +351,10 @@ const isStructural = (kv) =>
   num(kv.lead_min) > 0 &&
   num(kv.lead_min) <= LEAD_WINDOW_MIN;
 
-function loadDetections() {
+// `tainted(ts)` answers whether an event was computed from a capture that has
+// since been recognised as a partial response — or against one, since the
+// detector compares each capture with its predecessor.
+function loadDetections(tainted) {
   // VALIDATED — from the backtest replay. A genuine structural cutover is one
   // whose matched precursor was a same-region SIGNAL with a short lead.
   const replay = readLog(path.join(DIR, "detections_replay.log"));
@@ -367,7 +375,24 @@ function loadDetections() {
   const rolloverPrecursors = replay.filter((e) => e.kind && e.kind.startsWith("SIGNAL")).length;
 
   // LIVE feed
-  const live = readLog(DETLOG);
+  //
+  // Events derived from a partial response are dropped, for the same reason the
+  // captures behind them are. When the API returned an incomplete node set, the
+  // missing nodes were read as having left and their return one capture later as
+  // six new nodes arriving at once — firing region signals and cutovers that
+  // describe nothing that happened to BAM. Around one live event in ten came
+  // from those minutes.
+  //
+  // Both sides of the comparison matter. detect.sh diffs a capture against its
+  // predecessor, so a healthy capture following a degraded one produces the
+  // "everything came back" half of the artifact and is just as spurious as the
+  // "everything vanished" half.
+  //
+  // detections.log itself is append-only history and is not rewritten; this is a
+  // reading rule, and the count of what it dropped is published beside it.
+  const allLive = readLog(DETLOG);
+  const live = allLive.filter((e) => !tainted(e.ts));
+  const excludedFromPartialResponses = allLive.length - live.length;
   const liveCutovers = live.filter((e) => e.kind === "CUTOVER").length;
   const liveSignals = live.filter((e) => e.kind && e.kind.startsWith("SIGNAL")).length;
   // A cutover only counts as "structural" if its precursor lead is PLAUSIBLE
@@ -381,7 +406,7 @@ function loadDetections() {
     structural: e.kind === "CUTOVER" ? isStructural(e.kv) : null,
   }));
 
-  return { validated, rolloverPrecursors, liveCutovers, liveSignals, feed };
+  return { validated, rolloverPrecursors, liveCutovers, liveSignals, excludedFromPartialResponses, feed };
 }
 
 // ---- assemble -------------------------------------------------------------
@@ -434,7 +459,17 @@ async function main() {
 
   const nodesLatest = loadNodesLatest(latest.ts);
   const validatorsLatest = await loadValidatorsLatest(latest.ts);
-  const detections = loadDetections();
+
+  // An event is tainted if its own capture was a partial response, or if the
+  // capture it was compared against was — built from the order captures were
+  // actually written in, which is what the detector saw.
+  const excludedSet = new Set(summary.excluded ?? []);
+  const prevOf = new Map();
+  const order = summary.capturedOrder ?? [];
+  for (let i = 1; i < order.length; i++) prevOf.set(order[i], order[i - 1]);
+  const tainted = (ts) => excludedSet.has(ts) || excludedSet.has(prevOf.get(ts));
+
+  const detections = loadDetections(tainted);
 
   // metrics.json is a derived artifact: every figure below is a pure function of
   // the capture files. Recording a digest of those inputs lets anyone pin which

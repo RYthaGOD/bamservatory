@@ -241,7 +241,20 @@ count as node churn — see `detections` for events that were actually validated
 | `rolloverPrecursors` | Same-region node appearances preceding a cutover. |
 | `liveCutovers` | Top-node changes seen live. Mostly whale flips. |
 | `liveSignals` | New-node appearances seen live. |
+| `excludedFromPartialResponses` | Live events dropped because the capture behind them was incomplete. |
 | `feed` | Recent raw events. |
+
+`excludedFromPartialResponses` counts the detector reading its own blind spot.
+When the API returned an incomplete node set, the absent nodes were read as
+having left, and their return one capture later as several new nodes appearing
+at once — firing region signals and cutovers that describe nothing that happened
+to BAM. Both sides of each comparison are dropped, since the healthy capture
+following a degraded one produces the "everything came back" half of the
+artifact. Around one live event in ten came from those minutes.
+
+`detections.log` is append-only history and is not rewritten; this is a rule
+applied when it is read, and the count is published so the difference between
+the log and these figures is visible rather than implied.
 
 The separation is deliberate. A live "cutover" with `first_signal=none` is a
 stake flip, not a rollover, and is not credited as an early-warning success.
