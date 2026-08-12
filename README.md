@@ -68,11 +68,51 @@ A capture directory holds the flattened public-API snapshots
 
 ## Methodology
 
-All figures derive from the public BAM API (`/nodes`, `/validators`,
-`/bam_stake`), sampled every 60 seconds. **Nakamoto coefficient** = minimum
-entities whose cumulative stake exceeds 50%. **HHI** = Herfindahl–Hirschman index
-of node stake shares. **Early-warning** compares consecutive node sets and times
-region cutovers against precursor node appearances.
+Everything on the dashboard except the verification panel derives from the public
+BAM API (`/nodes`, `/validators`, `/bam_stake`), sampled every 60 seconds.
+**Nakamoto coefficient** = minimum entities whose cumulative stake exceeds 50%.
+**HHI** = Herfindahl–Hirschman index of node stake shares. **Early-warning**
+compares consecutive node sets and times region cutovers against precursor node
+appearances.
+
+That makes the bulk of this an *index of what BAM says about itself*. The
+verification panel is the part that checks it, and it reads two sources BAM does
+not control:
+
+| Source | Used for |
+|---|---|
+| Solana RPC `getVoteAccounts` | Every BAM-listed validator's stake, looked up on chain. The chain is the authority; BAM's figures either match it or they do not. |
+| [Jito's Kobe API](https://kobe.mainnet.jito.network) | Who is running BAM, published independently of the BAM explorer. |
+
+It runs every 15 minutes rather than every 60 seconds — it pulls a full
+vote-account set and Jito's whole validator table, and running that every minute
+would be rude to three services to restate a figure that moves over hours. The
+panel states its own read time for that reason.
+
+Two honest limits on it. Membership still originates with Jito either way: a
+BAM-produced block is indistinguishable from any other on chain, so the
+cross-check is between two of Jito's own systems, not an independent derivation.
+And BAM's published share and the chain-derived one use different network
+totals, so the small gap between them is a denominator difference, not a
+misstatement of BAM's stake — the numerators agree to the cent.
+
+### When a capture comes back incomplete
+
+The API sometimes returns a coherent but incomplete view: on 2026-07-01, three
+consecutive captures reported 291 validators and 116.8M SOL between captures
+reporting 380 and 142.0M, then recovered exactly. A quarter of BAM's stake did
+not leave and return within three minutes.
+
+Nothing inside such a record looks wrong — its totals agree with its own
+contents — so these were recorded as observations, and they set published minima
+that were never true of BAM. The collector now withholds a capture that collapses
+against the one before it, releasing it if the smaller network is still there two
+captures later, so a genuine change is recorded and a failed read is not. Figures
+computed from history already recorded exclude them too, and `metrics.json` lists
+every excluded timestamp in `window.partialResponsesExcluded`.
+
+The raw captures stay in the archive either way. What is withheld is the
+interpretation, never the record.
 
 ### Sampling rate, honestly
 
@@ -100,7 +140,16 @@ cd bamservatory-data && ./verify.sh      # hashes, record counts, coverage
 ```
 
 `metrics.json` carries a `provenance` block naming the collector build and a
-SHA-256 of each input it was computed from.
+SHA-256 of each input it was computed from, `verification.csv` included.
+
+One caveat worth stating plainly: the verification series is a *recording*, not
+something a third party can re-derive. It captures what three services returned
+at a moment that has passed, so you can check that the published panel matches
+the recorded series, and that the series has not been revised — but not that the
+readings were taken faithfully. The captures themselves have the same property,
+which is why three collectors record them independently. The verification
+collector runs on the primary only, because duplicating it would triple the load
+on other people's APIs to compute the same answer from the same public data.
 
 ## How the data is gathered
 

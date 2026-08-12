@@ -81,6 +81,7 @@ knowing before you build on `regionNakamoto`.
 | `whales` | array | Top 12 validators by stake. |
 | `leadershipChanges` | array | Every change of top node across the window. |
 | `detections` | object | Rollover early-warning events. |
+| `verification` | object \| null | Cross-source checks of what BAM reports. `null` where none have run. See below. |
 
 ### `provenance`
 
@@ -92,6 +93,7 @@ knowing before you build on `regionNakamoto`.
     "summary.csv": "sha256:b5524419…",
     "nodes.csv": "sha256:aa86e4cc…",
     "detections.log": "sha256:056a0f21…",
+    "verification.csv": "sha256:548c9739…",
     "validators.csv": { "tailReadOnly": true, "snapshotTs": "…", "validators": 375 }
   }
 }
@@ -114,9 +116,32 @@ does not resolve.
 | Field | Meaning |
 |---|---|
 | `from` / `to` | First and last capture timestamps. |
-| `snapshots` | Number of captures in the window. |
+| `snapshots` | Number of captures in the window, after the exclusions below. |
+| `partialResponsesExcluded` | array | Timestamps of captures left out of every figure in this file. |
 
 **`snapshots` is not the length of `series`.** See below.
+
+#### `partialResponsesExcluded`
+
+The BAM API occasionally returns a coherent but incomplete view — on
+2026-07-01 three consecutive captures reported 291 validators and 116.8M SOL
+between captures reporting 380 and 142.0M, then recovered exactly. Nothing
+inside such a record looks wrong: its own totals agree with its own contents.
+
+Recording one as an observation put minima into this file that were never true
+of BAM — a low of 10 nodes, 190 validators and a 17.72% stake share, all of them
+descriptions of a read that failed halfway.
+
+A capture is excluded when it sits below 80% of the median of the ten captures
+either side of it, in node count or validator count. Being low against what
+*follows* is what identifies it: a real change to BAM persists, so the series
+after it stays at the new level, while a partial read is followed by a return to
+where things were. The newest capture is never excluded, since nothing follows
+it yet to judge it against.
+
+The timestamps are published rather than quietly dropped — the raw records
+remain in the [archive](https://github.com/RYthaGOD/bamservatory-data)
+regardless, so anyone can pull them and disagree with this judgement.
 
 ### `headline`
 
@@ -212,6 +237,58 @@ The separation is deliberate. A live "cutover" with `first_signal=none` is a
 stake flip, not a rollover, and is not credited as an early-warning success.
 As of writing there is **one** validated structural rollover (2026-06-24, 22
 minutes of lead) — n=1, and it should be read that way.
+
+### `verification`
+
+The only block here not derived from the BAM API. It comes from
+`verification.csv` in the [archive](https://github.com/RYthaGOD/bamservatory-data),
+written on its own slower cycle by a collector that queries three sources: BAM's
+explorer, Jito's Kobe API, and a Solana RPC `getVoteAccounts` set.
+
+`null` on a witness vantage and before the first run, so test the field rather
+than its presence.
+
+| Field | Meaning |
+|---|---|
+| `latest` | The most recent reading. Its `ts` is *older* than `generatedAt` — see below. |
+| `readings` | How many readings exist. |
+| `since` | Timestamp of the first. |
+| `series` | Downsampled readings for charting. |
+
+Fields on `latest` (and, where charted, on `series`):
+
+| Field | Unit | Meaning |
+|---|---|---|
+| `ts` | RFC 3339 | When this reading was taken. |
+| `explorerValidators` | count | Validators BAM's explorer lists. |
+| `kobeRunningBam` | count | Validators Kobe flags as running BAM. |
+| `inBoth` / `onlyExplorer` / `onlyKobe` | count | Membership agreement between the two. |
+| `disputedStakeSol` | SOL | Stake attached to the validators only one source lists. |
+| `kobeTotalValidators` / `chainValidators` | count | Source-health counts; a short Kobe response is refused, not recorded. |
+| `onchainMatched` | count | BAM-listed validators found in `getVoteAccounts`. |
+| `stakeReportedSol` / `stakeOnchainSol` | SOL | BAM's per-validator stakes, and the same validators' stake on chain. |
+| `stakeAbsDiffSol` | SOL | Absolute difference between those two. |
+| `stakeMaxRelPct` / `stakeMedianRelPct` | % | Worst and typical per-validator deviation. |
+| `bamHeadlineStakeSol` / `bamHeadlineSharePct` | SOL, % | BAM's own published headline, verbatim from `/bam_stake`. |
+| `bamShareReportedPct` / `bamShareOnchainPct` | % | BAM's stake as a share of the `getVoteAccounts` total. |
+
+**`null` means the reading predates the column, not zero.** Columns have been
+added twice. A reading taken before a column existed carries `null` for it, and
+reading that as `0` states a measurement that was never made — a median
+deviation of `null` is "not recorded", where `0.0000` is "checked, and they
+agreed exactly".
+
+**The two share figures do not have the same denominator.**
+`bamHeadlineSharePct` is BAM's own, over a network total BAM does not publish;
+`bamShareOnchainPct` divides by the `getVoteAccounts` total. In practice the
+*numerators* agree to the cent, so the difference between the two is the network
+total each side uses — roughly 175,000 SOL, about 0.04%. It is not a discrepancy
+in what BAM reports about its own stake.
+
+**This block is deliberately staler than the rest of the file.** It runs every
+15 minutes against three services rather than every 60 seconds against one, so
+`latest.ts` normally trails `generatedAt`, and its validator counts will differ
+slightly from `headline`. That is two readings at two times, not a contradiction.
 
 ## Verifying any of this
 
