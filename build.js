@@ -127,6 +127,25 @@ const verificationPanel = !V ? "" : (() => {
   // "Matches" without consulting anything.
   const med = v.stakeMedianRelPct;
   const stakeHolds = (med ?? v.stakeMaxRelPct) < 0.01;
+
+  // What the share comparison is actually comparing.
+  //
+  // BAM's published stake figure and our own sum over the chain have agreed to
+  // the cent in almost every reading taken. The two *shares* still differ,
+  // because a share needs a network total and BAM does not divide by
+  // getVoteAccounts'. So the difference is in the denominator, and a tile
+  // labelled "gap between BAM's claim and the chain" invited the one reading the
+  // data does not support: that BAM misreports its own stake. It does not.
+  //
+  // Both denominators are recoverable from the row — stake over share — so the
+  // panel can state the real disagreement instead of implying a different one.
+  const hs = v.bamHeadlineStakeSol, hp = v.bamHeadlineSharePct;
+  const haveHeadline = hs != null && hp != null && hp > 0 && v.bamShareOnchainPct > 0;
+  const bamTotal = haveHeadline ? hs / (hp / 100) : null;
+  const chainTotal = haveHeadline ? v.stakeOnchainSol / (v.bamShareOnchainPct / 100) : null;
+  // "The same stake" has to mean the same to the reader as it does here: equal
+  // once both are rounded to the SOL, which is the precision either side states.
+  const sameStake = haveHeadline && Math.abs(hs - v.stakeOnchainSol) < 1;
   const agree = v.onlyExplorer === 0 && v.onlyKobe === 0;
   const disputed = v.onlyExplorer + v.onlyKobe;
 
@@ -175,7 +194,7 @@ const verificationPanel = !V ? "" : (() => {
 <br><br><b>Read at ${esc(v.ts.replace("T", " ").replace("Z", " UTC"))}</b>, on its own slower cycle than the figures above — it queries three services and a full Solana vote-account set, so it runs less often than the 60-second capture. Counts here will therefore differ slightly from the headline, which is the more recent reading, not a contradiction of it.</div>
 <div class="grid g4" style="margin-top:12px">
   <div class="card kpi"><div class="v ${stakeHolds ? "ok" : "bad"}">${stakeHolds ? "Matches" : "Differs"}</div><div class="l">BAM's reported stake vs Solana</div><div class="n">${fmt(v.onchainMatched)} validators checked · ${med === null ? `deviation ${fmt(v.stakeMaxRelPct, 4)}% at the worst validator; typical not recorded for this reading` : `typical deviation ${fmt(med, 4)}% · worst ${fmt(v.stakeMaxRelPct, 4)}%`}</div></div>
-  <div class="card kpi"><div class="v">${v.bamHeadlineSharePct == null ? "—" : fmt(Math.abs(v.bamHeadlineSharePct - v.bamShareOnchainPct), 4) + "pp"}</div><div class="l">gap between BAM's claim and the chain</div><div class="n">${v.bamHeadlineSharePct == null ? "awaiting a reading" : `BAM publishes ${fmt(v.bamHeadlineSharePct, 4)}% · chain gives ${fmt(v.bamShareOnchainPct, 4)}%`}</div></div>
+  <div class="card kpi"><div class="v">${!haveHeadline ? "—" : fmt(Math.abs(hp - v.bamShareOnchainPct), 4) + "pp"}</div><div class="l">${sameStake ? "share gap, and it is the network total" : "gap between BAM's published stake and the chain"}</div><div class="n">${!haveHeadline ? "awaiting a reading" : `BAM publishes ${fmt(hp, 4)}% · chain gives ${fmt(v.bamShareOnchainPct, 4)}%${sameStake ? ` · the same ${fmt(hs, 0)} SOL divided by network totals ${fmt(Math.abs(chainTotal - bamTotal), 0)} SOL apart` : ` · from stakes ${fmt(Math.abs(hs - v.stakeOnchainSol), 2)} SOL apart`}`}</div></div>
   <div class="card kpi"><div class="v ${agree ? "ok" : "warn"}">${agree ? "Agree" : fmt(disputed)}</div><div class="l">${agree ? "Jito's two sources agree" : "validators the two sources disagree on"}</div><div class="n">BAM explorer lists ${fmt(v.explorerValidators)} · Kobe flags ${fmt(v.kobeRunningBam)}</div></div>
   <div class="card kpi"><div class="v ${agree ? "ok" : "warn"}">${agree ? "0" : fmt(v.disputedStakeSol / 1e3, 0) + "k"}</div><div class="l">SOL under disagreement</div><div class="n">stake attached to the validators in dispute</div></div>
 </div>
