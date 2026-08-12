@@ -64,6 +64,17 @@ This is an inference from a naming pattern, not a documented API contract. If
 BAM ever names a node without that prefix, regional figures degrade. Worth
 knowing before you build on `regionNakamoto`.
 
+So the inference checks itself. `decentralization.unconventionalNodeNames` lists
+any node at the latest snapshot whose name does not fit
+`{city}-mainnet-bam-{n}-tee`. Normally empty. Non-empty means a region is being
+inferred from a shape that does not have one, and every regional figure should
+be read with that in mind.
+
+The convention has already been broken twice: `ams-mainnet-bam-dev` and
+`tyo-mainnet-bam-dev-tee` both ran with real stake into August 2026. Both kept a
+valid city prefix, so the regions stayed correct — by luck rather than by
+design, which is the reason this is now checked rather than assumed.
+
 ## Top level
 
 | Field | Type | Meaning |
@@ -175,6 +186,7 @@ identical to one that was taken and set aside.
 | `validatorNakamoto` | Fewest **validators** exceeding 50%. |
 | `top1ValShare` / `top5ValShare` / `top10ValShare` | Cumulative % of BAM stake held by the top 1 / 5 / 10 validators. |
 | `regionCount` | Distinct derived regions. |
+| `unconventionalNodeNames` | Nodes not matching `{city}-mainnet-bam-{n}-tee`. Empty normally; non-empty means the two regional figures above are inferring a region from a name that has none. |
 
 Nakamoto here is the minimum count whose cumulative share **strictly exceeds**
 50%. Some publications use ≥ 50%; on tied distributions that can differ by one.

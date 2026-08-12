@@ -28,6 +28,17 @@ const VALIDATORS = path.join(DIR, "validators.csv");
 const DETLOG = path.join(DIR, "detections.log");
 
 const city = (nodeName) => String(nodeName).split("-")[0];
+// Every region figure rests on this shape holding: {city}-mainnet-bam-{n}-tee,
+// with an IATA-style city code first. It is a naming convention, not an API
+// contract — BAM's own `region` field is unusable, being a copy of the node name
+// — so a node named any other way becomes its own region and quietly degrades
+// every regional measure without anything looking wrong.
+//
+// It has already been broken twice: ams-mainnet-bam-dev and tyo-mainnet-bam-dev-tee
+// both ran with real stake into August. Both happened to keep a valid city
+// prefix, so the regions stayed right by luck rather than by design. Checking is
+// the difference between the next one being noticed and being averaged in.
+const NODE_NAME = /^[a-z]{3}-mainnet-bam-[0-9]+-tee$/;
 const num = (x) => { const n = parseFloat(x); return Number.isFinite(n) ? n : 0; };
 // For columns that can legitimately be empty, where 0 would be a lie rather than
 // a default: a blank means the reading predates the column, and reading it as
@@ -194,8 +205,12 @@ function loadNodesLatest(latestTs) {
   const regions = Object.values(reg).sort((a, b) => b.stake - a.stake);
   regions.forEach((r) => (r.share = (100 * r.stake) / totStake));
   const busiestByVals = [...nodes].sort((a, b) => b.vals - a.vals)[0];
+  // Named so a consumer sees which nodes the regional figures are inferring
+  // from a shape they do not fit, rather than finding out when a region count
+  // moves for no visible reason.
+  const unconventionalNames = nodes.map((n) => n.node).filter((n) => !NODE_NAME.test(n));
   return {
-    nodes, regions, busiestByVals,
+    nodes, regions, busiestByVals, unconventionalNames,
     nodeNakamoto: nakamoto(nodes.map((n) => n.stake)),
     regionNakamoto: nakamoto(regions.map((r) => r.stake)),
   };
@@ -551,6 +566,11 @@ async function main() {
       top5ValShare: validatorsLatest.top5Share,
       top10ValShare: validatorsLatest.top10Share,
       regionCount: nodesLatest.regions.length,
+      // Nodes whose name does not fit the convention every regional figure above
+      // is derived from. Normally empty; non-empty means `regionNakamoto` and
+      // `regionCount` are inferring a region from a shape that does not have one,
+      // and should be read with that in mind.
+      unconventionalNodeNames: nodesLatest.unconventionalNames,
     },
     stats: { pct: reduceStat("pct"), hhi: reduceStat("hhi"), vals: reduceStat("vals"), nodes: reduceStat("nodes") },
     series,
