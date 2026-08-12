@@ -74,7 +74,65 @@ function loadSummary() {
   // dedup consecutive identical-timestamp rows (the API repeats between refreshes)
   const dedup = [];
   for (const r of rows) if (!dedup.length || dedup[dedup.length - 1].ts !== r.ts) dedup.push(r);
-  return dedup;
+
+  // Drop isolated partial responses.
+  //
+  // The API has served coherent but incomplete views — 2026-07-29T19:12:06Z came
+  // back with 10 nodes and 235 validators between captures seeing 15 and ~380 —
+  // and those rows set the published minimum node count to 10 and minimum
+  // validator count to 190. Neither was ever true of BAM; both described a read
+  // that failed halfway.
+  //
+  // The collector now withholds these at capture, but rows written before that
+  // are in the series and cannot be un-written: summary.csv is the record the
+  // seed and every statistic are built from.
+  //
+  // Recovery is the whole test, and it is why this is safe to apply blind. A
+  // real change to BAM persists, so the series afterwards sits at the new level.
+  // A partial read is followed by a series that returns to where it was. Only
+  // the second is low against what comes *after* it as well as before.
+  //
+  // Measured against the median of a window rather than the single neighbouring
+  // capture, because these arrive in clusters: on 2026-07-29 four consecutive
+  // captures were degraded, and each made the next one look normal by
+  // comparison. A median over ten captures either side is unmoved by three or
+  // four bad ones and still tracks a genuine change within a window of it.
+  //
+  // The newest capture is never testable — nothing follows it yet — so it is
+  // always kept. That is the right default for the row the headline is read
+  // from, and the collector now withholds partial responses at capture anyway.
+  const PARTIAL = 0.8, W = 10, MIN_CTX = 3;
+  const median = (xs) => {
+    const s = [...xs].sort((a, b) => a - b);
+    if (!s.length) return NaN;
+    const h = s.length >> 1;
+    return s.length % 2 ? s[h] : (s[h - 1] + s[h]) / 2;
+  };
+  const kept = [];
+  const excluded = [];
+  for (let i = 0; i < dedup.length; i++) {
+    const r = dedup[i];
+    const before = dedup.slice(Math.max(0, i - W), i);
+    const after = dedup.slice(i + 1, i + 1 + W);
+    if (before.length >= MIN_CTX && after.length >= MIN_CTX) {
+      const lowNodes = r.nodes < median(before.map((x) => x.nodes)) * PARTIAL &&
+                       r.nodes < median(after.map((x) => x.nodes)) * PARTIAL;
+      const lowVals = r.vals < median(before.map((x) => x.vals)) * PARTIAL &&
+                      r.vals < median(after.map((x) => x.vals)) * PARTIAL;
+      // Either list can be truncated on its own — the node list and the
+      // validator list come back from different endpoints.
+      if (lowNodes || lowVals) { excluded.push(r.ts); continue; }
+    }
+    kept.push(r);
+  }
+  if (excluded.length) {
+    console.log(`  excluded ${excluded.length} partial response(s): ${excluded.join(", ")}`);
+  }
+  // Attached to the array rather than returned separately so it reaches
+  // metrics.json: a figure quietly removed from a public statistic is its own
+  // kind of unverifiable claim, and a reader is entitled to see the count.
+  kept.excluded = excluded;
+  return kept;
 }
 
 // Read the last `want` bytes of a file as whole lines.
@@ -395,10 +453,20 @@ async function main() {
         "summary.csv": digest(SUMMARY),
         "nodes.csv": digest(NODES),
         "detections.log": digest(DETLOG),
+        // Read whole, like the three above, so it is hashed like them. It is
+        // also the input behind the only panel that checks BAM rather than
+        // describing it, which makes it the last one that should be unpinnable.
+        // null on a witness and before the first verification run.
+        "verification.csv": digest(path.join(DIR, "verification.csv")),
         "validators.csv": { tailReadOnly: true, snapshotTs: latest.ts, validators: latest.vals },
       },
     },
-    window: { from: first.ts, to: latest.ts, snapshots: summary.length },
+    window: {
+      from: first.ts, to: latest.ts, snapshots: summary.length,
+      // Captures that came back incomplete and were left out of every figure
+      // below. Published rather than silently dropped — see loadSummary.
+      partialResponsesExcluded: summary.excluded ?? [],
+    },
     headline: {
       bamStakeSOL: latest.stake,
       bamStakePct: latest.pct,
