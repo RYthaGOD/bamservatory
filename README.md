@@ -142,14 +142,22 @@ cd bamservatory-data && ./verify.sh      # hashes, record counts, coverage
 `metrics.json` carries a `provenance` block naming the collector build and a
 SHA-256 of each input it was computed from, `verification.csv` included.
 
-One caveat worth stating plainly: the verification series is a *recording*, not
-something a third party can re-derive. It captures what three services returned
-at a moment that has passed, so you can check that the published panel matches
-the recorded series, and that the series has not been revised — but not that the
-readings were taken faithfully. The captures themselves have the same property,
-which is why three collectors record them independently. The verification
-collector runs on the primary only, because duplicating it would triple the load
-on other people's APIs to compute the same answer from the same public data.
+The verification series goes one step further, because its figures are
+aggregates over responses that existed for a moment: the inputs behind each row
+are archived alongside it, and `recompute.mjs` rebuilds the row from them and
+diffs it against what was published.
+
+```bash
+cd bamservatory-data && node recompute.mjs --day 2026-08-12
+```
+
+One caveat worth stating plainly, and it is not closed by that: the series is
+still a *recording*. Evidence gathered by the same process it vouches for shows
+that a published figure is the one those inputs produce — not that the readings
+were taken faithfully. The captures themselves have the same property, which is
+why three collectors record them independently. The verification collector runs
+on the primary only, because duplicating it would triple the load on other
+people's APIs to compute the same answer from the same public data.
 
 ## How the data is gathered
 
@@ -177,9 +185,17 @@ than two means a disagreement can be resolved rather than merely flagged.
 - **Agreement across vantages is corroboration, not proof.** All three
   collectors could in principle be shown the same false view, and no number of
   vantages fixes that. BAM describes its ordering attestations as a public audit
-  trail, but no endpoint currently serves them (re-checked 2026-08-09); until
-  one does, "verified" here means *faithfully recorded and independently
-  recomputable*, not *proven true at source*.
+  trail, but no endpoint serves them yet; until one does, "verified" here means
+  *faithfully recorded and independently recomputable*, not *proven true at
+  source*.
+
+  That last claim is no longer a date anyone has to remember. The collector
+  re-probes for an attestation surface daily and publishes what it found to
+  [`attestations.json`](https://github.com/RYthaGOD/bamservatory-data/blob/main/attestations.json);
+  the dashboard states the date of the most recent check, and says so differently
+  if the probe could not reach BAM at all. A hand-maintained date drifts in the
+  one direction that matters — it would go on claiming no endpoint exists after
+  one appeared, and the project would never notice the thing it is waiting for.
 
 ## BAMsey
 

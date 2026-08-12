@@ -229,6 +229,28 @@ function loadValidatorsLatest(latestTs) {
   };
 }
 
+// ---- 3a. captures the collector withheld ------------------------------------
+// The counterpart to the exclusions in loadSummary, and the more important half:
+// those rows are in the series and removed when it is read, while these never
+// entered it at all. Without publishing them the two look identical from
+// outside — a capture that was never taken and one that was taken and set aside
+// are both just an absence in the record.
+//
+// Read from partial.log, which flatten.awk appends to when it withholds a
+// response. Absent until the first one, which is the normal state.
+function loadWithheld() {
+  const p = path.join(DIR, "partial.log");
+  if (!fs.existsSync(p)) return { count: 0, latest: null };
+  const lines = fs.readFileSync(p, "utf8").split(/\r?\n/)
+    .filter((l) => l.includes("partial response withheld"));
+  const last = lines[lines.length - 1];
+  return {
+    count: lines.length,
+    // Every line opens with the capture's own timestamp.
+    latest: last ? last.split(/\s+/)[0] : null,
+  };
+}
+
 // ---- 3b. cross-source verification ------------------------------------------
 // The one input here that checks BAM rather than describing it. Written by
 // verify-sources.mjs on its own slower cycle: BAM's reported stake against
@@ -465,7 +487,16 @@ async function main() {
       from: first.ts, to: latest.ts, snapshots: summary.length,
       // Captures that came back incomplete and were left out of every figure
       // below. Published rather than silently dropped — see loadSummary.
+      //
+      // Two separate things, and the distinction is the point. `Excluded` are
+      // rows that reached the series and are removed when it is read: they
+      // predate the collector's own guard, and their timestamps are listed so
+      // the judgement can be checked against the raw archive. `Withheld` never
+      // entered the series, because the collector recognised the response as
+      // incomplete at capture. Both are captures that did not count; only the
+      // first is still in summary.csv.
       partialResponsesExcluded: summary.excluded ?? [],
+      partialResponsesWithheld: loadWithheld(),
     },
     headline: {
       bamStakeSOL: latest.stake,
@@ -497,6 +528,23 @@ async function main() {
     // verification run, and null on a witness — never absent, so a consumer can
     // test the field rather than its existence.
     verification: loadVerification(),
+    // When the project last checked whether BAM serves attestations, and what it
+    // found. The page states this limit either way; carrying the machine's own
+    // answer means the date on it cannot drift away from the last time anyone
+    // actually looked. Null before the first probe.
+    attestations: (() => {
+      const p = path.join(DIR, "attestations.json");
+      if (!fs.existsSync(p)) return null;
+      try {
+        const a = JSON.parse(fs.readFileSync(p, "utf8"));
+        return {
+          checkedAt: a.checkedAt ?? null,
+          reachable: a.reachable === true,
+          available: a.attestationsAvailable === true,
+          endpointsFound: a.endpointsFound ?? [],
+        };
+      } catch { return null; }
+    })(),
   };
 
   fs.writeFileSync(OUT, JSON.stringify(metrics, null, 2));

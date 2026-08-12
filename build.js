@@ -188,6 +188,17 @@ const verificationPanel = !V ? "" : (() => {
     (cards.length ? `<div class="grid g2" style="margin-top:12px">${cards.join("")}</div>` : "") +
     (waiting.length ? `<div class="note" style="margin-top:12px">Still accumulating: ${waiting.join("; and ")}. Each is charted once it covers ${HOURS} hours — long enough to tell a persistent disagreement from a transient one.</div>` : "");
 
+  // The date on the attestation claim comes from the last time the collector
+  // actually looked, not from whenever someone last edited this sentence. A
+  // hand-written date drifts in the one direction that matters: it would go on
+  // saying no endpoint exists after one appeared.
+  const A = M.attestations;
+  const attestationNote = !A ? "" : A.available
+    ? ` <b>BAM began serving attestations as of ${esc(day(A.checkedAt))}</b> (${A.endpointsFound.map(esc).join(", ")}) — this section has not yet been rewritten to use them.`
+    : A.reachable
+      ? ` Re-checked automatically; still no attestation endpoint as of ${esc(day(A.checkedAt))}.`
+      : ` The last automatic re-check (${esc(day(A.checkedAt))}) could not reach BAM's API, so it establishes nothing either way.`;
+
   return `
 <h2>Verification — checking what BAM reports</h2>
 <div class="note">Everything above is gathered from BAM's own API, which makes it an index of what BAM says. This section checks it. Stake is verified against Solana itself, where the chain is the authority and BAM's figures either match or they do not. Membership is cross-checked against Jito's separate Kobe API, which publishes the same fact independently.
@@ -199,7 +210,7 @@ const verificationPanel = !V ? "" : (() => {
   <div class="card kpi"><div class="v ${agree ? "ok" : "warn"}">${agree ? "0" : fmt(v.disputedStakeSol / 1e3, 0) + "k"}</div><div class="l">SOL under disagreement</div><div class="n">stake attached to the validators in dispute</div></div>
 </div>
 ${trend}
-<div class="note" style="margin-top:12px"><b>What this does not establish.</b> Which validators run BAM still comes from Jito — a BAM-produced block is indistinguishable from any other on chain, because BAM changes how a block is assembled, not what ends up in it. That membership claim is now cross-checked between two of Jito's own systems rather than taken on faith, and the stake attached to it is verified outright against Solana — but it is not independently derived, and no amount of cross-checking makes it so. That gap closes with published attestations, not with more sources.</div>`;
+<div class="note" style="margin-top:12px"><b>What this does not establish.</b> Which validators run BAM still comes from Jito — a BAM-produced block is indistinguishable from any other on chain, because BAM changes how a block is assembled, not what ends up in it. That membership claim is now cross-checked between two of Jito's own systems rather than taken on faith, and the stake attached to it is verified outright against Solana — but it is not independently derived, and no amount of cross-checking makes it so. That gap closes with published attestations, not with more sources.${attestationNote}</div>`;
 })();
 
 // ---- BAMsey's briefing ------------------------------------------------------

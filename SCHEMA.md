@@ -82,6 +82,7 @@ knowing before you build on `regionNakamoto`.
 | `leadershipChanges` | array | Every change of top node across the window. |
 | `detections` | object | Rollover early-warning events. |
 | `verification` | object \| null | Cross-source checks of what BAM reports. `null` where none have run. See below. |
+| `attestations` | object \| null | Whether BAM serves attestations yet, and when that was last checked. `null` before the first probe. |
 
 ### `provenance`
 
@@ -118,6 +119,7 @@ does not resolve.
 | `from` / `to` | First and last capture timestamps. |
 | `snapshots` | Number of captures in the window, after the exclusions below. |
 | `partialResponsesExcluded` | array | Timestamps of captures left out of every figure in this file. |
+| `partialResponsesWithheld` | object | `{ count, latest }` — captures the collector refused at source, so they never entered the series at all. |
 
 **`snapshots` is not the length of `series`.** See below.
 
@@ -142,6 +144,14 @@ it yet to judge it against.
 The timestamps are published rather than quietly dropped — the raw records
 remain in the [archive](https://github.com/RYthaGOD/bamservatory-data)
 regardless, so anyone can pull them and disagree with this judgement.
+
+`partialResponsesWithheld` counts the same fault caught one step earlier. The
+collector now recognises a collapsed capture as it arrives and never writes it
+to the series, releasing it only if the smaller network is still there two
+captures later. Those never appear in `partialResponsesExcluded`, because they
+were never in the series to exclude — without this count the two cases would be
+indistinguishable from outside, and a capture that was never taken would look
+identical to one that was taken and set aside.
 
 ### `headline`
 
@@ -289,6 +299,23 @@ in what BAM reports about its own stake.
 15 minutes against three services rather than every 60 seconds against one, so
 `latest.ts` normally trails `generatedAt`, and its validator counts will differ
 slightly from `headline`. That is two readings at two times, not a contradiction.
+
+### `attestations`
+
+| Field | Meaning |
+|---|---|
+| `checkedAt` | When the collector last probed for an attestation endpoint. |
+| `reachable` | Whether BAM's API answered at all. `false` makes the result inconclusive rather than negative. |
+| `available` | Whether any probed path served attestations. |
+| `endpointsFound` | The paths that did, if any. |
+
+This exists so the project's largest stated limit carries a date maintained by a
+machine. Membership originates with Jito and only published attestations can
+change that; a hand-written "re-checked on…" would go on asserting no endpoint
+exists after one appeared, which is the one direction the error actually costs
+something. `reachable` is separate from `available` because "we looked and found
+nothing" and "we could not look" are different results and only the first is
+evidence.
 
 ## Verifying any of this
 
