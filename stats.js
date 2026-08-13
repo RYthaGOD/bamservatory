@@ -536,6 +536,26 @@ function loadDetections(tainted) {
 // ---- assemble -------------------------------------------------------------
 async function main() {
   const summary = loadSummary();
+
+  // Nothing captured yet is a state, not a fault, and it has to say so.
+  //
+  // summary.csv holding only its header is what a volume looks like before its
+  // first capture lands — a new deployment, or a restore that came up without a
+  // seed. Every figure below reads from the newest row, so without this the run
+  // ends in a TypeError on `latest.ts` several functions later, which is a
+  // confusing thing to meet at exactly the moment someone is bringing a
+  // collector back up.
+  //
+  // Exiting non-zero is right rather than incidental: publish.sh chains this
+  // into brief.js and build.js, and a dashboard rebuilt from no captures would
+  // be a worse outcome than a skipped cycle. The next tick writes a row and the
+  // next publish picks it up.
+  if (!summary.length) {
+    console.error(`stats: ${SUMMARY} holds no captures yet — nothing to publish.`);
+    console.error("If this is not a new volume, check the collector is writing to it.");
+    process.exit(1);
+  }
+
   const latest = summary[summary.length - 1];
   const first = summary[0];
 

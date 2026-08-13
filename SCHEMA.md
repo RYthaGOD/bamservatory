@@ -246,7 +246,35 @@ Nodes: `{ node, region, vals, stake, share }`, sorted by stake descending.
 Regions: `{ region, vals, stake, nodes, share }`, same ordering, where `nodes` is
 how many nodes rolled up into that region.
 
-`vals` is the count of validators connected to that node or region.
+`vals` is the count of validators connected to that node or region, **as the node
+itself reports it**. That distinction is worth one paragraph, because BAM's two
+endpoints do not always agree with each other.
+
+Each capture holds both a node list, where every node states its own
+`connected_validators`, and a validator list, where every validator names the
+node it is connected to. Counting the second gives a number that should equal the
+first. In **2.43% of captures** (1,096 of 45,163 examined) at least one node
+disagrees with the validators claiming it — almost always by exactly one
+(1,150 of 1,185 cases are ±1), and concentrated in the busiest nodes: `sin`,
+`fra` and `sqq` account for most of them.
+
+The likely cause is mundane: the two lists are not read at the same instant, so a
+validator connecting or disconnecting between them shows up in one and not the
+other. It is a reason to treat a single per-node `vals` as ±1 rather than exact,
+not a reason to distrust either endpoint. Aggregate figures are unaffected —
+`headline.validatorCount` comes from the validator list as a whole, and every
+stake figure agrees to the cent.
+
+It matters where a small margin decides a label. `headline.busiestByVals` names
+the node with the most connected validators, so a one-validator lead over the
+runner-up is inside the noise. Compare the top two in `nodes` before treating a
+narrow result as meaningful; the current margin is wide.
+
+The one large exception on record is not this effect at all: at
+2026-08-12T04:18:03Z a node self-reported 41 validators while none claimed it,
+during a torn read whose own header stake disagreed with the sum of its nodes.
+That capture is excluded from every figure and appears in
+`window.partialResponsesExcluded`.
 
 ### `whales`
 

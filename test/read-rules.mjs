@@ -137,5 +137,36 @@ console.log("── the validated 2026-06-24 rollover is untouched ──");
     m.leadershipChanges.some((c) => c.to === "fra-mainnet-bam-2-tee"), true);
 }
 
+// ── nothing to read ──────────────────────────────────────────────────────────
+// Not a rule about exclusion, but the same question asked at the limit: what
+// does it do when every capture is absent rather than some of them? That is a
+// real state — a new volume, or a restore that came up without a seed — and it
+// used to end in a TypeError several functions after the empty read, which is a
+// poor thing to meet while bringing a collector back up.
+console.log("── an empty capture log says so, and stops ──");
+{
+  const dir = fs.mkdtempSync(path.join(WORK, "dir-"));
+  const hdr = fs.readFileSync(path.join(FIX, "outage-2026-08-12.csv"), "utf8").split(/\r?\n/)[0];
+  fs.writeFileSync(path.join(dir, "summary.csv"), hdr + "\n");
+  for (const [f, head] of [
+    ["nodes.csv", "ts,bam_node,region,connected_validators,node_stake,node_stake_share"],
+    ["validators.csv", "ts,validator_pubkey,bam_node_connection,stake,stake_percentage"],
+  ]) fs.writeFileSync(path.join(dir, f), head + "\n");
+  fs.writeFileSync(path.join(dir, "detections.log"), "");
+  fs.writeFileSync(path.join(dir, "detections_replay.log"), "");
+
+  let code = 0, stderr = "";
+  try {
+    execFileSync(process.execPath, [path.join(ROOT, "stats.js"), "--dir", dir, "--out", path.join(dir, "m.json")],
+      { stdio: "pipe" });
+  } catch (e) {
+    code = e.status;
+    stderr = String(e.stderr ?? "");
+  }
+  check("it fails rather than publishing a dashboard built from nothing", code, 1);
+  check("and explains itself instead of throwing", /no captures yet/.test(stderr), true);
+  check("without leaving a metrics.json behind", fs.existsSync(path.join(dir, "m.json")), false);
+}
+
 console.log(fails ? `\nread rules: ${fails} check(s) FAILED` : "\nread rules: all checks passed");
 process.exit(fails ? 1 : 0);
