@@ -149,6 +149,34 @@ const verificationPanel = !V ? "" : (() => {
   const agree = v.onlyExplorer === 0 && v.onlyKobe === 0;
   const disputed = v.onlyExplorer + v.onlyKobe;
 
+  // A reading far from the last day's median is reported with that median beside
+  // it. Kobe's running_bam flag fell from 377 to 206 and recovered inside eighty
+  // minutes on 2026-08-13, and for those eighty minutes this panel said 172
+  // validators were in dispute with no other indication that the figure was
+  // extraordinary. The reading is not adjusted — one of the two sources really
+  // did say that, and which one is wrong is not ours to decide — but a reader
+  // seeing it is now told what it has otherwise been.
+  //
+  // Absent from metrics.json written before this existed, so it must be optional
+  // rather than assumed, like every other field added after the fact.
+  // Both notes are gated on the validator count, not on the stake. The stake in
+  // dispute is derived from which validators are in dispute, so it cannot be
+  // anomalous on its own — and judging it separately misfires, because a handful
+  // of disputed validators is a few hundred thousand SOL whose ordinary
+  // variation is easily a factor of two while remaining a rounding error against
+  // BAM's 142M. The question worth answering is whether an unusual *number* of
+  // validators is in dispute; the stake is then reported in the same breath.
+  //
+  // Five validators, or half the usual count, whichever is larger: the floor
+  // stops a normal one or two from reading as a deviation.
+  const T = V.typical;
+  const anomalous = T && T.onlyExplorer !== null &&
+    Math.abs(disputed - T.onlyExplorer) > Math.max(5, T.onlyExplorer * 0.5);
+  const typicalVals = anomalous ? ` · typically ${fmt(T.onlyExplorer)} over the last ${T.hours}h` : "";
+  const typicalStake = anomalous && T.disputedStakeSol !== null
+    ? ` · typically ${fmt(T.disputedStakeSol / 1e3, 0)}k SOL over the last ${T.hours}h`
+    : "";
+
   // Enough to draw a line: half a day of coverage and enough readings to shape
   // it. Measured, because a bare count meant different things as the cadence
   // changed — 24 readings was twelve hours at one every thirty minutes and six
@@ -206,8 +234,8 @@ const verificationPanel = !V ? "" : (() => {
 <div class="grid g4" style="margin-top:12px">
   <div class="card kpi"><div class="v ${stakeHolds ? "ok" : "bad"}">${stakeHolds ? "Matches" : "Differs"}</div><div class="l">BAM's reported stake vs Solana</div><div class="n">${fmt(v.onchainMatched)} validators checked · ${med === null ? `deviation ${fmt(v.stakeMaxRelPct, 4)}% at the worst validator; typical not recorded for this reading` : `typical deviation ${fmt(med, 4)}% · worst ${fmt(v.stakeMaxRelPct, 4)}%`}</div></div>
   <div class="card kpi"><div class="v">${!haveHeadline ? "—" : fmt(Math.abs(hp - v.bamShareOnchainPct), 4) + "pp"}</div><div class="l">${sameStake ? "share gap, and it is the network total" : "gap between BAM's published stake and the chain"}</div><div class="n">${!haveHeadline ? "awaiting a reading" : `BAM publishes ${fmt(hp, 4)}% · chain gives ${fmt(v.bamShareOnchainPct, 4)}%${sameStake ? ` · the same ${fmt(hs, 0)} SOL divided by network totals ${fmt(Math.abs(chainTotal - bamTotal), 0)} SOL apart` : ` · from stakes ${fmt(Math.abs(hs - v.stakeOnchainSol), 2)} SOL apart`}`}</div></div>
-  <div class="card kpi"><div class="v ${agree ? "ok" : "warn"}">${agree ? "Agree" : fmt(disputed)}</div><div class="l">${agree ? "Jito's two sources agree" : "validators the two sources disagree on"}</div><div class="n">BAM explorer lists ${fmt(v.explorerValidators)} · Kobe flags ${fmt(v.kobeRunningBam)}</div></div>
-  <div class="card kpi"><div class="v ${agree ? "ok" : "warn"}">${agree ? "0" : fmt(v.disputedStakeSol / 1e3, 0) + "k"}</div><div class="l">SOL under disagreement</div><div class="n">stake attached to the validators in dispute</div></div>
+  <div class="card kpi"><div class="v ${agree ? "ok" : "warn"}">${agree ? "Agree" : fmt(disputed)}</div><div class="l">${agree ? "Jito's two sources agree" : "validators the two sources disagree on"}</div><div class="n">BAM explorer lists ${fmt(v.explorerValidators)} · Kobe flags ${fmt(v.kobeRunningBam)}${typicalVals}</div></div>
+  <div class="card kpi"><div class="v ${agree ? "ok" : "warn"}">${agree ? "0" : fmt(v.disputedStakeSol / 1e3, 0) + "k"}</div><div class="l">SOL under disagreement</div><div class="n">stake attached to the validators in dispute${typicalStake}</div></div>
 </div>
 ${trend}
 <div class="note" style="margin-top:12px"><b>What this does not establish.</b> Which validators run BAM still comes from Jito — a BAM-produced block is indistinguishable from any other on chain, because BAM changes how a block is assembled, not what ends up in it. That membership claim is now cross-checked between two of Jito's own systems rather than taken on faith, and the stake attached to it is verified outright against Solana — but it is not independently derived, and no amount of cross-checking makes it so. That gap closes with published attestations, not with more sources.${attestationNote}</div>`;

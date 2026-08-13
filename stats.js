@@ -106,13 +106,35 @@ function loadSummary() {
   // Measured against the median of a window rather than the single neighbouring
   // capture, because these arrive in clusters: on 2026-07-29 four consecutive
   // captures were degraded, and each made the next one look normal by
-  // comparison. A median over ten captures either side is unmoved by three or
-  // four bad ones and still tracks a genuine change within a window of it.
+  // comparison. A median is unmoved by a few bad captures and still tracks a
+  // genuine change within a window of it.
+  //
+  // The window and the threshold were both too tight, and the 2026-08-12 outage
+  // showed it: the API degraded for about seven minutes and recovered in steps
+  // (9 nodes, then 11, 11, 12, 14), and the recovery walked back through the
+  // test rather than tripping it. Two separate reasons, and fixing one alone
+  // fixed nothing —
+  //
+  //   • Ten captures either side is shorter than the outage, so by 04:21 the
+  //     "before" median was itself degraded and the row looked normal beside it.
+  //     Sixty captures spans any outage seen so far while still following a real
+  //     change within an hour of it.
+  //   • At 12 of 15 nodes and 306 of 377 validators, that row is exactly 0.80 of
+  //     the network — the old threshold's boundary, which it therefore passed.
+  //     It set the published minimum stake share to 26.78% and the minimum
+  //     validator count to 306; neither was ever true of BAM.
+  //
+  // 0.88 is where the evidence puts the line. Ranked by how far each capture
+  // falls below its two-sided median, every read known to be broken sits at or
+  // under 0.88, and the next tier up is 0.9286 — a single node absent from a
+  // fourteen-node network with every validator still reported, which is a real
+  // observation and is kept. The gap between those two groups is the threshold's
+  // whole justification; it is not a round number chosen for looking cautious.
   //
   // The newest capture is never testable — nothing follows it yet — so it is
   // always kept. That is the right default for the row the headline is read
   // from, and the collector now withholds partial responses at capture anyway.
-  const PARTIAL = 0.8, W = 10, MIN_CTX = 3;
+  const PARTIAL = 0.88, W = 60, MIN_CTX = 3;
   const median = (xs) => {
     const s = [...xs].sort((a, b) => a - b);
     if (!s.length) return NaN;
@@ -331,7 +353,44 @@ function loadVerification() {
     .filter((_, i) => i % step === 0 || i === rows.length - 1)
     .map((r) => ({ ts: r.ts, onlyExplorer: r.onlyExplorer, disputedStakeSol: r.disputedStakeSol, stakeMedianRelPct: r.stakeMedianRelPct }));
 
-  return { latest: rows[rows.length - 1], readings: rows.length, since: rows[0].ts, series };
+  // What the disagreement has typically been, beside what it is right now.
+  //
+  // The panel headlines a single reading, and a single reading is exactly what a
+  // source-side fault moves. Between 2026-08-13T00:29Z and 01:31Z Kobe's
+  // running_bam flag fell from 377 to 206 and recovered — for eighty minutes the
+  // dashboard reported 172 validators in dispute and 115.7M SOL under
+  // disagreement, while BAM's own explorer and the on-chain stake did not move
+  // at all. 171 validators cannot leave BAM in forty-seven minutes and take no
+  // stake with them; the flag broke, not the membership.
+  //
+  // The recording itself was right and stays: Kobe did report that, the list it
+  // came in was complete, and which of two disagreeing sources is wrong is not
+  // something this project can settle from the outside — that is the standing
+  // limit attestations exist to close. So nothing is smoothed away or withheld.
+  // What was missing was the context that makes a spike legible as a spike, and
+  // that is added here rather than the spike being removed.
+  //
+  // Median, not mean, and over a day: long enough that an outage of this length
+  // cannot move it, short enough to follow a real divergence within a day of it
+  // starting.
+  const DAY_MS = 24 * 3600e3;
+  const cutoff = Date.parse(rows[rows.length - 1].ts) - DAY_MS;
+  const window = rows.filter((r) => Date.parse(r.ts) >= cutoff);
+  const med = (xs) => {
+    const s = [...xs].sort((a, b) => a - b);
+    if (!s.length) return null;
+    const h = s.length >> 1;
+    return s.length % 2 ? s[h] : (s[h - 1] + s[h]) / 2;
+  };
+  const typical = {
+    readings: window.length,
+    hours: 24,
+    onlyExplorer: med(window.map((r) => r.onlyExplorer)),
+    disputedStakeSol: med(window.map((r) => r.disputedStakeSol)),
+    kobeRunningBam: med(window.map((r) => r.kobeRunningBam)),
+  };
+
+  return { latest: rows[rows.length - 1], typical, readings: rows.length, since: rows[0].ts, series };
 }
 
 // ---- 4. detections ---------------------------------------------------------
@@ -406,8 +465,54 @@ function loadDetections(tainted) {
   // detections.log itself is append-only history and is not rewritten; this is a
   // reading rule, and the count of what it dropped is published beside it.
   const allLive = readLog(DETLOG);
-  const live = allLive.filter((e) => !tainted(e.ts));
-  const excludedFromPartialResponses = allLive.length - live.length;
+  const afterTaint = allLive.filter((e) => !tainted(e.ts));
+  const excludedFromPartialResponses = allLive.length - afterTaint.length;
+
+  // Captures where the whole fleet changes identity at once.
+  //
+  // The detector calls a node "new" when its name was not in the previous
+  // capture, which assumes a node's name identifies it. Twice that has been
+  // false in a way that manufactures events:
+  //
+  //   • The explorer periodically swaps every node's -1/-2 suffix across the
+  //     entire fleet in a single minute — 2026-07-08, 2026-07-31 and most
+  //     recently 2026-08-11T21:18:33Z, when fourteen regions changed name
+  //     between two captures fifty-nine seconds apart. It is a relabelling and
+  //     not a migration: twelve of fifteen regions carried their validator count
+  //     and node stake across the boundary unchanged to the cent, and the
+  //     totals either side were identical.
+  //   • A capture that returned nothing at all is withheld at source, so the
+  //     recovery after it is compared against the last good capture and every
+  //     node in the network reads as new (2026-07-30, 2026-08-04).
+  //
+  // Both produce the same false story — a dozen regions provisioning
+  // simultaneously — and neither is a fact about BAM. The rule does not try to
+  // tell them apart, because the honest claim covers both: four or more regions
+  // presenting a new node in one capture is a change in how the network was
+  // described, not four independent things happening at once.
+  //
+  // Four is safe against the one event this project rests on. The 2026-06-24
+  // structural rollover was genuinely coordinated and still never exceeded two
+  // regions in a single capture — it moved region by region over twenty-five
+  // minutes, which is what a real reconfiguration looks like from outside.
+  //
+  // As with partial responses, the log is not rewritten. This is a reading rule
+  // and what it dropped is published beside the counts it changed.
+  const IDENTITY_ARTIFACT_REGIONS = 4;
+  const regionsAt = new Map();
+  for (const e of afterTaint) {
+    if (!e.kind?.startsWith("SIGNAL") || !e.kv.region) continue;
+    if (!regionsAt.has(e.ts)) regionsAt.set(e.ts, new Set());
+    regionsAt.get(e.ts).add(e.kv.region);
+  }
+  const identityArtifacts = [...regionsAt.entries()]
+    .filter(([, r]) => r.size >= IDENTITY_ARTIFACT_REGIONS)
+    .map(([ts, r]) => ({ ts, regions: r.size }))
+    .sort((a, b) => (a.ts < b.ts ? -1 : 1));
+  const artifactAt = new Set(identityArtifacts.map((a) => a.ts));
+
+  const live = afterTaint.filter((e) => !artifactAt.has(e.ts));
+  const excludedFromIdentityArtifacts = afterTaint.length - live.length;
   const liveCutovers = live.filter((e) => e.kind === "CUTOVER").length;
   const liveSignals = live.filter((e) => e.kind && e.kind.startsWith("SIGNAL")).length;
   // A cutover only counts as "structural" if its precursor lead is PLAUSIBLE
@@ -421,7 +526,11 @@ function loadDetections(tainted) {
     structural: e.kind === "CUTOVER" ? isStructural(e.kv) : null,
   }));
 
-  return { validated, rolloverPrecursors, liveCutovers, liveSignals, excludedFromPartialResponses, feed };
+  return {
+    validated, rolloverPrecursors, liveCutovers, liveSignals,
+    excludedFromPartialResponses, excludedFromIdentityArtifacts,
+    identityArtifacts, artifactAt, feed,
+  };
 }
 
 // ---- assemble -------------------------------------------------------------
@@ -429,12 +538,6 @@ async function main() {
   const summary = loadSummary();
   const latest = summary[summary.length - 1];
   const first = summary[0];
-
-  // leadership-change events (top node by stake)
-  const leadershipChanges = [];
-  for (let i = 1; i < summary.length; i++)
-    if (summary[i].topNode !== summary[i - 1].topNode)
-      leadershipChanges.push({ ts: summary[i].ts, from: summary[i - 1].topNode, to: summary[i].topNode });
 
   // Averages are weighted by time, not by sample count.
   //
@@ -485,6 +588,27 @@ async function main() {
   const tainted = (ts) => excludedSet.has(ts) || excludedSet.has(prevOf.get(ts));
 
   const detections = loadDetections(tainted);
+  // Not a figure — the set the leadership filter below reads. Dropped before
+  // metrics.json is written, where `identityArtifacts` carries the same fact in
+  // a form a reader can check.
+  const artifactAt = detections.artifactAt;
+  delete detections.artifactAt;
+
+  // Leadership-change events (top node by stake).
+  //
+  // Computed after the detector because the same fleet-wide relabelling that
+  // manufactures region signals also manufactures these: when every node swapped
+  // its suffix on 2026-08-11, the top node's name changed from
+  // ams-mainnet-bam-1-tee to ams-mainnet-bam-2-tee while holding the same stake
+  // on the same box, and that was counted as leadership moving. It did not move.
+  // A rename is not an event, so a change at a capture already recognised as an
+  // identity artifact is not recorded as one.
+  const leadershipChanges = [];
+  for (let i = 1; i < summary.length; i++) {
+    if (summary[i].topNode === summary[i - 1].topNode) continue;
+    if (artifactAt.has(summary[i].ts)) continue;
+    leadershipChanges.push({ ts: summary[i].ts, from: summary[i - 1].topNode, to: summary[i].topNode });
+  }
 
   // metrics.json is a derived artifact: every figure below is a pure function of
   // the capture files. Recording a digest of those inputs lets anyone pin which
@@ -513,7 +637,7 @@ async function main() {
     //     The values shift slightly and the definition genuinely changed, so
     //     this bumps even though nothing was added or removed. A contract only
     //     means something if it is honoured when the change is inconvenient.
-    schemaVersion: 2,
+    schemaVersion: 3,
     provenance: {
       collector: process.env.BAM_NET_REF || null,
       // Both come from the environment and default to null rather than to a

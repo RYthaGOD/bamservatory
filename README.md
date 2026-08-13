@@ -114,6 +114,35 @@ every excluded timestamp in `window.partialResponsesExcluded`.
 The raw captures stay in the archive either way. What is withheld is the
 interpretation, never the record.
 
+### When the whole fleet changes its name at once
+
+A node is identified here by the name the API gives it, and the rollover detector
+calls a node new when that name was not in the previous capture. Both assume a
+name identifies a machine. Twice that has been false.
+
+On 2026-08-11 at 21:18:33Z, every node in the network swapped its `-1`/`-2`
+suffix inside a single fifty-nine-second gap — `ams-1` became `ams-2`, `fra-2`
+became `fra-1`, in fourteen regions at once. It was a relabelling and not a
+migration: twelve of the fifteen regions carried their validator count and node
+stake across the boundary unchanged to the cent, and the network totals either
+side were identical. The same thing had happened on 2026-07-08 and 2026-07-31.
+Separately, a capture that returns nothing at all is withheld at source, so the
+recovery after it gets compared against the last good capture and every node in
+the network reads as new.
+
+Both told the same false story — a dozen regions provisioning simultaneously —
+and between them they manufactured a leadership change that never happened, since
+the top node's name changed while it held the same stake on the same box. A
+capture where four or more regions present a new node is now treated as a change
+in how the network was described rather than as four independent events. The
+threshold is safe against the one rollover this project has validated: the
+2026-06-24 event was genuinely coordinated and still never exceeded two regions
+in a single capture, because it moved region by region over twenty-five minutes.
+
+`metrics.json` lists each one in `detections.identityArtifacts`, for the same
+reason the excluded timestamps are listed — a judgement that changes a public
+figure should be checkable against the raw archive.
+
 ### Sampling rate, honestly
 
 The 60-second figure was accurate at launch and again from 2026-08-08, but not

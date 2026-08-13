@@ -20,7 +20,7 @@ and a conditional request against `ETag` avoids re-downloading it.
 
 ## Stability contract
 
-Pin on `schemaVersion` (currently `2`).
+Pin on `schemaVersion` (currently `3`).
 
 - **Adding** a field keeps the version.
 - **Removing** a field, or changing what an existing one means, bumps it.
@@ -32,6 +32,7 @@ look, rather than silently misreading a renamed number.
 
 | Version | Change |
 |---|---|
+| `3` | Captures missing more than an eighth of the network are excluded from the series, and captures where the whole fleet changes identity at once no longer count as events. `stats.*.min` rises, `leadershipChanges` and `detections.live*` fall. See [`stats`](#stats) and [`detections`](#detections). |
 | `2` | `stats.*.avg` became time-weighted rather than a mean over captures. Values shift slightly; see [`stats`](#stats). |
 | `1` | Initial published contract. |
 
@@ -145,12 +146,27 @@ Recording one as an observation put minima into this file that were never true
 of BAM — a low of 10 nodes, 190 validators and a 17.72% stake share, all of them
 descriptions of a read that failed halfway.
 
-A capture is excluded when it sits below 80% of the median of the ten captures
+A capture is excluded when it sits below 88% of the median of the sixty captures
 either side of it, in node count or validator count. Being low against what
 *follows* is what identifies it: a real change to BAM persists, so the series
 after it stays at the new level, while a partial read is followed by a return to
 where things were. The newest capture is never excluded, since nothing follows
 it yet to judge it against.
+
+Both numbers were widened in `schemaVersion` 3, after an outage on 2026-08-12
+walked straight through the previous ones. The API degraded for about seven
+minutes and recovered in steps — 9 nodes, then 11, 11, 12, 14 — which defeated
+each half of the old test in turn. Ten captures either side is shorter than the
+outage, so by 04:21 the "before" median was itself degraded; and that capture
+held 12 of 15 nodes and 306 of 377 validators, or exactly 0.80 of the network,
+which the old threshold therefore let through. It set `stats.pct.min` to 26.78%
+and `stats.vals.min` to 306.
+
+88% is where the evidence puts the line rather than a round number: ranked by how
+far each capture falls below its two-sided median, every read known to be broken
+sits at or under 0.88, and the next tier up is 0.9286 — one node absent from a
+fourteen-node network with every validator still reported, which is a real
+observation and is kept.
 
 The timestamps are published rather than quietly dropped — the raw records
 remain in the [archive](https://github.com/RYthaGOD/bamservatory-data)
@@ -245,6 +261,12 @@ Top 12 validators by stake: `{ pk, pkShort, node, region, stake, share }`.
 between two nodes, which flip leadership without anything moving. Do not read the
 count as node churn — see `detections` for events that were actually validated.
 
+Since `schemaVersion` 3, a change at a capture listed in
+`detections.identityArtifacts` is not recorded here. When every node swapped its
+`-1`/`-2` suffix on 2026-08-11, the top node's name changed from
+`ams-mainnet-bam-1-tee` to `ams-mainnet-bam-2-tee` while holding the same stake
+on the same machine, and that was previously counted as leadership moving.
+
 ### `detections`
 
 | Field | Meaning |
@@ -254,6 +276,8 @@ count as node churn — see `detections` for events that were actually validated
 | `liveCutovers` | Top-node changes seen live. Mostly whale flips. |
 | `liveSignals` | New-node appearances seen live. |
 | `excludedFromPartialResponses` | Live events dropped because the capture behind them was incomplete. |
+| `identityArtifacts` | `{ ts, regions }` for captures where the whole fleet changed identity at once. |
+| `excludedFromIdentityArtifacts` | Live events dropped because they fell at one of those captures. |
 | `feed` | Recent raw events. |
 
 `excludedFromPartialResponses` counts the detector reading its own blind spot.
@@ -263,6 +287,29 @@ at once — firing region signals and cutovers that describe nothing that happen
 to BAM. Both sides of each comparison are dropped, since the healthy capture
 following a degraded one produces the "everything came back" half of the
 artifact. Around one live event in ten came from those minutes.
+
+`identityArtifacts` counts a second way the detector can be fooled, added in
+`schemaVersion` 3. It treats a node as new when its name was not in the previous
+capture, which assumes a name identifies a machine. Twice that has been false:
+the explorer periodically swaps every node's `-1`/`-2` suffix across the whole
+fleet in a single minute (2026-07-08, 2026-07-31, and 2026-08-11T21:18:33Z, when
+fourteen regions changed name between captures fifty-nine seconds apart), and a
+capture that returned nothing at all is withheld at source, so the recovery after
+it is compared against the last good capture and every node reads as new
+(2026-07-30, 2026-08-04).
+
+The 2026-08-11 case is demonstrably a relabelling rather than a migration:
+twelve of fifteen regions carried their validator count and node stake across the
+boundary unchanged to the cent, and the network totals either side were
+identical. Both cases tell the same false story — a dozen regions provisioning at
+once — so the rule does not try to separate them. Four or more regions presenting
+a new node in one capture is a change in how the network was described, not four
+independent things happening at once.
+
+The threshold is safe against the one event this project rests on: the 2026-06-24
+structural rollover was genuinely coordinated and still never exceeded two
+regions in a single capture, because it moved region by region over twenty-five
+minutes. That is what a real reconfiguration looks like from outside.
 
 `detections.log` is append-only history and is not rewritten; this is a rule
 applied when it is read, and the count is published so the difference between
@@ -286,9 +333,24 @@ than its presence.
 | Field | Meaning |
 |---|---|
 | `latest` | The most recent reading. Its `ts` is *older* than `generatedAt` — see below. |
+| `typical` | Median of the last 24 hours of readings, for judging whether `latest` is ordinary. |
 | `readings` | How many readings exist. |
 | `since` | Timestamp of the first. |
 | `series` | Downsampled readings for charting. |
+
+`typical` carries `{ readings, hours, onlyExplorer, disputedStakeSol,
+kobeRunningBam }` and exists because a single reading is exactly what a
+source-side fault moves. Between 00:29Z and 01:31Z on 2026-08-13, Kobe's
+`running_bam` flag fell from 377 to 206 and then recovered; for eighty minutes
+`latest` reported 172 validators in dispute and 115.7M SOL under disagreement,
+while BAM's explorer and the on-chain stake did not move at all. 171 validators
+cannot leave BAM in forty-seven minutes and take no stake with them.
+
+Nothing is smoothed or withheld: Kobe did report that, the list it arrived in was
+complete rather than truncated, and which of two disagreeing sources is wrong is
+not something this project can settle from outside — that is the standing limit
+attestations exist to close. `typical` is context, added so that a spike is
+legible as a spike, not a correction applied to one.
 
 Fields on `latest` (and, where charted, on `series`):
 
