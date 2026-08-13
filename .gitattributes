@@ -1,0 +1,7 @@
+# Test fixtures are byte-for-byte extracts of real captures, and the tests assert
+# on what they contain. Line endings must not depend on which machine checked
+# them out, or a test could pass on CI and fail on a contributor's clone for a
+# reason that has nothing to do with the rule being tested.
+test/fixtures/** text eol=lf
+*.mjs text eol=lf
+*.js text eol=lf

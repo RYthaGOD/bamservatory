@@ -143,6 +143,19 @@ in a single capture, because it moved region by region over twenty-five minutes.
 reason the excluded timestamps are listed — a judgement that changes a public
 figure should be checkable against the raw archive.
 
+Both rules are asserted in both directions by `test/read-rules.mjs`, against the
+real captures from the incidents that prompted them and the real captures they
+must not touch:
+
+```bash
+node test/read-rules.mjs
+```
+
+The second pair is the one that matters. The 2026-06-24 rollover is the only
+validated early-warning event here, and a rule that tidied away relabellings
+while also suppressing it would quietly delete the finding the dashboard rests
+on. The test fails if that ever starts happening.
+
 ### Sampling rate, honestly
 
 The 60-second figure was accurate at launch and again from 2026-08-08, but not

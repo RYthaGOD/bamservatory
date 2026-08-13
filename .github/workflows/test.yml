@@ -1,0 +1,44 @@
+# The rules that decide what gets left out of a published figure.
+#
+# stats.js excludes captures from the series and events from the detector, and
+# both decisions change numbers on the dashboard and in metrics.json. They were
+# each written after a specific incident and calibrated against the archive as it
+# stood that day — which is a good way to get a rule right once, and no way at
+# all to keep it right.
+#
+# So the cases are asserted here, on someone else's machine, on a schedule, with
+# a public pass/fail history. In both directions: the captures a rule must
+# exclude, and the real ones it must never touch.
+
+name: test
+
+on:
+  push:
+    branches: [main]
+    # Data refreshes land here every ~15 minutes and cannot affect the rules.
+    # Running on them would bury a genuine failure in a hundred green runs a day.
+    paths-ignore:
+      - "metrics.json"
+      - "briefing.json"
+      - "index.html"
+  pull_request:
+  schedule:
+    # Weekly, so the checks still run even in a stretch where nobody touches the
+    # code — the case where a silent break would otherwise sit undiscovered.
+    - cron: "23 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  read-rules:
+    name: read rules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: what stats.js leaves out, in both directions
+        run: node test/read-rules.mjs
