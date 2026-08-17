@@ -368,11 +368,26 @@ than its presence.
 
 `typical` carries `{ readings, hours, onlyExplorer, disputedStakeSol,
 kobeRunningBam }` and exists because a single reading is exactly what a
-source-side fault moves. Between 00:29Z and 01:31Z on 2026-08-13, Kobe's
-`running_bam` flag fell from 377 to 206 and then recovered; for eighty minutes
-`latest` reported 172 validators in dispute and 115.7M SOL under disagreement,
-while BAM's explorer and the on-chain stake did not move at all. 171 validators
-cannot leave BAM in forty-seven minutes and take no stake with them.
+source-side fault moves.
+
+Kobe's `running_bam` flag collapses and recovers on a rough two-day cycle:
+
+| Episode | Duration | Flag low | Peak "disputed" |
+|---|---|---|---|
+| 2026-08-13 00:44–01:31Z | ~46 min | 206 of 379 | 115.7M SOL |
+| 2026-08-15 02:27–03:13Z | ~47 min | 265 of 379 | 100.9M SOL |
+| 2026-08-17 04:28–04:59Z | ~31 min | 262 of 380 | 96.3M SOL |
+
+Always in the small hours UTC, thirty to fifty minutes, while BAM's own explorer
+and the on-chain stake do not move at all. That is the shape of a scheduled job
+somewhere upstream, not of validators leaving — a hundred validators cannot leave
+BAM in half an hour and take no stake with them.
+
+Kobe's *full* validator list stays healthy throughout: in all eleven affected
+readings it carried its usual ~667 of ~688 on-chain validators. The truncation
+guard in `verify-sources.mjs` therefore correctly does not fire — it tests
+whether the list is short, and the list is not short. Only the flag moves, which
+is why this needed a different answer.
 
 Nothing is smoothed or withheld: Kobe did report that, the list it arrived in was
 complete rather than truncated, and which of two disagreeing sources is wrong is

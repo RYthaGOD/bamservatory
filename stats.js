@@ -356,12 +356,20 @@ function loadVerification() {
   // What the disagreement has typically been, beside what it is right now.
   //
   // The panel headlines a single reading, and a single reading is exactly what a
-  // source-side fault moves. Between 2026-08-13T00:29Z and 01:31Z Kobe's
-  // running_bam flag fell from 377 to 206 and recovered — for eighty minutes the
-  // dashboard reported 172 validators in dispute and 115.7M SOL under
-  // disagreement, while BAM's own explorer and the on-chain stake did not move
-  // at all. 171 validators cannot leave BAM in forty-seven minutes and take no
-  // stake with them; the flag broke, not the membership.
+  // source-side fault moves. Kobe's running_bam flag periodically collapses and
+  // recovers: 2026-08-13 00:44-01:31 (low 206 of 379), 2026-08-15 02:27-03:13
+  // (265 of 379), 2026-08-17 04:28-04:59 (262 of 380). Roughly every second day,
+  // thirty to fifty minutes, always in the small hours UTC — the shape of a
+  // scheduled job somewhere upstream, not of validators leaving. While one is
+  // running the panel reports a hundred-odd validators in dispute and up to
+  // 115.7M SOL under disagreement, while BAM's own explorer and the on-chain
+  // stake do not move at all. A hundred validators cannot leave BAM in half an
+  // hour and take no stake with them; the flag drops, not the membership.
+  //
+  // Kobe's full validator list stays healthy throughout — in all eleven affected
+  // readings it carried its usual ~667 of ~688 on-chain validators — so the
+  // truncation guard in verify-sources.mjs correctly does not fire. It tests
+  // whether the list is short, and the list is not short. Only the flag moves.
   //
   // The recording itself was right and stays: Kobe did report that, the list it
   // came in was complete, and which of two disagreeing sources is wrong is not
