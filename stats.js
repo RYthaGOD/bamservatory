@@ -357,10 +357,13 @@ function loadVerification() {
   //
   // The panel headlines a single reading, and a single reading is exactly what a
   // source-side fault moves. Kobe's running_bam flag periodically collapses and
-  // recovers: 2026-08-13 00:44-01:31 (low 206 of 379), 2026-08-15 02:27-03:13
-  // (265 of 379), 2026-08-17 04:28-04:59 (262 of 380). Roughly every second day,
-  // thirty to fifty minutes, always in the small hours UTC — the shape of a
-  // scheduled job somewhere upstream, not of validators leaving. While one is
+  // recovers — five times between 2026-08-13 and 2026-08-21, the deepest taking
+  // it to 206 of 379. Each episode starts about an hour and fifty minutes later
+  // in the day than the one before (00:44, 02:27, 04:28, 06:13, 08:06), so it is
+  // a cycle of roughly fifty hours drifting through the clock rather than
+  // anything anchored to a time of day, and they are getting shorter. That is the
+  // shape of a scheduled job somewhere upstream, not of validators leaving. While
+  // one is
   // running the panel reports a hundred-odd validators in dispute and up to
   // 115.7M SOL under disagreement, while BAM's own explorer and the on-chain
   // stake do not move at all. A hundred validators cannot leave BAM in half an

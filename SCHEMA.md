@@ -253,7 +253,7 @@ endpoints do not always agree with each other.
 Each capture holds both a node list, where every node states its own
 `connected_validators`, and a validator list, where every validator names the
 node it is connected to. Counting the second gives a number that should equal the
-first. In **2.43% of captures** (1,096 of 45,163 examined) at least one node
+first. In **2.43% of captures** (1,096 of 45,163 examined to 2026-08-13) at least one node
 disagrees with the validators claiming it — almost always by exactly one
 (1,150 of 1,185 cases are ±1), and concentrated in the busiest nodes: `sin`,
 `fra` and `sqq` account for most of them.
@@ -377,8 +377,13 @@ Kobe's `running_bam` flag collapses and recovers on a rough two-day cycle:
 | 2026-08-13 00:44–01:31Z | ~46 min | 206 of 379 | 115.7M SOL |
 | 2026-08-15 02:27–03:13Z | ~47 min | 265 of 379 | 100.9M SOL |
 | 2026-08-17 04:28–04:59Z | ~31 min | 262 of 380 | 96.3M SOL |
+| 2026-08-19 06:13–06:29Z | ~16 min | 245 of 380 | 107.3M SOL |
+| 2026-08-21 08:06Z | one reading | 261 of 377 | 98.5M SOL |
 
-Always in the small hours UTC, thirty to fifty minutes, while BAM's own explorer
+Each episode begins about an hour and fifty minutes later in the day than the
+one before — 00:44, 02:27, 04:28, 06:13, 08:06 — so this is a cycle of roughly
+fifty hours drifting through the clock rather than anything anchored to a time
+of day. They are also getting shorter. Throughout, BAM's own explorer
 and the on-chain stake do not move at all. That is the shape of a scheduled job
 somewhere upstream, not of validators leaving — a hundred validators cannot leave
 BAM in half an hour and take no stake with them.
