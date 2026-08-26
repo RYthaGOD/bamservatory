@@ -379,11 +379,14 @@ Kobe's `running_bam` flag collapses and recovers on a rough two-day cycle:
 | 2026-08-17 04:28–04:59Z | ~31 min | 262 of 380 | 96.3M SOL |
 | 2026-08-19 06:13–06:29Z | ~16 min | 245 of 380 | 107.3M SOL |
 | 2026-08-21 08:06Z | one reading | 261 of 377 | 98.5M SOL |
+| 2026-08-25 00:06Z | one reading | 250 of 387 | 105.4M SOL |
 
-Each episode begins about an hour and fifty minutes later in the day than the
-one before — 00:44, 02:27, 04:28, 06:13, 08:06 — so this is a cycle of roughly
-fifty hours drifting through the clock rather than anything anchored to a time
-of day. They are also getting shorter. Throughout, BAM's own explorer
+The first five arrived 49.7, 50.0, 49.8 and 49.9 hours apart, each starting about
+two hours later in the day than the last. That regularity broke afterwards:
+nothing appeared where it predicted on 2026-08-23 — the deepest dip that day was
+a ratio of 0.987, ordinary noise — and the sixth episode came 88 hours after the
+fifth. Four gaps is not a cycle, and the fifth gap says it is not a simple one.
+They are also getting shorter. Throughout, BAM's own explorer
 and the on-chain stake do not move at all. That is the shape of a scheduled job
 somewhere upstream, not of validators leaving — a hundred validators cannot leave
 BAM in half an hour and take no stake with them.
