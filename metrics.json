@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-08-28T03:28:40.710Z",
+  "generatedAt": "2026-08-28T03:44:12.728Z",
   "schemaVersion": 3,
   "provenance": {
     "collector": "0fcd020edfd9d71e7c36d971dad47ba88442a520",
     "archive": "https://github.com/RYthaGOD/bamservatory-data",
     "inputs": {
-      "summary.csv": "sha256:e96dd0aad7734223d7c5f03c3c7560384f007b2b5adb1a6dc8cea19bee7692c7",
-      "nodes.csv": "sha256:5be2657bb75b026428060f79a3dfc3856dd2f17531ca43a79897e10ea06a7648",
-      "detections.log": "sha256:39ec39d39032fd79bd3363b1e9128780d519b6f69091d83810e1c7e98d834ce4",
-      "verification.csv": "sha256:da2f0f4869aed9e5d5a39daa83a377f60939b917a5a1bf3a348d149ffd1dd3b1",
+      "summary.csv": "sha256:df1af77ba670a62986aa9ba48df678b304a318875f4795459b6445b0368cc1a1",
+      "nodes.csv": "sha256:836adad2d7b9e976afe046863952ac88a23a110aca7936b2da83f49a55794040",
+      "detections.log": "sha256:583abbf49795e512d2b6e2332656fb0a902cb23124c3c6e08f6ae19fa9c66894",
+      "verification.csv": "sha256:98888c16b908e3e6b8eee71eebdb508d7ad6630d4b64f3ebe951fb9df59778e8",
       "validators.csv": {
         "tailReadOnly": true,
-        "snapshotTs": "2026-08-28T03:28:38Z",
+        "snapshotTs": "2026-08-28T03:44:11Z",
         "validators": 389
       }
     }
   },
   "window": {
     "from": "2026-06-20T15:08:27Z",
-    "to": "2026-08-28T03:28:38Z",
-    "snapshots": 67489,
+    "to": "2026-08-28T03:44:11Z",
+    "snapshots": 67505,
     "partialResponsesExcluded": [
       "2026-06-24T06:10:46Z",
       "2026-06-24T06:11:46Z",
@@ -76,25 +76,25 @@
     "pct": {
       "min": 28.4591,
       "max": 34.5269,
-      "avg": 32.78418997968626,
+      "avg": 32.784375192894814,
       "cur": 33.9396
     },
     "hhi": {
       "min": 0.117198,
       "max": 0.160019,
-      "avg": 0.1342033511153179,
+      "avg": 0.13420265641153586,
       "cur": 0.129706
     },
     "vals": {
       "min": 319,
       "max": 391,
-      "avg": 377.1624115690739,
+      "avg": 377.1643091445633,
       "cur": 389
     },
     "nodes": {
       "min": 12,
       "max": 21,
-      "avg": 15.508690197380329,
+      "avg": 15.508758646023036,
       "cur": 16
     }
   },
@@ -1787,7 +1787,7 @@
       "nodes": 16
     },
     {
-      "ts": "2026-08-28T03:28:38Z",
+      "ts": "2026-08-28T03:44:11Z",
       "pct": 33.9396,
       "hhi": 0.129706,
       "vals": 389,
@@ -2444,7 +2444,7 @@
     ],
     "rolloverPrecursors": 15,
     "liveCutovers": 64,
-    "liveSignals": 201,
+    "liveSignals": 202,
     "excludedFromPartialResponses": 47,
     "excludedFromIdentityArtifacts": 154,
     "identityArtifacts": [
@@ -2498,6 +2498,13 @@
       }
     ],
     "feed": [
+      {
+        "ts": "2026-08-28T03:31:11Z",
+        "kind": "SIGNAL_XREGION",
+        "region": "hkg",
+        "detail": "new hkg-mainnet-bam-1-tee",
+        "structural": null
+      },
       {
         "ts": "2026-08-28T03:13:06Z",
         "kind": "SIGNAL_XREGION",
@@ -2574,19 +2581,12 @@
         "region": "tyo",
         "detail": "new tyo-mainnet-bam-dev-tee",
         "structural": null
-      },
-      {
-        "ts": "2026-08-27T16:48:14Z",
-        "kind": "SIGNAL_XREGION",
-        "region": "hkg",
-        "detail": "new hkg-mainnet-bam-2-tee",
-        "structural": null
       }
     ]
   },
   "verification": {
     "latest": {
-      "ts": "2026-08-28T03:28:39Z",
+      "ts": "2026-08-28T03:44:11Z",
       "explorerValidators": 389,
       "kobeRunningBam": 389,
       "inBoth": 389,
@@ -2613,7 +2613,7 @@
       "disputedStakeSol": 100417.23,
       "kobeRunningBam": 387
     },
-    "readings": 1594,
+    "readings": 1595,
     "since": "2026-08-10T10:02:04Z",
     "series": [
       {
@@ -4213,7 +4213,7 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-28T03:28:39Z",
+        "ts": "2026-08-28T03:44:11Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
@@ -4221,7 +4221,7 @@
     ]
   },
   "attestations": {
-    "checkedAt": "2026-08-27T03:31:02Z",
+    "checkedAt": "2026-08-28T03:31:12Z",
     "reachable": true,
     "available": false,
     "endpointsFound": []
