@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-08-31T15:59:22.986Z",
+  "generatedAt": "2026-08-31T16:14:47.103Z",
   "schemaVersion": 3,
   "provenance": {
     "collector": "0fcd020edfd9d71e7c36d971dad47ba88442a520",
     "archive": "https://github.com/RYthaGOD/bamservatory-data",
     "inputs": {
-      "summary.csv": "sha256:a63361c153baf4b6040e8972c2d2bac928430a85ee49e2ee7c44db1e9808c194",
-      "nodes.csv": "sha256:154ace1cd0b9b7909d7436c78cb89a642ba0a03011861ac7f4924f63c5895941",
+      "summary.csv": "sha256:9113a4da4abe97e92572df01c5235f5780d1f08669bd12859ac58bbe5169c7ea",
+      "nodes.csv": "sha256:9efedddfb76fb1142b8412efcb1257978e83a9e50b71c1e35c9b95aa16d1d521",
       "detections.log": "sha256:b9ead9f5d8e57505727458a4431b4a02d3d41a4243c09c6bf52176d0c3dc0ddf",
-      "verification.csv": "sha256:14e89e1079f797582da6587bdf1d63a155fe6ca715d38c77ec5b0458119e3bf6",
+      "verification.csv": "sha256:d259f159f663df2c0101e42843f7e9d745504cc0862a0bca938244965b42702a",
       "validators.csv": {
         "tailReadOnly": true,
-        "snapshotTs": "2026-08-31T15:59:20Z",
+        "snapshotTs": "2026-08-31T16:14:45Z",
         "validators": 383
       }
     }
   },
   "window": {
     "from": "2026-06-20T15:08:27Z",
-    "to": "2026-08-31T15:59:20Z",
-    "snapshots": 72674,
+    "to": "2026-08-31T16:14:45Z",
+    "snapshots": 72690,
     "partialResponsesExcluded": [
       "2026-06-24T06:10:46Z",
       "2026-06-24T06:11:46Z",
@@ -47,20 +47,20 @@
   "headline": {
     "bamStakeSOL": 149696422.65,
     "bamStakePct": 34.265,
-    "nodeCount": 16,
+    "nodeCount": 15,
     "validatorCount": 383,
     "topNode": "ams-mainnet-bam-1-tee",
-    "topNodeShare": 22.213461,
+    "topNodeShare": 22.566815,
     "busiestByVals": {
       "node": "fra-mainnet-bam-2-tee",
       "region": "fra",
       "vals": 104,
       "stake": 28121837.29,
-      "share": 18.785911374616276
+      "share": 18.785911375871212
     }
   },
   "decentralization": {
-    "nodeStakeHHI": 0.133438,
+    "nodeStakeHHI": 0.135007,
     "nodeNakamoto": 3,
     "regionNakamoto": 3,
     "validatorNakamoto": 26,
@@ -68,34 +68,32 @@
     "top5ValShare": 19.228299210540527,
     "top10ValShare": 28.201566804401352,
     "regionCount": 15,
-    "unconventionalNodeNames": [
-      "tyo-mainnet-bam-dev-tee"
-    ]
+    "unconventionalNodeNames": []
   },
   "stats": {
     "pct": {
       "min": 28.4591,
       "max": 34.5269,
-      "avg": 32.853116669458934,
+      "avg": 32.85332993060759,
       "cur": 34.265
     },
     "hhi": {
       "min": 0.117198,
       "max": 0.160019,
-      "avg": 0.13413835066507318,
-      "cur": 0.133438
+      "avg": 0.13413840641869057,
+      "cur": 0.135007
     },
     "vals": {
       "min": 319,
       "max": 391,
-      "avg": 377.564211654929,
+      "avg": 377.5650327160189,
       "cur": 383
     },
     "nodes": {
       "min": 12,
       "max": 21,
-      "avg": 15.532811365698228,
-      "cur": 16
+      "avg": 15.532778976176946,
+      "cur": 15
     }
   },
   "series": [
@@ -1787,232 +1785,225 @@
       "nodes": 16
     },
     {
-      "ts": "2026-08-31T15:59:20Z",
+      "ts": "2026-08-31T16:14:45Z",
       "pct": 34.265,
-      "hhi": 0.133438,
+      "hhi": 0.135007,
       "vals": 383,
-      "nodes": 16
+      "nodes": 15
     }
   ],
   "nodes": [
     {
       "node": "ams-mainnet-bam-1-tee",
       "region": "ams",
-      "vals": 68,
-      "stake": 33252757.21,
-      "share": 22.213461498506962
+      "vals": 69,
+      "stake": 33781715,
+      "share": 22.56681516113484
     },
     {
       "node": "fra-mainnet-bam-2-tee",
       "region": "fra",
       "vals": 104,
       "stake": 28121837.29,
-      "share": 18.785911374616276
+      "share": 18.785911375871212
     },
     {
       "node": "sqq-mainnet-bam-2-tee",
       "region": "sqq",
       "vals": 20,
       "stake": 18081133.32,
-      "share": 12.078534008975533
+      "share": 12.078534009782404
     },
     {
       "node": "ewr-mainnet-bam-2-tee",
       "region": "ewr",
       "vals": 23,
       "stake": 16480909.4,
-      "share": 11.009554609420055
+      "share": 11.009554610155515
     },
     {
       "node": "sin-mainnet-bam-2-tee",
       "region": "sin",
       "vals": 45,
       "stake": 16270552.88,
-      "share": 10.869032533958153
+      "share": 10.869032534684226
     },
     {
       "node": "tyo-mainnet-bam-1-tee",
       "region": "tyo",
       "vals": 39,
       "stake": 11621948.17,
-      "share": 7.76367795853938
+      "share": 7.763677959058009
     },
     {
       "node": "sea-mainnet-bam-1-tee",
       "region": "sea",
       "vals": 2,
       "stake": 5677899.07,
-      "share": 3.792942389328367
+      "share": 3.7929423895817433
     },
     {
       "node": "lon-mainnet-bam-2-tee",
       "region": "lon",
       "vals": 17,
       "stake": 4294525.17,
-      "share": 2.868822844244502
+      "share": 2.8688228444361448
     },
     {
       "node": "pit-mainnet-bam-2-tee",
       "region": "pit",
       "vals": 14,
       "stake": 3922217.81,
-      "share": 2.6201145896254325
+      "share": 2.6201145898004614
     },
     {
       "node": "dub-mainnet-bam-1-tee",
       "region": "dub",
       "vals": 3,
       "stake": 3577406.97,
-      "share": 2.3897745227781506
+      "share": 2.3897745229377922
     },
     {
       "node": "lax-mainnet-bam-2-tee",
       "region": "lax",
       "vals": 18,
       "stake": 3181239.17,
-      "share": 2.1251270495875145
+      "share": 2.125127049729477
     },
     {
       "node": "hkg-mainnet-bam-1-tee",
       "region": "hkg",
       "vals": 11,
       "stake": 1557631.98,
-      "share": 1.040527189912778
+      "share": 1.0405271899822872
     },
     {
       "node": "slc-mainnet-bam-2-tee",
       "region": "slc",
       "vals": 10,
       "stake": 1498029.86,
-      "share": 1.0007118630366283
+      "share": 1.000711863103478
     },
     {
       "node": "dfw-mainnet-bam-1-tee",
       "region": "dfw",
       "vals": 3,
       "stake": 896857.04,
-      "share": 0.5991172161120446
+      "share": 0.5991172161520668
     },
     {
       "node": "iad-mainnet-bam-1-tee",
       "region": "iad",
       "vals": 5,
       "stake": 732519.51,
-      "share": 0.4893366835576816
-    },
-    {
-      "node": "tyo-mainnet-bam-dev-tee",
-      "region": "tyo",
-      "vals": 1,
-      "stake": 528957.8,
-      "share": 0.35335366780055794
+      "share": 0.4893366835903703
     }
   ],
   "regions": [
     {
       "region": "ams",
-      "vals": 68,
-      "stake": 33252757.21,
+      "vals": 69,
+      "stake": 33781715,
       "nodes": 1,
-      "share": 22.213461498506962
+      "share": 22.56681516113484
     },
     {
       "region": "fra",
       "vals": 104,
       "stake": 28121837.29,
       "nodes": 1,
-      "share": 18.785911374616276
+      "share": 18.785911375871212
     },
     {
       "region": "sqq",
       "vals": 20,
       "stake": 18081133.32,
       "nodes": 1,
-      "share": 12.078534008975533
+      "share": 12.078534009782404
     },
     {
       "region": "ewr",
       "vals": 23,
       "stake": 16480909.4,
       "nodes": 1,
-      "share": 11.009554609420055
+      "share": 11.009554610155515
     },
     {
       "region": "sin",
       "vals": 45,
       "stake": 16270552.88,
       "nodes": 1,
-      "share": 10.869032533958153
+      "share": 10.869032534684226
     },
     {
       "region": "tyo",
-      "vals": 40,
-      "stake": 12150905.97,
-      "nodes": 2,
-      "share": 8.117031626339937
+      "vals": 39,
+      "stake": 11621948.17,
+      "nodes": 1,
+      "share": 7.763677959058009
     },
     {
       "region": "sea",
       "vals": 2,
       "stake": 5677899.07,
       "nodes": 1,
-      "share": 3.792942389328367
+      "share": 3.7929423895817433
     },
     {
       "region": "lon",
       "vals": 17,
       "stake": 4294525.17,
       "nodes": 1,
-      "share": 2.868822844244502
+      "share": 2.8688228444361448
     },
     {
       "region": "pit",
       "vals": 14,
       "stake": 3922217.81,
       "nodes": 1,
-      "share": 2.6201145896254325
+      "share": 2.6201145898004614
     },
     {
       "region": "dub",
       "vals": 3,
       "stake": 3577406.97,
       "nodes": 1,
-      "share": 2.3897745227781506
+      "share": 2.3897745229377922
     },
     {
       "region": "lax",
       "vals": 18,
       "stake": 3181239.17,
       "nodes": 1,
-      "share": 2.1251270495875145
+      "share": 2.125127049729477
     },
     {
       "region": "hkg",
       "vals": 11,
       "stake": 1557631.98,
       "nodes": 1,
-      "share": 1.040527189912778
+      "share": 1.0405271899822872
     },
     {
       "region": "slc",
       "vals": 10,
       "stake": 1498029.86,
       "nodes": 1,
-      "share": 1.0007118630366283
+      "share": 1.000711863103478
     },
     {
       "region": "dfw",
       "vals": 3,
       "stake": 896857.04,
       "nodes": 1,
-      "share": 0.5991172161120446
+      "share": 0.5991172161520668
     },
     {
       "region": "iad",
       "vals": 5,
       "stake": 732519.51,
       "nodes": 1,
-      "share": 0.4893366835576816
+      "share": 0.4893366835903703
     }
   ],
   "whales": [
@@ -2586,7 +2577,7 @@
   },
   "verification": {
     "latest": {
-      "ts": "2026-08-31T15:59:21Z",
+      "ts": "2026-08-31T16:14:46Z",
       "explorerValidators": 383,
       "kobeRunningBam": 387,
       "inBoth": 383,
@@ -2613,7 +2604,7 @@
       "disputedStakeSol": 31875.46,
       "kobeRunningBam": 385
     },
-    "readings": 1919,
+    "readings": 1920,
     "since": "2026-08-10T10:02:04Z",
     "series": [
       {
@@ -2623,45 +2614,39 @@
         "stakeMedianRelPct": null
       },
       {
-        "ts": "2026-08-10T13:36:06Z",
+        "ts": "2026-08-10T14:06:45Z",
         "onlyExplorer": 1,
-        "disputedStakeSol": 744254.76,
+        "disputedStakeSol": 620161.56,
         "stakeMedianRelPct": null
       },
       {
-        "ts": "2026-08-10T17:09:25Z",
+        "ts": "2026-08-10T18:10:09Z",
         "onlyExplorer": 2,
-        "disputedStakeSol": 744254.76,
+        "disputedStakeSol": 1100573.14,
         "stakeMedianRelPct": null
       },
       {
-        "ts": "2026-08-10T20:42:17Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 735267.2,
-        "stakeMedianRelPct": null
-      },
-      {
-        "ts": "2026-08-11T01:17:40Z",
+        "ts": "2026-08-10T23:14:42Z",
         "onlyExplorer": 4,
-        "disputedStakeSol": 591967.43,
+        "disputedStakeSol": 338897.45,
         "stakeMedianRelPct": null
       },
       {
-        "ts": "2026-08-11T04:50:38Z",
-        "onlyExplorer": 3,
+        "ts": "2026-08-11T03:19:11Z",
+        "onlyExplorer": 4,
         "disputedStakeSol": 371457.46,
         "stakeMedianRelPct": null
       },
       {
-        "ts": "2026-08-11T08:03:14Z",
+        "ts": "2026-08-11T07:22:38Z",
         "onlyExplorer": 3,
-        "disputedStakeSol": 428203.18,
-        "stakeMedianRelPct": 0
+        "disputedStakeSol": 566500.64,
+        "stakeMedianRelPct": null
       },
       {
-        "ts": "2026-08-11T09:52:14Z",
-        "onlyExplorer": 3,
-        "disputedStakeSol": 873480.63,
+        "ts": "2026-08-11T09:36:17Z",
+        "onlyExplorer": 4,
+        "disputedStakeSol": 296531.61,
         "stakeMedianRelPct": 0
       },
       {
@@ -2671,45 +2656,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-11T13:29:04Z",
-        "onlyExplorer": 3,
-        "disputedStakeSol": 371457.46,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-11T15:18:25Z",
-        "onlyExplorer": 3,
-        "disputedStakeSol": 641301.57,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-11T17:07:41Z",
+        "ts": "2026-08-11T13:44:44Z",
         "onlyExplorer": 2,
+        "disputedStakeSol": 246665.72,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-11T15:49:56Z",
+        "onlyExplorer": 1,
         "disputedStakeSol": 243655.91,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-11T18:54:55Z",
-        "onlyExplorer": 4,
-        "disputedStakeSol": 1056523.08,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-11T20:43:58Z",
+        "ts": "2026-08-11T17:53:25Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 174.8,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-11T22:32:54Z",
-        "onlyExplorer": 3,
-        "disputedStakeSol": 324242.65,
+        "ts": "2026-08-11T19:56:49Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 368447.65,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-12T00:22:15Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 113708.17,
+        "ts": "2026-08-11T22:01:53Z",
+        "onlyExplorer": 3,
+        "disputedStakeSol": 363438.31,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-12T00:06:50Z",
+        "onlyExplorer": 2,
+        "disputedStakeSol": 393993.98,
         "stakeMedianRelPct": 0
       },
       {
@@ -2719,45 +2698,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-12T04:16:33Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 91590447.1,
+        "ts": "2026-08-12T04:32:03Z",
+        "onlyExplorer": 5,
+        "disputedStakeSol": 5933269.59,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-12T06:04:34Z",
+        "ts": "2026-08-12T06:35:35Z",
         "onlyExplorer": 4,
-        "disputedStakeSol": 555875.59,
+        "disputedStakeSol": 611110.14,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-12T07:53:23Z",
+        "ts": "2026-08-12T08:39:55Z",
         "onlyExplorer": 2,
-        "disputedStakeSol": 411735.99,
+        "disputedStakeSol": 113708.17,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-12T09:41:48Z",
+        "ts": "2026-08-12T10:44:08Z",
         "onlyExplorer": 2,
-        "disputedStakeSol": 298202.62,
+        "disputedStakeSol": 124966.54,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-12T11:31:02Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 298202.62,
+        "ts": "2026-08-12T12:48:26Z",
+        "onlyExplorer": 4,
+        "disputedStakeSol": 1205037.07,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-12T13:19:41Z",
+        "ts": "2026-08-12T14:53:02Z",
         "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-12T15:08:59Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 113533.37,
+        "disputedStakeSol": 124791.74,
         "stakeMedianRelPct": 0
       },
       {
@@ -2767,44 +2740,38 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-12T18:46:53Z",
+        "ts": "2026-08-12T19:02:37Z",
         "onlyExplorer": 0,
-        "disputedStakeSol": 38962.63,
+        "disputedStakeSol": 461782.19,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-12T20:36:06Z",
-        "onlyExplorer": 9,
-        "disputedStakeSol": 1444602.75,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-12T22:24:42Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-13T00:13:32Z",
+        "ts": "2026-08-12T21:06:49Z",
         "onlyExplorer": 3,
-        "disputedStakeSol": 687240.62,
-        "stakeMedianRelPct": 0.0028
-      },
-      {
-        "ts": "2026-08-13T02:02:37Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 131826.64,
+        "disputedStakeSol": 693003.97,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-13T03:51:29Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 252983.84,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-13T05:39:52Z",
+        "ts": "2026-08-12T23:11:37Z",
         "onlyExplorer": 1,
+        "disputedStakeSol": 124791.74,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-13T01:15:43Z",
+        "onlyExplorer": 172,
+        "disputedStakeSol": 115446275.05,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-13T03:20:33Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 118357.38,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-13T05:24:21Z",
+        "onlyExplorer": 2,
         "disputedStakeSol": 141372.95,
         "stakeMedianRelPct": 0
       },
@@ -2815,45 +2782,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-13T09:16:08Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 469299.5,
+        "ts": "2026-08-13T09:31:51Z",
+        "onlyExplorer": 2,
+        "disputedStakeSol": 665236.59,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-13T11:05:14Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 2482518.25,
+        "ts": "2026-08-13T11:36:32Z",
+        "onlyExplorer": 2,
+        "disputedStakeSol": 513769.77,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-13T12:53:29Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 6746.49,
+        "ts": "2026-08-13T13:39:57Z",
+        "onlyExplorer": 2,
+        "disputedStakeSol": 131826.64,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-13T14:42:05Z",
+        "ts": "2026-08-13T15:43:21Z",
+        "onlyExplorer": 2,
+        "disputedStakeSol": 426181.52,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-13T17:45:27Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-13T16:29:10Z",
+        "ts": "2026-08-13T19:49:10Z",
         "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-13T18:17:19Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 125080.15,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-13T20:04:15Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
+        "disputedStakeSol": 5002416.63,
         "stakeMedianRelPct": 0
       },
       {
@@ -2863,45 +2824,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-13T23:41:48Z",
+        "ts": "2026-08-13T23:57:20Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-14T01:31:21Z",
+        "ts": "2026-08-14T02:02:33Z",
         "onlyExplorer": 0,
-        "disputedStakeSol": 0,
+        "disputedStakeSol": 244340.03,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-14T03:20:30Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-14T05:09:35Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-14T06:58:30Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-14T08:47:32Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 378966.49,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-14T10:36:02Z",
+        "ts": "2026-08-14T04:07:05Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 244340.03,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-14T06:11:40Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-14T08:16:14Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-14T10:20:31Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
@@ -2911,45 +2866,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-14T14:14:29Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 244340.03,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-14T16:04:16Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 244340.03,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-14T17:53:42Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 244340.03,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-14T19:43:00Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 244340.03,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-14T21:31:32Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 244340.03,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-14T23:20:15Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 558313.92,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-15T01:09:28Z",
+        "ts": "2026-08-14T14:30:02Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-14T16:35:30Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 244340.03,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-14T18:40:40Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-14T20:45:12Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 330854.69,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-14T22:49:36Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-15T00:53:58Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 182658.63,
         "stakeMedianRelPct": 0
       },
       {
@@ -2959,43 +2908,37 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-15T04:47:35Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 638.97,
+        "ts": "2026-08-15T05:03:06Z",
+        "onlyExplorer": 3,
+        "disputedStakeSol": 245397.88,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-15T06:36:19Z",
+        "ts": "2026-08-15T07:07:21Z",
         "onlyExplorer": 2,
         "disputedStakeSol": 245397.88,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-15T08:25:23Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 245278.19,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-15T10:13:39Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 245278.19,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-15T12:02:16Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 32743.52,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-15T13:51:42Z",
+        "ts": "2026-08-15T09:11:55Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 519.28,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-15T15:40:23Z",
+        "ts": "2026-08-15T11:15:44Z",
+        "onlyExplorer": 3,
+        "disputedStakeSol": 160137.44,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-15T13:20:00Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 519.28,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-15T15:24:52Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 519.28,
         "stakeMedianRelPct": 0
@@ -3007,43 +2950,37 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-15T19:18:34Z",
-        "onlyExplorer": 1,
+        "ts": "2026-08-15T19:34:05Z",
+        "onlyExplorer": 2,
         "disputedStakeSol": 100495.32,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-15T21:07:35Z",
+        "ts": "2026-08-15T21:39:06Z",
+        "onlyExplorer": 2,
+        "disputedStakeSol": 177995.29,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-15T23:43:48Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 519.28,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-15T22:57:11Z",
+        "ts": "2026-08-16T01:47:35Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 519.28,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-16T00:45:41Z",
+        "ts": "2026-08-16T03:51:19Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 519.28,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-16T02:34:11Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 157491.21,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-16T04:22:22Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 519.28,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-16T06:12:02Z",
+        "ts": "2026-08-16T05:56:31Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 519.28,
         "stakeMedianRelPct": 0
@@ -3055,43 +2992,37 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-16T09:48:26Z",
+        "ts": "2026-08-16T10:03:58Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 519.28,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-16T11:37:09Z",
+        "ts": "2026-08-16T12:08:11Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 519.28,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-16T13:26:15Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 100712.65,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-16T15:15:17Z",
+        "ts": "2026-08-16T14:13:03Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 519.28,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-16T17:04:50Z",
+        "ts": "2026-08-16T16:18:10Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 519.28,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-16T18:53:51Z",
+        "ts": "2026-08-16T18:22:31Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-16T20:42:24Z",
+        "ts": "2026-08-16T20:26:51Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
@@ -3103,43 +3034,37 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-17T00:19:28Z",
+        "ts": "2026-08-17T00:34:57Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-17T02:08:12Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
+        "ts": "2026-08-17T02:39:15Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 85543.69,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-17T03:56:57Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
+        "ts": "2026-08-17T04:43:36Z",
+        "onlyExplorer": 118,
+        "disputedStakeSol": 96326469.37,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-17T05:45:47Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 9960.58,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-17T07:34:50Z",
+        "ts": "2026-08-17T06:47:54Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 3214.09,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-17T09:23:46Z",
+        "ts": "2026-08-17T08:52:41Z",
         "onlyExplorer": 1,
-        "disputedStakeSol": 3214.09,
+        "disputedStakeSol": 253566.96,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-17T11:12:56Z",
+        "ts": "2026-08-17T10:57:17Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 3214.09,
         "stakeMedianRelPct": 0
@@ -3151,45 +3076,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-17T14:49:26Z",
+        "ts": "2026-08-17T15:05:05Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 3214.09,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-17T16:38:34Z",
+        "ts": "2026-08-17T17:09:48Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-17T18:27:24Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-17T20:15:50Z",
+        "ts": "2026-08-17T19:14:13Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 329973.32,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-17T22:04:38Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-17T23:54:22Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-18T01:43:59Z",
+        "ts": "2026-08-17T21:17:42Z",
         "onlyExplorer": 1,
-        "disputedStakeSol": 150282.69,
+        "disputedStakeSol": 106649.99,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-17T23:23:16Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 223323.33,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-18T01:28:27Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 223323.33,
         "stakeMedianRelPct": 0
       },
       {
@@ -3199,45 +3118,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-18T05:22:07Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 329973.32,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-18T07:10:44Z",
+        "ts": "2026-08-18T05:37:46Z",
         "onlyExplorer": 1,
-        "disputedStakeSol": 88836.25,
+        "disputedStakeSol": 106649.99,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-18T08:59:22Z",
+        "ts": "2026-08-18T07:41:47Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 106649.99,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-18T10:48:19Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 545766.62,
+        "ts": "2026-08-18T09:46:10Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-18T12:36:45Z",
+        "ts": "2026-08-18T11:49:57Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 223323.33,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-18T13:54:53Z",
         "onlyExplorer": 2,
         "disputedStakeSol": 329973.32,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-18T14:25:56Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 307484.5,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-18T16:12:12Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 465066.82,
+        "ts": "2026-08-18T15:57:09Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 106649.99,
         "stakeMedianRelPct": 0
       },
       {
@@ -3247,45 +3160,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-18T19:50:48Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 361747.1,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-18T21:38:58Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 329973.32,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-18T23:27:35Z",
+        "ts": "2026-08-18T20:06:35Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-19T01:17:38Z",
-        "onlyExplorer": 1,
+        "ts": "2026-08-18T22:09:57Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-19T00:13:38Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-19T02:19:27Z",
+        "onlyExplorer": 0,
         "disputedStakeSol": 223323.33,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-19T03:06:14Z",
+        "ts": "2026-08-19T04:39:58Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-19T05:11:11Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-19T07:00:07Z",
+        "ts": "2026-08-19T06:44:32Z",
         "onlyExplorer": 3,
-        "disputedStakeSol": 110781.01,
+        "disputedStakeSol": 123710.21,
         "stakeMedianRelPct": 0
       },
       {
@@ -3295,45 +3202,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-19T10:38:04Z",
-        "onlyExplorer": 3,
-        "disputedStakeSol": 291357.12,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-19T12:26:38Z",
-        "onlyExplorer": 3,
-        "disputedStakeSol": 201376.48,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-19T14:16:33Z",
-        "onlyExplorer": 3,
-        "disputedStakeSol": 201376.48,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-19T16:07:15Z",
+        "ts": "2026-08-19T10:53:36Z",
         "onlyExplorer": 2,
-        "disputedStakeSol": 424009.51,
+        "disputedStakeSol": 291357.13,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-19T17:56:57Z",
+        "ts": "2026-08-19T12:58:04Z",
         "onlyExplorer": 3,
-        "disputedStakeSol": 424009.51,
+        "disputedStakeSol": 201376.48,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-19T19:46:40Z",
-        "onlyExplorer": 3,
-        "disputedStakeSol": 122651.96,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-19T21:36:08Z",
+        "ts": "2026-08-19T15:03:51Z",
         "onlyExplorer": 3,
         "disputedStakeSol": 291357.12,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-19T17:10:01Z",
+        "onlyExplorer": 4,
+        "disputedStakeSol": 655983.7,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-19T19:15:29Z",
+        "onlyExplorer": 2,
+        "disputedStakeSol": 68724.1,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-19T21:20:33Z",
+        "onlyExplorer": 2,
+        "disputedStakeSol": 68724.1,
         "stakeMedianRelPct": 0
       },
       {
@@ -3343,45 +3244,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-20T01:13:32Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 276152.58,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-20T03:02:22Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 275513.88,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-20T04:51:15Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 275513.88,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-20T06:40:00Z",
+        "ts": "2026-08-20T01:29:04Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 52880.86,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-20T08:29:04Z",
+        "ts": "2026-08-20T03:33:36Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 52880.86,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-20T10:18:21Z",
+        "ts": "2026-08-20T05:37:52Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 275513.88,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-20T07:42:12Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 52880.86,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-20T09:47:14Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 1395.64,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-20T12:07:30Z",
+        "ts": "2026-08-20T11:51:44Z",
         "onlyExplorer": 0,
-        "disputedStakeSol": 277806.46,
+        "disputedStakeSol": 55173.43,
         "stakeMedianRelPct": 0
       },
       {
@@ -3391,45 +3286,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-20T15:45:36Z",
+        "ts": "2026-08-20T16:01:28Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 1395.64,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-20T17:33:49Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 785077.57,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-20T19:22:59Z",
+        "ts": "2026-08-20T18:05:13Z",
         "onlyExplorer": 0,
-        "disputedStakeSol": 59717.88,
+        "disputedStakeSol": 1395.64,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-20T21:12:17Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 1239785.14,
+        "ts": "2026-08-20T20:09:31Z",
+        "onlyExplorer": 6,
+        "disputedStakeSol": 1081640.47,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-20T23:01:26Z",
+        "ts": "2026-08-20T22:14:48Z",
+        "onlyExplorer": 4,
+        "disputedStakeSol": 1128200.04,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-21T00:19:40Z",
         "onlyExplorer": 0,
-        "disputedStakeSol": 33182.26,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-21T00:50:44Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 33182.26,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-21T02:39:29Z",
-        "onlyExplorer": 1,
         "disputedStakeSol": 224028.66,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-21T02:23:57Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 1395.64,
         "stakeMedianRelPct": 0
       },
       {
@@ -3439,43 +3328,37 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-21T06:17:28Z",
+        "ts": "2026-08-21T06:32:59Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 33182.26,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-21T08:37:49Z",
         "onlyExplorer": 1,
-        "disputedStakeSol": 361410.44,
+        "disputedStakeSol": 101908.2,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-21T08:06:20Z",
-        "onlyExplorer": 122,
-        "disputedStakeSol": 98538333.1,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-21T09:55:49Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 353220.12,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-21T11:44:19Z",
+        "ts": "2026-08-21T10:41:56Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-21T13:33:51Z",
+        "ts": "2026-08-21T12:46:51Z",
         "onlyExplorer": 0,
-        "disputedStakeSol": 219618.76,
+        "disputedStakeSol": 321526.96,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-21T15:23:31Z",
+        "ts": "2026-08-21T14:52:22Z",
         "onlyExplorer": 0,
-        "disputedStakeSol": 101908.2,
+        "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-21T17:12:23Z",
+        "ts": "2026-08-21T16:56:38Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 101908.2,
         "stakeMedianRelPct": 0
@@ -3487,43 +3370,37 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-21T20:49:27Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 879001.97,
+        "ts": "2026-08-21T21:05:01Z",
+        "onlyExplorer": 2,
+        "disputedStakeSol": 563978.25,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-21T22:38:44Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 219618.76,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-22T00:27:28Z",
+        "ts": "2026-08-21T23:09:57Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-22T02:16:28Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 642965.19,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-22T04:05:15Z",
+        "ts": "2026-08-22T01:14:16Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-22T05:54:15Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 274521.94,
+        "ts": "2026-08-22T03:18:39Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 534265.08,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-22T07:43:08Z",
+        "ts": "2026-08-22T05:23:03Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-22T07:27:36Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
@@ -3535,45 +3412,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-22T11:21:20Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 128407.25,
+        "ts": "2026-08-22T11:36:53Z",
+        "onlyExplorer": 2,
+        "disputedStakeSol": 348026.01,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-22T13:10:06Z",
+        "ts": "2026-08-22T13:41:12Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-22T14:58:55Z",
+        "ts": "2026-08-22T15:45:35Z",
         "onlyExplorer": 0,
-        "disputedStakeSol": 219618.76,
+        "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-22T16:48:00Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 219618.76,
+        "ts": "2026-08-22T17:50:05Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-22T18:36:43Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 219618.76,
+        "ts": "2026-08-22T19:54:26Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-22T20:25:37Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 1559813.1,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-22T22:14:36Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 219618.76,
+        "ts": "2026-08-22T21:59:03Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
@@ -3583,44 +3454,38 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-23T01:51:20Z",
+        "ts": "2026-08-23T02:07:10Z",
         "onlyExplorer": 0,
-        "disputedStakeSol": 0,
+        "disputedStakeSol": 219618.76,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-23T03:40:34Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-23T05:29:35Z",
+        "ts": "2026-08-23T04:11:38Z",
         "onlyExplorer": 4,
-        "disputedStakeSol": 299229.42,
+        "disputedStakeSol": 78887.73,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-23T07:18:24Z",
+        "ts": "2026-08-23T06:16:18Z",
         "onlyExplorer": 4,
-        "disputedStakeSol": 299229.42,
+        "disputedStakeSol": 78887.73,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-23T09:07:35Z",
+        "ts": "2026-08-23T08:20:58Z",
+        "onlyExplorer": 3,
+        "disputedStakeSol": 285616.39,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-23T10:25:15Z",
         "onlyExplorer": 3,
         "disputedStakeSol": 65274.7,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-23T10:56:27Z",
+        "ts": "2026-08-23T12:29:43Z",
         "onlyExplorer": 3,
-        "disputedStakeSol": 65274.7,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-23T12:45:17Z",
-        "onlyExplorer": 2,
         "disputedStakeSol": 253781.89,
         "stakeMedianRelPct": 0
       },
@@ -3631,43 +3496,37 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-23T16:22:50Z",
+        "ts": "2026-08-23T16:38:23Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-23T18:11:51Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 220341.69,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-23T20:00:36Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 220341.69,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-23T21:49:38Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 220341.69,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-23T23:38:43Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 220341.69,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-24T01:27:29Z",
+        "ts": "2026-08-23T18:42:54Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-24T03:16:26Z",
+        "ts": "2026-08-23T20:47:26Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-23T22:51:54Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 122630.54,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-24T00:56:08Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 220341.69,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-24T03:00:52Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
@@ -3679,45 +3538,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-24T06:54:22Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 220341.69,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-24T08:43:19Z",
+        "ts": "2026-08-24T07:09:55Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-24T10:32:29Z",
+        "ts": "2026-08-24T09:14:24Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 140220.39,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-24T11:19:09Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-24T12:21:41Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 220341.69,
+        "ts": "2026-08-24T13:23:58Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-24T14:10:58Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 220341.69,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-24T15:59:41Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 254423.07,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-24T17:50:01Z",
+        "ts": "2026-08-24T15:28:13Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 220341.69,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-24T17:34:12Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 286580.45,
         "stakeMedianRelPct": 0
       },
       {
@@ -3727,45 +3580,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-24T21:29:37Z",
+        "ts": "2026-08-24T21:45:15Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-24T23:50:36Z",
         "onlyExplorer": 3,
-        "disputedStakeSol": 629281.81,
+        "disputedStakeSol": 208481.48,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-24T23:19:27Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 220341.69,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-25T01:08:26Z",
-        "onlyExplorer": 3,
-        "disputedStakeSol": 67955.89,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-25T02:56:17Z",
+        "ts": "2026-08-25T01:55:04Z",
         "onlyExplorer": 4,
         "disputedStakeSol": 319634.8,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-25T04:45:21Z",
+        "ts": "2026-08-25T03:58:42Z",
         "onlyExplorer": 3,
-        "disputedStakeSol": 74723.08,
+        "disputedStakeSol": 67955.89,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-25T06:33:57Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 256814.28,
+        "ts": "2026-08-25T06:02:49Z",
+        "onlyExplorer": 2,
+        "disputedStakeSol": 31618.43,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-25T08:22:48Z",
+        "ts": "2026-08-25T08:07:15Z",
         "onlyExplorer": 1,
-        "disputedStakeSol": 71448.53,
+        "disputedStakeSol": 5135.37,
         "stakeMedianRelPct": 0
       },
       {
@@ -3775,45 +3622,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-25T12:00:58Z",
+        "ts": "2026-08-25T12:16:47Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 5135.37,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-25T13:50:17Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 5135.37,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-25T15:39:07Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 880329.09,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-25T17:28:23Z",
+        "ts": "2026-08-25T14:20:56Z",
         "onlyExplorer": 2,
         "disputedStakeSol": 256814.28,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-25T19:17:44Z",
+        "ts": "2026-08-25T16:25:35Z",
         "onlyExplorer": 1,
-        "disputedStakeSol": 5135.37,
+        "disputedStakeSol": 256814.28,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-25T21:06:42Z",
-        "onlyExplorer": 2,
+        "ts": "2026-08-25T18:30:58Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 286344.26,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-25T20:35:30Z",
+        "onlyExplorer": 3,
         "disputedStakeSol": 357987.09,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-25T22:56:44Z",
-        "onlyExplorer": 4,
-        "disputedStakeSol": 1099359.21,
+        "ts": "2026-08-25T22:41:10Z",
+        "onlyExplorer": 2,
+        "disputedStakeSol": 438942.88,
         "stakeMedianRelPct": 0
       },
       {
@@ -3823,45 +3664,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-26T02:34:22Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-26T04:23:17Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-26T06:12:24Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-26T08:01:32Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-26T10:20:46Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 1157318.76,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-26T12:09:59Z",
+        "ts": "2026-08-26T02:49:55Z",
         "onlyExplorer": 1,
-        "disputedStakeSol": 483630.11,
+        "disputedStakeSol": 251678.91,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-26T13:59:27Z",
-        "onlyExplorer": 0,
+        "ts": "2026-08-26T04:54:21Z",
+        "onlyExplorer": 1,
         "disputedStakeSol": 101172.81,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-26T06:59:17Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 352851.72,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-26T09:03:49Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 0,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-26T11:38:50Z",
+        "onlyExplorer": 2,
+        "disputedStakeSol": 996357.14,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-26T13:43:48Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 251678.91,
         "stakeMedianRelPct": 0
       },
       {
@@ -3871,45 +3706,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-26T17:39:14Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 345379.33,
+        "ts": "2026-08-26T17:54:31Z",
+        "onlyExplorer": 2,
+        "disputedStakeSol": 194873.23,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-26T19:28:51Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
+        "ts": "2026-08-26T20:00:04Z",
+        "onlyExplorer": 142,
+        "disputedStakeSol": 109392993.55,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-26T21:18:02Z",
+        "ts": "2026-08-26T22:04:50Z",
         "onlyExplorer": 3,
         "disputedStakeSol": 121504.64,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-26T23:07:15Z",
-        "onlyExplorer": 4,
-        "disputedStakeSol": 371592.93,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-27T00:57:06Z",
+        "ts": "2026-08-27T00:09:54Z",
         "onlyExplorer": 2,
-        "disputedStakeSol": 350505.52,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-27T02:46:18Z",
-        "onlyExplorer": 1,
         "disputedStakeSol": 100417.23,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-27T04:35:18Z",
-        "onlyExplorer": 1,
+        "ts": "2026-08-27T02:14:57Z",
+        "onlyExplorer": 2,
         "disputedStakeSol": 251505.38,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-27T04:19:44Z",
+        "onlyExplorer": 2,
+        "disputedStakeSol": 350505.52,
         "stakeMedianRelPct": 0
       },
       {
@@ -3919,45 +3748,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-27T08:13:17Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 350505.51,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-27T10:02:09Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 5641897.37,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-27T11:50:41Z",
+        "ts": "2026-08-27T08:28:50Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 1417.09,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-27T13:39:57Z",
+        "ts": "2026-08-27T10:32:48Z",
         "onlyExplorer": 1,
-        "disputedStakeSol": 350505.51,
+        "disputedStakeSol": 1417.09,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-27T15:28:46Z",
+        "ts": "2026-08-27T12:37:24Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 1417.09,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-27T14:41:49Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-27T17:18:00Z",
+        "ts": "2026-08-27T16:46:38Z",
         "onlyExplorer": 0,
-        "disputedStakeSol": 349088.42,
+        "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-27T19:07:42Z",
+        "ts": "2026-08-27T18:52:05Z",
         "onlyExplorer": 0,
-        "disputedStakeSol": 0,
+        "disputedStakeSol": 99000.14,
         "stakeMedianRelPct": 0
       },
       {
@@ -3967,43 +3790,37 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-27T22:47:12Z",
+        "ts": "2026-08-27T23:02:48Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 99000.14,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-28T00:36:46Z",
+        "ts": "2026-08-28T01:08:08Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 104415.29,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-28T03:13:07Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-28T02:26:11Z",
+        "ts": "2026-08-28T05:18:01Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-28T04:15:28Z",
+        "ts": "2026-08-28T07:22:18Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-28T06:04:36Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-28T07:53:24Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-28T09:42:22Z",
+        "ts": "2026-08-28T09:26:55Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
@@ -4015,43 +3832,37 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-28T13:20:02Z",
+        "ts": "2026-08-28T13:35:41Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-28T15:09:08Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 104415.29,
+        "ts": "2026-08-28T15:40:23Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 20419.92,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-28T16:58:38Z",
+        "ts": "2026-08-28T17:45:26Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 6089.14,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-28T18:48:07Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 157871.99,
+        "ts": "2026-08-28T19:50:30Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 755820.75,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-28T20:37:22Z",
+        "ts": "2026-08-28T21:55:08Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-28T22:26:20Z",
-        "onlyExplorer": 6,
-        "disputedStakeSol": 1499721.04,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-29T00:15:16Z",
+        "ts": "2026-08-28T23:59:16Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
@@ -4063,45 +3874,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-29T04:00:53Z",
+        "ts": "2026-08-29T04:16:26Z",
         "onlyExplorer": 1,
-        "disputedStakeSol": 26495.9,
+        "disputedStakeSol": 315420.77,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-29T05:49:46Z",
+        "ts": "2026-08-29T06:20:48Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-29T07:38:39Z",
+        "ts": "2026-08-29T08:25:13Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-29T09:27:40Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 60654.08,
+        "ts": "2026-08-29T10:29:45Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 250625.12,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-29T11:16:30Z",
+        "ts": "2026-08-29T12:34:25Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-29T13:05:32Z",
+        "ts": "2026-08-29T14:38:59Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-29T14:54:39Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 190210.61,
         "stakeMedianRelPct": 0
       },
       {
@@ -4111,43 +3916,37 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-29T18:32:39Z",
+        "ts": "2026-08-29T18:48:11Z",
+        "onlyExplorer": 0,
+        "disputedStakeSol": 262560.49,
+        "stakeMedianRelPct": 0
+      },
+      {
+        "ts": "2026-08-29T20:52:46Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-29T20:21:37Z",
+        "ts": "2026-08-29T22:57:17Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-29T22:10:37Z",
+        "ts": "2026-08-30T01:02:15Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-29T23:59:27Z",
-        "onlyExplorer": 6,
-        "disputedStakeSol": 1499721.04,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-30T01:48:51Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 48.6,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-30T03:37:45Z",
+        "ts": "2026-08-30T03:06:43Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-30T05:26:42Z",
+        "ts": "2026-08-30T05:11:08Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
@@ -4159,45 +3958,39 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-30T09:04:44Z",
+        "ts": "2026-08-30T09:20:16Z",
         "onlyExplorer": 2,
         "disputedStakeSol": 260302.88,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-30T10:53:33Z",
+        "ts": "2026-08-30T11:24:35Z",
         "onlyExplorer": 2,
         "disputedStakeSol": 70092.27,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-30T12:42:20Z",
+        "ts": "2026-08-30T13:28:51Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 44620.38,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-30T14:31:15Z",
+        "ts": "2026-08-30T15:33:42Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 44620.38,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-30T16:20:30Z",
+        "ts": "2026-08-30T17:38:19Z",
         "onlyExplorer": 1,
         "disputedStakeSol": 44620.38,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-30T18:09:27Z",
+        "ts": "2026-08-30T19:43:08Z",
         "onlyExplorer": 1,
-        "disputedStakeSol": 231436.57,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-30T19:58:40Z",
-        "onlyExplorer": 1,
-        "disputedStakeSol": 44620.38,
+        "disputedStakeSol": 227806.9,
         "stakeMedianRelPct": 0
       },
       {
@@ -4207,43 +4000,37 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-30T23:36:48Z",
+        "ts": "2026-08-30T23:52:19Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 31875.46,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-31T01:25:16Z",
+        "ts": "2026-08-31T01:56:22Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 31875.46,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-31T03:14:27Z",
+        "ts": "2026-08-31T04:01:19Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 31875.46,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-31T05:03:52Z",
+        "ts": "2026-08-31T06:06:17Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 31875.46,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-31T06:52:54Z",
+        "ts": "2026-08-31T08:10:09Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 31875.46,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-31T08:41:27Z",
-        "onlyExplorer": 0,
-        "disputedStakeSol": 31875.46,
-        "stakeMedianRelPct": 0
-      },
-      {
-        "ts": "2026-08-31T10:30:45Z",
+        "ts": "2026-08-31T10:15:09Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 31875.46,
         "stakeMedianRelPct": 0
@@ -4255,13 +4042,13 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-31T14:09:13Z",
+        "ts": "2026-08-31T14:25:02Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 31875.46,
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-08-31T15:59:21Z",
+        "ts": "2026-08-31T16:14:46Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 311058.64,
         "stakeMedianRelPct": 0
