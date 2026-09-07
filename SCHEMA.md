@@ -20,7 +20,7 @@ and a conditional request against `ETag` avoids re-downloading it.
 
 ## Stability contract
 
-Pin on `schemaVersion` (currently `3`).
+Pin on `schemaVersion` (currently `4`).
 
 - **Adding** a field keeps the version.
 - **Removing** a field, or changing what an existing one means, bumps it.
@@ -32,6 +32,7 @@ look, rather than silently misreading a renamed number.
 
 | Version | Change |
 |---|---|
+| `4` | Captures whose headline stake disagrees with the sum of their own node list are excluded from the series, and the partial-response threshold is applied inclusively. `stats.pct.min` rises from 28.4591 to 28.6328 and `stats.hhi.max` falls from 0.160019 to 0.159862 — both were set by the same single capture. New field `window.incoherentCaptures`. See [`stats`](#stats). |
 | `3` | Captures missing more than an eighth of the network are excluded from the series, and captures where the whole fleet changes identity at once no longer count as events. `stats.*.min` rises, `leadershipChanges` and `detections.live*` fall. See [`stats`](#stats) and [`detections`](#detections). |
 | `2` | `stats.*.avg` became time-weighted rather than a mean over captures. Values shift slightly; see [`stats`](#stats). |
 | `1` | Initial published contract. |
@@ -132,6 +133,7 @@ does not resolve.
 | `snapshots` | Number of captures in the window, after the exclusions below. |
 | `partialResponsesExcluded` | array | Timestamps of captures left out of every figure in this file. |
 | `partialResponsesWithheld` | object | `{ count, latest }` — captures the collector refused at source, so they never entered the series at all. |
+| `incoherentCaptures` | array | Timestamps of captures whose headline stake disagreed with the sum of their own node list. |
 
 **`snapshots` is not the length of `series`.** See below.
 
@@ -167,6 +169,44 @@ far each capture falls below its two-sided median, every read known to be broken
 sits at or under 0.88, and the next tier up is 0.9286 — one node absent from a
 fourteen-node network with every validator still reported, which is a real
 observation and is kept.
+
+The comparison is inclusive as of `schemaVersion` 4, and that is not a detail.
+"At or under 0.88" is what the evidence says, but the test read strictly under
+it — so the fault that 0.88 was chosen to fix recurred at the new number.
+2026-08-04T21:38:46Z held 330 validators against a trailing median of 375, which
+is 0.88 to the digit, and it passed exactly as the 0.80 capture had. It was one
+capture, recovered three minutes later, and until 2026-08-31 it was both the
+published minimum stake share (28.4591%) and the published maximum concentration
+(`stats.hhi.max` 0.160019). Exactly one capture in 70,225 has ever landed on
+this boundary, which is why a strict comparison looked correct for as long as it
+did.
+
+#### `incoherentCaptures`
+
+`bam_stake` is the API's own headline figure. The node list is a separate
+endpoint, and the sum of it is recorded in the same row. Nothing compared the two
+before `schemaVersion` 4, so a capture could report one view of the network in
+its header and a different one in its body and still be published — the headline
+entering the series while the concentration measures were computed from a node
+table that disagreed with it.
+
+A capture is excluded when the two differ by more than 0.5%. That is the same
+tolerance `compare.mjs` already allows between two collectors on different
+continents reading BAM stake; this asks the question inside a single capture
+instead of across two. Unlike the partial-response test it needs no neighbouring
+captures, so it applies to the newest row as well.
+
+Small disagreements are expected and are not a fault. Stake steps between the two
+reads, which puts 97% of non-zero gaps under 0.3% — filtering those would make
+this a stake-volatility filter and the series would stop describing a network
+that moves. The excluded cases are a different shape: on 2026-08-22 the headline
+read 135.0M and 134.8M while the node table under it held 142.0M and 142.2M,
+with all sixteen nodes present at both, so the partial-response test could not
+fire and did not.
+
+The check is applied on read rather than at capture, so it covers the whole
+series rather than only what arrives next, and the rows themselves stay in
+`summary.csv` and in the archive for anyone who wants to disagree with it.
 
 The timestamps are published rather than quietly dropped — the raw records
 remain in the [archive](https://github.com/RYthaGOD/bamservatory-data)

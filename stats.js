@@ -70,6 +70,7 @@ function loadSummary() {
   const I = {
     ts: ix("ts"), stake: ix("bam_stake"), pct: ix("bam_stake_percentage"),
     nodes: ix("node_count"), vals: ix("validator_count"),
+    nodeStake: ix("total_node_stake"),
     topNode: ix("top_node"), topShare: ix("top_node_share"), hhi: ix("node_stake_hhi"),
   };
   const rows = [];
@@ -79,6 +80,7 @@ function loadSummary() {
     rows.push({
       ts: c[I.ts], stake: num(c[I.stake]), pct: num(c[I.pct]),
       nodes: num(c[I.nodes]), vals: num(c[I.vals]),
+      nodeStake: num(c[I.nodeStake]),
       topNode: c[I.topNode], topShare: num(c[I.topShare]), hhi: num(c[I.hhi]),
     });
   }
@@ -134,7 +136,37 @@ function loadSummary() {
   // The newest capture is never testable — nothing follows it yet — so it is
   // always kept. That is the right default for the row the headline is read
   // from, and the collector now withholds partial responses at capture anyway.
+  // The comparison is inclusive, and that is not a detail. The evidence above
+  // places every known-broken read "at or under" 0.88, but this test read
+  // strictly under it until 2026-08-31, so a capture landing exactly on the
+  // line passed — the same way the 2026-08-12 row passed a "< 0.80" test by
+  // sitting at exactly 0.80. It happened again: 2026-08-04T21:38:46Z is 330
+  // validators against a trailing median of 375, which is 0.88 to the digit.
+  // It survived, and it set the published minimum stake share to 28.4591% —
+  // a single capture, fully recovered three minutes later. Exactly one capture
+  // in 70,225 has ever sat on this boundary and it was that one, which is why
+  // a strict comparison looked correct for as long as it did.
   const PARTIAL = 0.88, W = 60, MIN_CTX = 3;
+
+  // A capture is also checked against itself, before it is checked against its
+  // neighbours.
+  //
+  // The two figures come from different endpoints: bam_stake is the API's own
+  // headline, total_node_stake is the sum of the node list it served in the
+  // same capture. flatten.awk has always written both into the row and nothing
+  // ever compared them, so a capture could report one view of the network in
+  // its header and a different one in its body and still be published — the
+  // headline stake entering the series while the concentration metrics were
+  // computed from a node table that disagreed with it.
+  //
+  // Small disagreements are expected and are not a fault: stake steps between
+  // the two reads, which puts 97% of non-zero gaps under 0.3%. The tolerance is
+  // therefore the same 0.5% that compare.mjs already allows between two
+  // collectors reading BAM stake from different continents. This asks that
+  // question inside a single capture instead of across two, and it needs no
+  // neighbouring captures to answer, which is why it runs before the window
+  // test and applies to the newest row as well.
+  const COHERENT = 0.5;
   const median = (xs) => {
     const s = [...xs].sort((a, b) => a - b);
     if (!s.length) return NaN;
@@ -143,28 +175,44 @@ function loadSummary() {
   };
   const kept = [];
   const excluded = [];
+  const incoherent = [];
   for (let i = 0; i < dedup.length; i++) {
     const r = dedup[i];
     const before = dedup.slice(Math.max(0, i - W), i);
     const after = dedup.slice(i + 1, i + 1 + W);
     if (before.length >= MIN_CTX && after.length >= MIN_CTX) {
-      const lowNodes = r.nodes < median(before.map((x) => x.nodes)) * PARTIAL &&
-                       r.nodes < median(after.map((x) => x.nodes)) * PARTIAL;
-      const lowVals = r.vals < median(before.map((x) => x.vals)) * PARTIAL &&
-                      r.vals < median(after.map((x) => x.vals)) * PARTIAL;
+      const lowNodes = r.nodes <= median(before.map((x) => x.nodes)) * PARTIAL &&
+                       r.nodes <= median(after.map((x) => x.nodes)) * PARTIAL;
+      const lowVals = r.vals <= median(before.map((x) => x.vals)) * PARTIAL &&
+                      r.vals <= median(after.map((x) => x.vals)) * PARTIAL;
       // Either list can be truncated on its own — the node list and the
       // validator list come back from different endpoints.
       if (lowNodes || lowVals) { excluded.push(r.ts); continue; }
+    }
+    // Checked after the window test, not before it. A truncated response is
+    // usually incoherent as well, and it is already named by the older and more
+    // specific rule; classifying it here instead would quietly shrink a count
+    // that has been published for weeks. What is left is what only this test
+    // finds — a capture with a plausible node count whose header still
+    // disagrees with its own body.
+    if (r.stake > 0 && r.nodeStake > 0 &&
+        Math.abs(r.stake - r.nodeStake) / r.stake * 100 > COHERENT) {
+      incoherent.push(r.ts);
+      continue;
     }
     kept.push(r);
   }
   if (excluded.length) {
     console.log(`  excluded ${excluded.length} partial response(s): ${excluded.join(", ")}`);
   }
+  if (incoherent.length) {
+    console.log(`  excluded ${incoherent.length} incoherent capture(s): ${incoherent.join(", ")}`);
+  }
   // Attached to the array rather than returned separately so it reaches
   // metrics.json: a figure quietly removed from a public statistic is its own
   // kind of unverifiable claim, and a reader is entitled to see the count.
   kept.excluded = excluded;
+  kept.incoherent = incoherent;
   // The order captures were actually written in, exclusions included. The
   // detector compared each capture against whichever one preceded it at the
   // time, so judging its output needs that adjacency and not the tidied one
@@ -669,7 +717,7 @@ async function main() {
     //     The values shift slightly and the definition genuinely changed, so
     //     this bumps even though nothing was added or removed. A contract only
     //     means something if it is honoured when the change is inconvenient.
-    schemaVersion: 3,
+    schemaVersion: 4,
     provenance: {
       collector: process.env.BAM_NET_REF || null,
       // Both come from the environment and default to null rather than to a
@@ -702,6 +750,11 @@ async function main() {
       // incomplete at capture. Both are captures that did not count; only the
       // first is still in summary.csv.
       partialResponsesExcluded: summary.excluded ?? [],
+      // Captures whose headline stake disagreed with the sum of their own node
+      // list by more than 0.5%. Listed rather than counted, for the same reason
+      // as the line above: they are still in summary.csv and in the raw
+      // archive, so the judgement can be checked.
+      incoherentCaptures: summary.incoherent ?? [],
       partialResponsesWithheld: loadWithheld(),
     },
     headline: {

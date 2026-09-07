@@ -12,6 +12,9 @@
 //
 //   partial responses      outage-2026-08-12.csv         must be excluded
 //                          single-node-absent-2026-06-23 must be kept
+//   the 0.88 boundary      boundary-2026-08-04.csv       must be excluded
+//   internal coherence     incoherent-2026-08-22.csv     must be excluded
+//                          (and its neighbours kept)
 //   identity artifacts     relabel-2026-08-11            must be recognised
 //                          rollover-2026-06-24           must NOT be
 //
@@ -166,6 +169,65 @@ console.log("── an empty capture log says so, and stops ──");
   check("it fails rather than publishing a dashboard built from nothing", code, 1);
   check("and explains itself instead of throwing", /no captures yet/.test(stderr), true);
   check("without leaving a metrics.json behind", fs.existsSync(path.join(dir, "m.json")), false);
+}
+
+
+// ── the threshold boundary ───────────────────────────────────────────────────
+// A threshold is only as good as the comparison that applies it, and this one
+// has now been wrong twice in the same way. The 2026-08-12 outage passed a
+// "< 0.80" test by sitting at exactly 0.80; the fix raised the line to 0.88 and
+// kept the strict comparison, so 2026-08-04T21:38:46Z passed it by sitting at
+// exactly 0.88 — 330 validators against a trailing median of 375. It was a
+// single capture, recovered three minutes later, and it was the published
+// minimum stake share until 2026-08-31.
+//
+// This capture is internally coherent — its header stake and its node table
+// agree to the cent — so the coherence rule cannot reach it. Only the boundary
+// can, which is what makes it the right fixture for this assertion.
+console.log("── a capture sitting exactly on the threshold is excluded ──");
+{
+  const m = runStats("boundary-2026-08-04.csv", null);
+  const ex = m.window.partialResponsesExcluded;
+  check("the boundary capture is excluded", ex.includes("2026-08-04T21:38:46Z"), true);
+  // The window also contains 20:23:45 — eleven nodes and 190 validators, an
+  // unambiguous partial response that the old rule already caught. It is
+  // asserted here so this fixture proves the inclusive comparison added a
+  // capture rather than changing which ones the rule finds.
+  check("the pre-existing partial response is still caught", ex.includes("2026-08-04T20:23:45Z"), true);
+  check("and those two are the only exclusions", ex.length, 2);
+  check("nothing was diverted to the coherence rule", m.window.incoherentCaptures, []);
+  check("the published minimum is no longer the blip", m.stats.pct.min > 28.4591, true);
+  check("the surrounding captures are untouched", m.stats.nodes.min, 16);
+}
+
+// ── internal coherence ───────────────────────────────────────────────────────
+// bam_stake is the API's headline; total_node_stake is the sum of the node list
+// served in the same capture. Both have always been written into the row and
+// nothing compared them, so a capture could carry one view of the network in its
+// header and another in its body and still be published.
+//
+// On 2026-08-22 the headline dropped to 135.0M and 134.8M while the node table
+// stayed at 142.0M and 142.2M, then inverted at 10:05. All sixteen nodes were
+// present at every one of them, so the partial-response rule cannot fire and
+// never did — these three rows entered the series and were read as a stake dip
+// that the node table underneath them did not show.
+console.log("── a capture that disagrees with itself is excluded ──");
+{
+  const m = runStats("incoherent-2026-08-22.csv", null);
+  const inc = m.window.incoherentCaptures;
+  check("all three incoherent captures are excluded", inc.length, 3);
+  check("09:55 — headline 5.17% under its own node table", inc.includes("2026-08-22T09:55:29Z"), true);
+  check("10:00 — the deepest, at 5.47%", inc.includes("2026-08-22T10:00:29Z"), true);
+  check("10:05 — the inversion, headline 2.53% over", inc.includes("2026-08-22T10:05:10Z"), true);
+  // The other direction, in the same fixture. Ordinary skew between the two
+  // endpoints is the common case, not a fault: stake steps between the reads,
+  // which puts 97% of non-zero gaps under 0.3%. If this ever starts excluding
+  // them the rule has become a stake-volatility filter, and the series will
+  // stop describing a network that moves.
+  check("the ordinary two-endpoint skew either side is kept",
+    inc.every((t) => t >= "2026-08-22T09:55" && t <= "2026-08-22T10:06"), true);
+  check("no capture here is called a partial response", m.window.partialResponsesExcluded, []);
+  check("sixteen nodes throughout, so nothing was read as a smaller network", m.stats.nodes.min, 16);
 }
 
 console.log(fails ? `\nread rules: ${fails} check(s) FAILED` : "\nread rules: all checks passed");
