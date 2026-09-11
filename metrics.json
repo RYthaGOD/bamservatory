@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-09-11T09:28:34.518Z",
+  "generatedAt": "2026-09-11T09:44:11.156Z",
   "schemaVersion": 4,
   "provenance": {
     "collector": "0fcd020edfd9d71e7c36d971dad47ba88442a520",
     "archive": "https://github.com/RYthaGOD/bamservatory-data",
     "inputs": {
-      "summary.csv": "sha256:5ff4a0701e95d581107a618e67198d697e16466934e6150848a600cef3dc7baf",
-      "nodes.csv": "sha256:caa512d5f315ba59df1763ac7a963b9ca7427245d3f6f7d02dcdc84e6bc720fb",
+      "summary.csv": "sha256:cda63ba0d7fd45be10e137d174c7ce99ef47e341c3be8e13bb8a9f33891ff176",
+      "nodes.csv": "sha256:c0a65b2ceeb30559fcfea619481bf3e8ceef2d542f8fbabc58b31b31d6051e98",
       "detections.log": "sha256:deafd6f575ccb5987aedf923d74c9ecb7bfcda11d2e46745db99a20c01156ebc",
-      "verification.csv": "sha256:5b9084ff5c5b060e43a4a41516ba727b573cef83e7f2a40eb167f9a9ff3f599d",
+      "verification.csv": "sha256:3f398721b46ccb930efea6279a7285430b1c03b9aa1781800ed5f2b5ee8fe9a1",
       "validators.csv": {
         "tailReadOnly": true,
-        "snapshotTs": "2026-09-11T09:28:33Z",
+        "snapshotTs": "2026-09-11T09:44:09Z",
         "validators": 381
       }
     }
   },
   "window": {
     "from": "2026-06-20T15:08:27Z",
-    "to": "2026-09-11T09:28:33Z",
-    "snapshots": 88281,
+    "to": "2026-09-11T09:44:09Z",
+    "snapshots": 88297,
     "partialResponsesExcluded": [
       "2026-06-24T06:10:46Z",
       "2026-06-24T06:11:46Z",
@@ -81,7 +81,7 @@
     "nodeCount": 16,
     "validatorCount": 381,
     "topNode": "ams-mainnet-bam-2-tee",
-    "topNodeShare": 21.757715,
+    "topNodeShare": 21.818116,
     "busiestByVals": {
       "node": "fra-mainnet-bam-1-tee",
       "region": "fra",
@@ -91,7 +91,7 @@
     }
   },
   "decentralization": {
-    "nodeStakeHHI": 0.132435,
+    "nodeStakeHHI": 0.132596,
     "nodeNakamoto": 3,
     "regionNakamoto": 3,
     "validatorNakamoto": 26,
@@ -107,25 +107,25 @@
     "pct": {
       "min": 28.6328,
       "max": 34.5269,
-      "avg": 33.03103070340915,
+      "avg": 33.03120724289372,
       "cur": 34.3609
     },
     "hhi": {
       "min": 0.117198,
       "max": 0.159862,
-      "avg": 0.1339700626399089,
-      "cur": 0.132435
+      "avg": 0.1339698759980641,
+      "cur": 0.132596
     },
     "vals": {
       "min": 319,
       "max": 391,
-      "avg": 377.8888629942506,
+      "avg": 377.88927599613345,
       "cur": 381
     },
     "nodes": {
       "min": 12,
       "max": 21,
-      "avg": 15.665469611222143,
+      "avg": 15.665514019964078,
       "cur": 16
     }
   },
@@ -1818,9 +1818,9 @@
       "nodes": 16
     },
     {
-      "ts": "2026-09-11T09:28:33Z",
+      "ts": "2026-09-11T09:44:09Z",
       "pct": 34.3609,
-      "hhi": 0.132435,
+      "hhi": 0.132596,
       "vals": 381,
       "nodes": 16
     }
@@ -1829,9 +1829,9 @@
     {
       "node": "ams-mainnet-bam-2-tee",
       "region": "ams",
-      "vals": 65,
-      "stake": 32850036.34,
-      "share": 21.757715309221666
+      "vals": 66,
+      "stake": 32941229.37,
+      "share": 21.818115607242323
     },
     {
       "node": "fra-mainnet-bam-1-tee",
@@ -1864,9 +1864,9 @@
     {
       "node": "tyo-mainnet-bam-1-tee",
       "region": "tyo",
-      "vals": 40,
-      "stake": 12823342.96,
-      "share": 8.493343585634276
+      "vals": 39,
+      "stake": 12732149.93,
+      "share": 8.432943287613623
     },
     {
       "node": "sea-mainnet-bam-1-tee",
@@ -1942,10 +1942,10 @@
   "regions": [
     {
       "region": "ams",
-      "vals": 65,
-      "stake": 32850036.34,
+      "vals": 66,
+      "stake": 32941229.37,
       "nodes": 1,
-      "share": 21.757715309221666
+      "share": 21.818115607242323
     },
     {
       "region": "fra",
@@ -1977,10 +1977,10 @@
     },
     {
       "region": "tyo",
-      "vals": 41,
-      "stake": 13350727.38,
+      "vals": 40,
+      "stake": 13259534.35,
       "nodes": 2,
-      "share": 8.842648528560833
+      "share": 8.782248230540178
     },
     {
       "region": "sea",
@@ -2637,7 +2637,7 @@
   },
   "verification": {
     "latest": {
-      "ts": "2026-09-11T09:28:33Z",
+      "ts": "2026-09-11T09:44:09Z",
       "explorerValidators": 381,
       "kobeRunningBam": 381,
       "inBoth": 381,
@@ -2664,7 +2664,7 @@
       "disputedStakeSol": 0,
       "kobeRunningBam": 379
     },
-    "readings": 2906,
+    "readings": 2907,
     "since": "2026-08-10T10:02:04Z",
     "series": [
       {
@@ -4126,7 +4126,7 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-09-11T09:28:33Z",
+        "ts": "2026-09-11T09:44:09Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
