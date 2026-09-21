@@ -286,6 +286,54 @@ function loadNodesLatest(latestTs) {
   };
 }
 
+// ---- 2b. region shape at arbitrary capture timestamps ---------------------
+// loadNodesLatest tail-reads a single tick because that is all the topology
+// table needs. Telling a rename from an arrival needs the same rows at
+// historical timestamps — at each capture the detector called something new,
+// and at the capture before it — so this makes one streaming pass and keeps
+// only those.
+//
+// It is O(file) on a file that is never trimmed, which is why it lives here and
+// not in detect.sh. detect.sh runs inside the 60-second tick and reads a
+// 4000-line tail precisely so that scanning cannot cost a capture; publish.sh
+// runs detached from that loop (nohup, on a 15-minute throttle), so the seconds
+// spent here are paid by the publish and never by the collector.
+//
+// The file is ASCII, so splitting chunks on byte boundaries is safe.
+function addShapeRow(shape, wanted, line, I) {
+  if (!line) return;
+  const c = line.split(",");
+  if (c.length < 5) return;
+  const ts = c[I.ts];
+  if (!wanted.has(ts)) return;
+  let byRegion = shape.get(ts);
+  if (!byRegion) shape.set(ts, (byRegion = new Map()));
+  const r = city(c[I.node]);
+  const e = byRegion.get(r) ?? { nodes: 0, vals: 0, stake: 0 };
+  e.nodes++; e.vals += num(c[I.vals]); e.stake += num(c[I.stake]);
+  byRegion.set(r, e);
+}
+
+function loadRegionShape(wanted) {
+  const shape = new Map(); // ts -> Map(region -> {nodes, vals, stake})
+  if (!wanted.size || !fs.existsSync(NODES)) return shape;
+  const I = { ts: 0, node: 1, vals: 3, stake: 4 };
+  const fd = fs.openSync(NODES, "r");
+  const buf = Buffer.alloc(1 << 20);
+  let carry = "";
+  try {
+    for (;;) {
+      const n = fs.readSync(fd, buf, 0, buf.length, null);
+      if (n <= 0) break;
+      const lines = (carry + buf.toString("utf8", 0, n)).split("\n");
+      carry = lines.pop() ?? "";
+      for (const line of lines) addShapeRow(shape, wanted, line, I);
+    }
+    if (carry) addShapeRow(shape, wanted, carry, I);
+  } finally { fs.closeSync(fd); }
+  return shape;
+}
+
 // ---- 3. validators.csv latest snapshot (TAIL-READ — the file is large) -----
 // The newest tick's rows are at the end of the file, so we read only the last
 // few MB instead of streaming the whole multi-hundred-MB file on every build.
@@ -488,7 +536,7 @@ const isStructural = (kv) =>
 // `tainted(ts)` answers whether an event was computed from a capture that has
 // since been recognised as a partial response — or against one, since the
 // detector compares each capture with its predecessor.
-function loadDetections(tainted) {
+function loadDetections(tainted, prevOf) {
   // VALIDATED — from the backtest replay. A genuine structural cutover is one
   // whose matched precursor was a same-region SIGNAL with a short lead.
   const replay = readLog(path.join(DIR, "detections_replay.log"));
@@ -505,8 +553,6 @@ function loadDetections(tainted) {
       });
     }
   }
-  // context: how many regions spun up a new node in the rollover window (coordination)
-  const rolloverPrecursors = replay.filter((e) => e.kind && e.kind.startsWith("SIGNAL")).length;
 
   // LIVE feed
   //
@@ -571,8 +617,67 @@ function loadDetections(tainted) {
     .sort((a, b) => (a.ts < b.ts ? -1 : 1));
   const artifactAt = new Set(identityArtifacts.map((a) => a.ts));
 
-  const live = afterTaint.filter((e) => !artifactAt.has(e.ts));
-  const excludedFromIdentityArtifacts = afterTaint.length - live.length;
+  // A rename is not an arrival.
+  //
+  // The rule above catches a fleet relabelled inside a single capture. It
+  // cannot catch a slow one, and September's are slow: on 2026-09-17 fifteen
+  // regions swapped suffix one at a time between 21:20:17Z and 21:42:59Z, one
+  // region every minute or two, never more than one in a capture. The fleet was
+  // identical at both ends — 16 nodes, 382 validators, 151,917,032.74 SOL — and
+  // every step carried its region's stake across unchanged to the cent. Eleven
+  // of the twelve rows in the published precursor feed were steps of it.
+  //
+  // Rate cannot separate that from a real rollover, because region-by-region
+  // over twenty minutes is also exactly what 2026-06-24 looked like. Substance
+  // can. In a rollover the new node appears ALONGSIDE the old one: the region
+  // gains a node, and stake migrates to it over the following minutes. In a
+  // relabelling the region ends the capture holding the same number of nodes,
+  // the same validators and the same stake to the cent — a name changed and
+  // nothing else did. That is the same test compare.mjs already applies when it
+  // decides whether two vantages disagree or merely caught a rename in flight.
+  //
+  // This is the one rule here that needs more than summary.csv, because the
+  // question is about a single region rather than the whole capture. Where
+  // nodes.csv does not cover the capture the answer is "not a relabelling":
+  // it only ever suppresses what it can see is one, which keeps a missing row
+  // from silently deleting a precursor.
+  const signalEvents = [...afterTaint, ...replay].filter((e) => e.kind?.startsWith("SIGNAL") && e.kv.region);
+  const wantedTs = new Set();
+  for (const e of signalEvents) {
+    wantedTs.add(e.ts);
+    const p = prevOf?.get(e.ts);
+    if (p) wantedTs.add(p);
+  }
+  const shape = loadRegionShape(wantedTs);
+  const sameToTheCent = (a, b) => a.nodes === b.nodes && a.vals === b.vals && Math.abs(a.stake - b.stake) < 0.005;
+  const isRelabelling = (ts, region) => {
+    const p = prevOf?.get(ts);
+    if (!p) return false;
+    const before = shape.get(p)?.get(region), after = shape.get(ts)?.get(region);
+    if (!before || !after) return false;
+    return sameToTheCent(before, after);
+  };
+  // Keyed by capture AND region, never by capture alone: a relabelling step and
+  // a genuine appearance elsewhere can share a minute, and suppressing the
+  // whole capture would take the real one with it.
+  const relabelAt = new Set();
+  const relabellings = [];
+  for (const e of signalEvents) {
+    const key = `${e.ts}|${e.kv.region}`;
+    if (relabelAt.has(key) || !isRelabelling(e.ts, e.kv.region)) continue;
+    relabelAt.add(key);
+    relabellings.push({ ts: e.ts, region: e.kv.region, node: e.kv.new_node });
+  }
+  relabellings.sort((a, b) => (a.ts < b.ts ? -1 : 1));
+  const isRelabelled = (e) => e.kv.region && relabelAt.has(`${e.ts}|${e.kv.region}`);
+
+  // context: how many regions spun up a new node in the rollover window
+  // (coordination), counting only the ones that genuinely spun one up
+  const rolloverPrecursors = replay.filter((e) => e.kind?.startsWith("SIGNAL") && !isRelabelled(e)).length;
+
+  const live = afterTaint.filter((e) => !artifactAt.has(e.ts) && !isRelabelled(e));
+  const excludedFromIdentityArtifacts = afterTaint.filter((e) => artifactAt.has(e.ts)).length;
+  const excludedFromRelabelling = afterTaint.filter((e) => !artifactAt.has(e.ts) && isRelabelled(e)).length;
   const liveCutovers = live.filter((e) => e.kind === "CUTOVER").length;
   const liveSignals = live.filter((e) => e.kind && e.kind.startsWith("SIGNAL")).length;
   // A cutover only counts as "structural" if its precursor lead is PLAUSIBLE
@@ -588,8 +693,8 @@ function loadDetections(tainted) {
 
   return {
     validated, rolloverPrecursors, liveCutovers, liveSignals,
-    excludedFromPartialResponses, excludedFromIdentityArtifacts,
-    identityArtifacts, artifactAt, feed,
+    excludedFromPartialResponses, excludedFromIdentityArtifacts, excludedFromRelabelling,
+    identityArtifacts, relabellings, artifactAt, relabelAt, feed,
   };
 }
 
@@ -667,12 +772,14 @@ async function main() {
   for (let i = 1; i < order.length; i++) prevOf.set(order[i], order[i - 1]);
   const tainted = (ts) => excludedSet.has(ts) || excludedSet.has(prevOf.get(ts));
 
-  const detections = loadDetections(tainted);
+  const detections = loadDetections(tainted, prevOf);
   // Not a figure — the set the leadership filter below reads. Dropped before
   // metrics.json is written, where `identityArtifacts` carries the same fact in
   // a form a reader can check.
   const artifactAt = detections.artifactAt;
+  const relabelAt = detections.relabelAt;
   delete detections.artifactAt;
+  delete detections.relabelAt;
 
   // Leadership-change events (top node by stake).
   //
@@ -683,10 +790,18 @@ async function main() {
   // on the same box, and that was counted as leadership moving. It did not move.
   // A rename is not an event, so a change at a capture already recognised as an
   // identity artifact is not recorded as one.
+  //
+  // The same applies one region at a time. On 2026-09-17T21:20:17Z the top node
+  // was renamed from ams-mainnet-bam-1-tee to ams-mainnet-bam-2-tee holding
+  // 33,368,811.91 SOL and 67 validators either side — identical to the cent —
+  // and that was published as leadership changing hands. It did not change
+  // hands. Seven of the seventy-one changes standing before this rule were
+  // renames of exactly that shape.
   const leadershipChanges = [];
   for (let i = 1; i < summary.length; i++) {
     if (summary[i].topNode === summary[i - 1].topNode) continue;
     if (artifactAt.has(summary[i].ts)) continue;
+    if (relabelAt.has(`${summary[i].ts}|${city(summary[i].topNode)}`)) continue;
     leadershipChanges.push({ ts: summary[i].ts, from: summary[i - 1].topNode, to: summary[i].topNode });
   }
 
@@ -717,7 +832,7 @@ async function main() {
     //     The values shift slightly and the definition genuinely changed, so
     //     this bumps even though nothing was added or removed. A contract only
     //     means something if it is honoured when the change is inconvenient.
-    schemaVersion: 4,
+    schemaVersion: 5,
     provenance: {
       collector: process.env.BAM_NET_REF || null,
       // Both come from the environment and default to null rather than to a

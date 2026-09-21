@@ -17,6 +17,8 @@
 //                          (and its neighbours kept)
 //   identity artifacts     relabel-2026-08-11            must be recognised
 //                          rollover-2026-06-24           must NOT be
+//   slow relabelling       relabel-slow-2026-09-17       must be recognised
+//                          rollover-2026-06-24 (+nodes)  its precursor must NOT be
 //
 // The second pair is the one that matters most. The 2026-06-24 rollover is the
 // single validated early-warning event this project has, and a rule that
@@ -50,17 +52,25 @@ const check = (label, actual, expected) => {
 // stats.js reads a capture directory. Only summary.csv drives the rules under
 // test; the rest has to exist for it to run at all, and is stubbed at the latest
 // timestamp so the topology block is well-formed rather than meaningful.
-function runStats(summaryFixture, detectionsFixture) {
+function runStats(summaryFixture, detectionsFixture, nodesFixture) {
   const dir = fs.mkdtempSync(path.join(WORK, "dir-"));
   const summary = fs.readFileSync(path.join(FIX, summaryFixture), "utf8");
   fs.writeFileSync(path.join(dir, "summary.csv"), summary);
 
   const rows = summary.trim().split(/\r?\n/);
   const last = rows[rows.length - 1].split(",")[0];
+  // Telling a rename from an arrival is the one rule here that reads node rows
+  // at historical captures, so a test for it has to supply the real ones. The
+  // stub below covers only the latest timestamp, which is all the topology
+  // block needs — and with only that in place the rule can see nothing and so
+  // suppresses nothing, which is why every test written before it still asserts
+  // the same numbers.
   fs.writeFileSync(path.join(dir, "nodes.csv"),
-    "ts,bam_node,region,connected_validators,node_stake,node_stake_share\n" +
-    `${last},ams-mainnet-bam-2-tee,ams-mainnet-bam-2-tee,68,32000000.00,22.500000\n` +
-    `${last},fra-mainnet-bam-1-tee,fra-mainnet-bam-1-tee,95,26000000.00,18.300000\n`);
+    nodesFixture
+      ? fs.readFileSync(path.join(FIX, nodesFixture), "utf8")
+      : "ts,bam_node,region,connected_validators,node_stake,node_stake_share\n" +
+        `${last},ams-mainnet-bam-2-tee,ams-mainnet-bam-2-tee,68,32000000.00,22.500000\n` +
+        `${last},fra-mainnet-bam-1-tee,fra-mainnet-bam-1-tee,95,26000000.00,18.300000\n`);
   fs.writeFileSync(path.join(dir, "validators.csv"),
     "ts,validator_pubkey,bam_node_connection,stake,stake_percentage\n" +
     `${last},DRpbCBMxVnDK7maPM5tGv6MvB3v1sRMC86PZ8okm21hy,ams-mainnet-bam-2-tee,12000000.00,2.7000\n`);
@@ -135,6 +145,53 @@ console.log("── the validated 2026-06-24 rollover is untouched ──");
   const m = runStats("rollover-2026-06-24.csv", "rollover-2026-06-24.log");
   check("it is NOT called an identity artifact", m.detections.identityArtifacts, []);
   check("its precursor signals are still counted", m.detections.liveSignals > 0, true);
+  check("its cutover is still counted", m.detections.liveCutovers, 1);
+  check("and the real leadership change is still recorded",
+    m.leadershipChanges.some((c) => c.to === "fra-mainnet-bam-2-tee"), true);
+}
+
+// ── a relabelling that takes twenty minutes ─────────────────────────────────
+// The four-region rule above asks how much changed inside a single capture, so
+// a fleet that renames itself slowly walks straight through it. On 2026-09-17
+// fifteen regions swapped suffix one at a time between 21:20:17Z and 21:42:59Z,
+// never more than one in a capture, and the fleet was identical at both ends:
+// 16 nodes, 382 validators, 151,917,032.74 SOL. Eleven of the twelve rows in
+// the published precursor feed were steps of it, and its first step renamed the
+// top node and was published as leadership changing hands.
+console.log("── a relabelling spread over twenty minutes is still a relabelling ──");
+{
+  const m = runStats("relabel-slow-2026-09-17.csv", "relabel-slow-2026-09-17.log", "relabel-slow-2026-09-17.nodes.csv");
+  check("the four-region rule cannot see it", m.detections.identityArtifacts, []);
+  check("but its steps are recognised as renames", m.detections.relabellings.length, 14);
+  check("starting at the first", m.detections.relabellings[0]?.ts, "2026-09-17T21:20:17Z");
+  check("and ending at the last", m.detections.relabellings.at(-1)?.ts, "2026-09-17T21:42:59Z");
+  check("the renamed top node is not a leadership change", m.leadershipChanges, []);
+  check("and its cutover is not live monitoring", m.detections.liveCutovers, 0);
+  // The boundary, asserted rather than rounded off. At 21:30:17 iad renamed
+  // itself AND lost a validator holding 693,798.16 SOL inside the handover, so
+  // the region did not come out of the capture unchanged and the rule declines
+  // to call it a rename. That is the safe direction, and the same call
+  // compare.mjs makes on the identical shape at dfw on 2026-09-03: a rule that
+  // forgave a step where stake moved would forgive one where it moved for a
+  // real reason.
+  check("a step that also moved stake is left standing", m.detections.liveSignals, 1);
+  check("and it is the iad step", m.detections.feed[0]?.region, "iad");
+}
+
+// The direction that matters, now that the rule can read one region at a time.
+// The same rollover, with its real node rows underneath it so the rename test
+// is actually exercised: six regions DID rename themselves during the rollover,
+// and the fra precursor that earned the 22-minute lead did not —
+// fra-mainnet-bam-2-tee appeared ALONGSIDE fra-mainnet-bam-1-tee and the region
+// went from one node to two. Suppressing that would delete the only validated
+// early-warning event this project has.
+console.log("── the 2026-06-24 precursor survives a rule that reads regions ──");
+{
+  const m = runStats("rollover-2026-06-24.csv", "rollover-2026-06-24.log", "rollover-2026-06-24.nodes.csv");
+  check("rename steps inside the rollover are recognised", m.detections.relabellings.length > 0, true);
+  check("the fra precursor is NOT one of them",
+    m.detections.relabellings.some((r) => r.region === "fra"), false);
+  check("it is still counted as a signal", m.detections.liveSignals > 0, true);
   check("its cutover is still counted", m.detections.liveCutovers, 1);
   check("and the real leadership change is still recorded",
     m.leadershipChanges.some((c) => c.to === "fra-mainnet-bam-2-tee"), true);

@@ -20,7 +20,7 @@ and a conditional request against `ETag` avoids re-downloading it.
 
 ## Stability contract
 
-Pin on `schemaVersion` (currently `4`).
+Pin on `schemaVersion` (currently `5`).
 
 - **Adding** a field keeps the version.
 - **Removing** a field, or changing what an existing one means, bumps it.
@@ -32,6 +32,7 @@ look, rather than silently misreading a renamed number.
 
 | Version | Change |
 |---|---|
+| `5` | A fleet relabelling spread across many captures no longer counts as events: a node is new only if its region gained one, rather than ending the capture with the same node count, validators and stake to the cent. `leadershipChanges`, `detections.liveSignals`, `detections.liveCutovers` and `detections.rolloverPrecursors` fall. New fields `detections.relabellings` and `detections.excludedFromRelabelling`. See [`detections`](#detections). |
 | `4` | Captures whose headline stake disagrees with the sum of their own node list are excluded from the series, and the partial-response threshold is applied inclusively. `stats.pct.min` rises from 28.4591 to 28.6328 and `stats.hhi.max` falls from 0.160019 to 0.159862 — both were set by the same single capture. New field `window.incoherentCaptures`. See [`stats`](#stats). |
 | `3` | Captures missing more than an eighth of the network are excluded from the series, and captures where the whole fleet changes identity at once no longer count as events. `stats.*.min` rises, `leadershipChanges` and `detections.live*` fall. See [`stats`](#stats) and [`detections`](#detections). |
 | `2` | `stats.*.avg` became time-weighted rather than a mean over captures. Values shift slightly; see [`stats`](#stats). |
@@ -346,6 +347,8 @@ on the same machine, and that was previously counted as leadership moving.
 | `excludedFromPartialResponses` | Live events dropped because the capture behind them was incomplete. |
 | `identityArtifacts` | `{ ts, regions }` for captures where the whole fleet changed identity at once. |
 | `excludedFromIdentityArtifacts` | Live events dropped because they fell at one of those captures. |
+| `relabellings` | `{ ts, region, node }` for captures where a region renamed a node rather than gained one. |
+| `excludedFromRelabelling` | Live events dropped because they were steps of a relabelling. |
 | `feed` | Recent raw events. |
 
 `excludedFromPartialResponses` counts the detector reading its own blind spot.
@@ -378,6 +381,22 @@ The threshold is safe against the one event this project rests on: the 2026-06-2
 structural rollover was genuinely coordinated and still never exceeded two
 regions in a single capture, because it moved region by region over twenty-five
 minutes. That is what a real reconfiguration looks like from outside.
+
+That threshold asks how much changed inside a single capture, which is why it
+could not see the slow case. `relabellings`, added in `schemaVersion` 5, covers
+it: on 2026-09-17 fifteen regions swapped suffix one at a time between 21:20:17Z
+and 21:42:59Z, never more than one in a capture, and the fleet was identical at
+both ends — 16 nodes, 382 validators, 151,917,032.74 SOL. Eleven of the twelve
+rows then in `feed` were steps of it, and its first step renamed the top node and
+was published as leadership changing hands.
+
+Rate cannot separate that from a real rollover, since region by region over
+twenty minutes is also what 2026-06-24 looked like. Substance can. In a rollover
+the new node appears **alongside** the old one, so the region gains a node and
+stake migrates to it over the following minutes; in a relabelling the region ends
+the capture with the same node count, the same validators and the same stake to
+the cent. A capture where nodes.csv cannot answer the question is not counted as
+a relabelling, so a missing row can never delete a precursor.
 
 `detections.log` is append-only history and is not rewritten; this is a rule
 applied when it is read, and the count is published so the difference between
