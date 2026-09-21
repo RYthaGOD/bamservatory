@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-09-21T05:21:16.309Z",
-  "schemaVersion": 4,
+  "generatedAt": "2026-09-21T05:36:50.824Z",
+  "schemaVersion": 5,
   "provenance": {
     "collector": "0fcd020edfd9d71e7c36d971dad47ba88442a520",
     "archive": "https://github.com/RYthaGOD/bamservatory-data",
     "inputs": {
-      "summary.csv": "sha256:3a40bf04ce5bdd8e91c2a61d5662f3fab71e390a347f3f342b4cab16a2661c09",
-      "nodes.csv": "sha256:7691968c4ab8b42e1d8090dd6b74792f3a5da7c8e6473e5e148c2f0a05a518fe",
+      "summary.csv": "sha256:312df1355aadd5d3b12e32975deaef179907710c6f493ecf3bf666f6bbf5455e",
+      "nodes.csv": "sha256:1b3635066d58872124ecaaa44f893f9627a2a23cad85986df5e194b7a2e97c5e",
       "detections.log": "sha256:d7806f65ee60ed5fe8d22d8eb58372aba4e93a91a4dfd90bea7b85dab2b1a53f",
-      "verification.csv": "sha256:ef8df03ff427a220073ce1ea28fb6a22cc0d017700c8cfe9b73180b17853d9ed",
+      "verification.csv": "sha256:3b76d9d30f56dd66caf35143743af77f02ef19555801df7947302a35030f152f",
       "validators.csv": {
         "tailReadOnly": true,
-        "snapshotTs": "2026-09-21T05:21:14Z",
+        "snapshotTs": "2026-09-21T05:36:47Z",
         "validators": 383
       }
     }
   },
   "window": {
     "from": "2026-06-20T15:08:27Z",
-    "to": "2026-09-21T05:21:14Z",
-    "snapshots": 102739,
+    "to": "2026-09-21T05:36:47Z",
+    "snapshots": 102755,
     "partialResponsesExcluded": [
       "2026-06-24T06:10:46Z",
       "2026-06-24T06:11:46Z",
@@ -131,25 +131,25 @@
     "pct": {
       "min": 27.0474,
       "max": 34.7464,
-      "avg": 33.182994841083286,
+      "avg": 33.183166113432904,
       "cur": 34.6331
     },
     "hhi": {
       "min": 0.117198,
       "max": 0.159862,
-      "avg": 0.1337410468496899,
+      "avg": 0.13374075593849744,
       "cur": 0.131278
     },
     "vals": {
       "min": 316,
       "max": 391,
-      "avg": 378.30007990161533,
+      "avg": 378.30063501056947,
       "cur": 383
     },
     "nodes": {
       "min": 12,
       "max": 21,
-      "avg": 15.782532183793247,
+      "avg": 15.782675979277426,
       "cur": 17
     }
   },
@@ -1842,7 +1842,7 @@
       "nodes": 17
     },
     {
-      "ts": "2026-09-21T05:21:14Z",
+      "ts": "2026-09-21T05:36:47Z",
       "pct": 34.6331,
       "hhi": 0.131278,
       "vals": 383,
@@ -2457,16 +2457,6 @@
       "to": "ams-mainnet-bam-2-tee"
     },
     {
-      "ts": "2026-07-22T20:45:45Z",
-      "from": "ams-mainnet-bam-2-tee",
-      "to": "ams-mainnet-bam-1-tee"
-    },
-    {
-      "ts": "2026-07-24T05:04:47Z",
-      "from": "ams-mainnet-bam-1-tee",
-      "to": "ams-mainnet-bam-2-tee"
-    },
-    {
       "ts": "2026-08-19T20:02:57Z",
       "from": "ams-mainnet-bam-2-tee",
       "to": "ams-mainnet-bam-dev"
@@ -2497,21 +2487,6 @@
       "to": "ams-mainnet-bam-2-tee"
     },
     {
-      "ts": "2026-09-03T23:13:34Z",
-      "from": "ams-mainnet-bam-2-tee",
-      "to": "ams-mainnet-bam-1-tee"
-    },
-    {
-      "ts": "2026-09-10T17:32:58Z",
-      "from": "ams-mainnet-bam-2-tee",
-      "to": "ams-mainnet-bam-1-tee"
-    },
-    {
-      "ts": "2026-09-10T21:40:56Z",
-      "from": "ams-mainnet-bam-1-tee",
-      "to": "ams-mainnet-bam-2-tee"
-    },
-    {
       "ts": "2026-09-15T23:52:43Z",
       "from": "ams-mainnet-bam-1-tee",
       "to": "ams-mainnet-bam-2-tee"
@@ -2525,11 +2500,6 @@
       "ts": "2026-09-16T01:03:43Z",
       "from": "fra-mainnet-bam-2-tee",
       "to": "ams-mainnet-bam-1-tee"
-    },
-    {
-      "ts": "2026-09-17T21:20:17Z",
-      "from": "ams-mainnet-bam-1-tee",
-      "to": "ams-mainnet-bam-2-tee"
     }
   ],
   "detections": {
@@ -2544,11 +2514,12 @@
         "precursorNode": "fra-mainnet-bam-2-tee"
       }
     ],
-    "rolloverPrecursors": 15,
-    "liveCutovers": 72,
-    "liveSignals": 317,
+    "rolloverPrecursors": 9,
+    "liveCutovers": 66,
+    "liveSignals": 223,
     "excludedFromPartialResponses": 63,
     "excludedFromIdentityArtifacts": 159,
+    "excludedFromRelabelling": 100,
     "identityArtifacts": [
       {
         "ts": "2026-07-08T02:07:48Z",
@@ -2603,68 +2574,1154 @@
         "regions": 15
       }
     ],
+    "relabellings": [
+      {
+        "ts": "2026-06-24T05:51:46Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-06-24T05:57:45Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-06-24T05:58:46Z",
+        "region": "lon",
+        "node": "lon-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-06-24T05:59:46Z",
+        "region": "pit",
+        "node": "pit-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-06-24T06:00:46Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-06-24T06:00:46Z",
+        "region": "slc",
+        "node": "slc-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-06-24T23:26:47Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-01T00:22:46Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-01T21:28:47Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-02T15:01:46Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-06T23:56:47Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-08T00:49:46Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-08T01:15:46Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-08T01:21:46Z",
+        "region": "ewr",
+        "node": "ewr-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-08T01:29:46Z",
+        "region": "fra",
+        "node": "fra-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-08T02:07:48Z",
+        "region": "ams",
+        "node": "ams-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-08T02:07:48Z",
+        "region": "lon",
+        "node": "lon-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-08T02:09:47Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-21T03:30:46Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-21T03:51:46Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-21T18:06:46Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-21T20:09:46Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-21T22:18:46Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-22T20:45:45Z",
+        "region": "ams",
+        "node": "ams-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-24T04:49:47Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-24T04:52:46Z",
+        "region": "tyo",
+        "node": "tyo-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-24T05:04:47Z",
+        "region": "ams",
+        "node": "ams-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-24T05:19:47Z",
+        "region": "ewr",
+        "node": "ewr-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-24T05:37:46Z",
+        "region": "pit",
+        "node": "pit-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-24T05:52:46Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-24T05:55:47Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-24T05:58:46Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-24T17:33:46Z",
+        "region": "iad",
+        "node": "iad-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-30T16:16:45Z",
+        "region": "ams",
+        "node": "ams-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-30T16:16:45Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-30T16:16:45Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-30T16:16:45Z",
+        "region": "ewr",
+        "node": "ewr-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-30T16:16:45Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-30T16:16:45Z",
+        "region": "iad",
+        "node": "iad-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-30T16:16:45Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-30T16:16:45Z",
+        "region": "lon",
+        "node": "lon-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-30T16:16:45Z",
+        "region": "pit",
+        "node": "pit-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-30T16:16:45Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-30T16:16:45Z",
+        "region": "sin",
+        "node": "sin-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-30T16:16:45Z",
+        "region": "slc",
+        "node": "slc-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-30T16:16:45Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-30T16:16:45Z",
+        "region": "tyo",
+        "node": "tyo-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-31T18:01:45Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-31T18:07:46Z",
+        "region": "ams",
+        "node": "ams-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-31T18:07:46Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-31T18:07:46Z",
+        "region": "ewr",
+        "node": "ewr-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-31T18:07:46Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-31T18:10:46Z",
+        "region": "iad",
+        "node": "iad-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-07-31T18:10:46Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-31T18:10:46Z",
+        "region": "lon",
+        "node": "lon-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-31T18:10:46Z",
+        "region": "pit",
+        "node": "pit-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-31T18:10:46Z",
+        "region": "slc",
+        "node": "slc-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-31T18:10:46Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-07-31T18:10:46Z",
+        "region": "tyo",
+        "node": "tyo-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-11T21:18:33Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-11T21:18:33Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-11T21:18:33Z",
+        "region": "ewr",
+        "node": "ewr-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-11T21:18:33Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-11T21:18:33Z",
+        "region": "iad",
+        "node": "iad-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-11T21:18:33Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-11T21:18:33Z",
+        "region": "pit",
+        "node": "pit-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-11T21:18:33Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-11T21:18:33Z",
+        "region": "sin",
+        "node": "sin-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-11T21:18:33Z",
+        "region": "slc",
+        "node": "slc-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-11T21:18:33Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-11T21:18:33Z",
+        "region": "tyo",
+        "node": "tyo-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-17T18:47:45Z",
+        "region": "ams",
+        "node": "ams-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-17T18:47:45Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-17T18:47:45Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-17T18:47:45Z",
+        "region": "fra",
+        "node": "fra-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-17T18:47:45Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-17T18:47:45Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-17T18:47:45Z",
+        "region": "lon",
+        "node": "lon-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-17T18:47:45Z",
+        "region": "pit",
+        "node": "pit-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-17T18:47:45Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-17T18:47:45Z",
+        "region": "sin",
+        "node": "sin-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-17T18:47:45Z",
+        "region": "slc",
+        "node": "slc-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-17T18:47:45Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-17T18:47:45Z",
+        "region": "tyo",
+        "node": "tyo-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-18T21:53:57Z",
+        "region": "ams",
+        "node": "ams-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-18T21:53:57Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-18T21:53:57Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-18T21:53:57Z",
+        "region": "ewr",
+        "node": "ewr-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-18T21:53:57Z",
+        "region": "fra",
+        "node": "fra-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-18T21:53:57Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-18T21:53:57Z",
+        "region": "iad",
+        "node": "iad-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-18T21:53:57Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-18T21:53:57Z",
+        "region": "pit",
+        "node": "pit-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-18T21:53:57Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-18T21:53:57Z",
+        "region": "sin",
+        "node": "sin-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-18T21:53:57Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-18T21:53:57Z",
+        "region": "tyo",
+        "node": "tyo-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-20T19:50:09Z",
+        "region": "ams",
+        "node": "ams-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-20T19:50:09Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-20T19:50:09Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-20T19:50:09Z",
+        "region": "ewr",
+        "node": "ewr-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-20T19:50:09Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-20T19:50:09Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-20T19:50:09Z",
+        "region": "lon",
+        "node": "lon-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-20T19:50:09Z",
+        "region": "pit",
+        "node": "pit-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-20T19:50:09Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-20T19:50:09Z",
+        "region": "tyo",
+        "node": "tyo-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-21T03:06:49Z",
+        "region": "fra",
+        "node": "fra-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-21T19:44:44Z",
+        "region": "ams",
+        "node": "ams-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-21T19:44:44Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-21T19:44:44Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-21T19:44:44Z",
+        "region": "ewr",
+        "node": "ewr-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-21T19:44:44Z",
+        "region": "fra",
+        "node": "fra-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-21T19:44:44Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-21T19:44:44Z",
+        "region": "iad",
+        "node": "iad-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-21T19:44:44Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-21T19:44:44Z",
+        "region": "lon",
+        "node": "lon-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-21T19:44:44Z",
+        "region": "pit",
+        "node": "pit-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-21T19:44:44Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-21T19:44:44Z",
+        "region": "sin",
+        "node": "sin-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-21T19:44:44Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-21T19:44:44Z",
+        "region": "tyo",
+        "node": "tyo-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-25T19:29:17Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-25T19:29:17Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-25T19:29:17Z",
+        "region": "ewr",
+        "node": "ewr-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-25T19:29:17Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-25T19:29:17Z",
+        "region": "iad",
+        "node": "iad-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-25T19:29:17Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-25T19:29:17Z",
+        "region": "lon",
+        "node": "lon-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-25T19:29:17Z",
+        "region": "pit",
+        "node": "pit-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-25T19:29:17Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-25T19:29:17Z",
+        "region": "sin",
+        "node": "sin-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-25T19:29:17Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-25T19:29:17Z",
+        "region": "tyo",
+        "node": "tyo-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-26T15:31:55Z",
+        "region": "fra",
+        "node": "fra-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-27T23:35:50Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-27T23:35:50Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-27T23:35:50Z",
+        "region": "ewr",
+        "node": "ewr-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-27T23:35:50Z",
+        "region": "fra",
+        "node": "fra-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-27T23:35:50Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-27T23:35:50Z",
+        "region": "iad",
+        "node": "iad-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-27T23:35:50Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-27T23:35:50Z",
+        "region": "pit",
+        "node": "pit-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-27T23:35:50Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-08-27T23:35:50Z",
+        "region": "sin",
+        "node": "sin-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-27T23:35:50Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-08-27T23:35:50Z",
+        "region": "tyo",
+        "node": "tyo-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-02T00:32:44Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-02T15:02:09Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-02T15:04:10Z",
+        "region": "ewr",
+        "node": "ewr-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-02T15:05:09Z",
+        "region": "fra",
+        "node": "fra-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-02T15:07:13Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-02T15:08:14Z",
+        "region": "iad",
+        "node": "iad-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-02T15:10:14Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-02T15:11:14Z",
+        "region": "lon",
+        "node": "lon-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-02T15:14:13Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-02T15:16:13Z",
+        "region": "sin",
+        "node": "sin-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-02T15:17:13Z",
+        "region": "slc",
+        "node": "slc-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-02T15:19:14Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-03T23:13:34Z",
+        "region": "ams",
+        "node": "ams-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-03T23:16:34Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-03T23:18:34Z",
+        "region": "ewr",
+        "node": "ewr-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-03T23:19:34Z",
+        "region": "fra",
+        "node": "fra-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-03T23:21:34Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-03T23:22:33Z",
+        "region": "iad",
+        "node": "iad-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-03T23:24:15Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-03T23:26:16Z",
+        "region": "lon",
+        "node": "lon-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-03T23:27:16Z",
+        "region": "pit",
+        "node": "pit-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-03T23:28:15Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-03T23:30:16Z",
+        "region": "sin",
+        "node": "sin-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-03T23:33:15Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-03T23:35:16Z",
+        "region": "tyo",
+        "node": "tyo-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-06T05:23:04Z",
+        "region": "slc",
+        "node": "slc-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-08T04:25:13Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-08T23:21:15Z",
+        "region": "pit",
+        "node": "pit-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-09T17:55:18Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-09T17:55:18Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-09T17:55:18Z",
+        "region": "ewr",
+        "node": "ewr-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-09T18:00:19Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-09T18:00:19Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-09T18:00:19Z",
+        "region": "lon",
+        "node": "lon-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-09T18:03:19Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-09T18:04:19Z",
+        "region": "slc",
+        "node": "slc-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-10T17:32:58Z",
+        "region": "ams",
+        "node": "ams-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-10T21:40:56Z",
+        "region": "ams",
+        "node": "ams-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-10T21:43:00Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-10T21:43:56Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-10T21:45:47Z",
+        "region": "ewr",
+        "node": "ewr-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-10T21:46:48Z",
+        "region": "fra",
+        "node": "fra-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-10T21:48:47Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-10T21:51:47Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-10T21:53:48Z",
+        "region": "lon",
+        "node": "lon-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-10T21:54:48Z",
+        "region": "pit",
+        "node": "pit-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-10T21:56:47Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-10T21:57:48Z",
+        "region": "sin",
+        "node": "sin-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-10T21:59:48Z",
+        "region": "slc",
+        "node": "slc-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-10T22:00:48Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-10T22:02:30Z",
+        "region": "tyo",
+        "node": "tyo-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-11T06:09:17Z",
+        "region": "fra",
+        "node": "fra-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-11T07:23:45Z",
+        "region": "slc",
+        "node": "slc-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-11T07:25:27Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-15T22:59:26Z",
+        "region": "ams",
+        "node": "ams-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-15T22:59:26Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-15T22:59:26Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-15T22:59:26Z",
+        "region": "fra",
+        "node": "fra-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-15T22:59:26Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-15T22:59:26Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-15T22:59:26Z",
+        "region": "lon",
+        "node": "lon-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-15T22:59:26Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-15T22:59:26Z",
+        "region": "sin",
+        "node": "sin-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-15T22:59:26Z",
+        "region": "slc",
+        "node": "slc-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-15T22:59:26Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-15T22:59:26Z",
+        "region": "tyo",
+        "node": "tyo-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-17T01:21:52Z",
+        "region": "lon",
+        "node": "lon-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-17T21:20:17Z",
+        "region": "ams",
+        "node": "ams-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-17T21:22:16Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-17T21:23:17Z",
+        "region": "dub",
+        "node": "dub-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-17T21:25:17Z",
+        "region": "ewr",
+        "node": "ewr-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-17T21:26:16Z",
+        "region": "fra",
+        "node": "fra-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-17T21:28:17Z",
+        "region": "hkg",
+        "node": "hkg-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-17T21:32:17Z",
+        "region": "lax",
+        "node": "lax-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-17T21:33:17Z",
+        "region": "lon",
+        "node": "lon-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-17T21:34:59Z",
+        "region": "pit",
+        "node": "pit-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-17T21:36:58Z",
+        "region": "sea",
+        "node": "sea-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-17T21:37:58Z",
+        "region": "sin",
+        "node": "sin-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-17T21:39:59Z",
+        "region": "slc",
+        "node": "slc-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-17T21:40:59Z",
+        "region": "sqq",
+        "node": "sqq-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-17T21:42:59Z",
+        "region": "tyo",
+        "node": "tyo-mainnet-bam-1-tee"
+      }
+    ],
     "feed": [
       {
         "ts": "2026-09-18T22:57:52Z",
         "kind": "SIGNAL_XREGION",
         "region": "tyo",
         "detail": "new tyo-mainnet-bam-dev-tee",
-        "structural": null
-      },
-      {
-        "ts": "2026-09-17T21:42:59Z",
-        "kind": "SIGNAL_XREGION",
-        "region": "tyo",
-        "detail": "new tyo-mainnet-bam-1-tee",
-        "structural": null
-      },
-      {
-        "ts": "2026-09-17T21:40:59Z",
-        "kind": "SIGNAL_XREGION",
-        "region": "sqq",
-        "detail": "new sqq-mainnet-bam-2-tee",
-        "structural": null
-      },
-      {
-        "ts": "2026-09-17T21:39:59Z",
-        "kind": "SIGNAL_XREGION",
-        "region": "slc",
-        "detail": "new slc-mainnet-bam-2-tee",
-        "structural": null
-      },
-      {
-        "ts": "2026-09-17T21:37:58Z",
-        "kind": "SIGNAL_XREGION",
-        "region": "sin",
-        "detail": "new sin-mainnet-bam-2-tee",
-        "structural": null
-      },
-      {
-        "ts": "2026-09-17T21:36:58Z",
-        "kind": "SIGNAL_XREGION",
-        "region": "sea",
-        "detail": "new sea-mainnet-bam-1-tee",
-        "structural": null
-      },
-      {
-        "ts": "2026-09-17T21:34:59Z",
-        "kind": "SIGNAL_XREGION",
-        "region": "pit",
-        "detail": "new pit-mainnet-bam-1-tee",
-        "structural": null
-      },
-      {
-        "ts": "2026-09-17T21:33:17Z",
-        "kind": "SIGNAL_XREGION",
-        "region": "lon",
-        "detail": "new lon-mainnet-bam-1-tee",
-        "structural": null
-      },
-      {
-        "ts": "2026-09-17T21:32:17Z",
-        "kind": "SIGNAL_XREGION",
-        "region": "lax",
-        "detail": "new lax-mainnet-bam-2-tee",
         "structural": null
       },
       {
@@ -2675,24 +3732,80 @@
         "structural": null
       },
       {
-        "ts": "2026-09-17T21:28:17Z",
-        "kind": "SIGNAL_XREGION",
-        "region": "hkg",
-        "detail": "new hkg-mainnet-bam-1-tee",
+        "ts": "2026-09-17T15:00:45Z",
+        "kind": "SIGNAL",
+        "region": "ams",
+        "detail": "new ams-mainnet-bam-dev",
         "structural": null
       },
       {
-        "ts": "2026-09-17T21:26:16Z",
-        "kind": "SIGNAL_XREGION",
-        "region": "fra",
-        "detail": "new fra-mainnet-bam-1-tee",
+        "ts": "2026-09-17T13:06:09Z",
+        "kind": "SIGNAL",
+        "region": "ams",
+        "detail": "new ams-mainnet-bam-dev",
         "structural": null
+      },
+      {
+        "ts": "2026-09-17T02:10:03Z",
+        "kind": "SIGNAL_XREGION",
+        "region": "tyo",
+        "detail": "new tyo-mainnet-bam-dev-tee",
+        "structural": null
+      },
+      {
+        "ts": "2026-09-17T00:41:52Z",
+        "kind": "SIGNAL",
+        "region": "ams",
+        "detail": "new ams-mainnet-bam-dev",
+        "structural": null
+      },
+      {
+        "ts": "2026-09-16T20:14:15Z",
+        "kind": "SIGNAL",
+        "region": "ams",
+        "detail": "new ams-mainnet-bam-dev",
+        "structural": null
+      },
+      {
+        "ts": "2026-09-16T19:17:30Z",
+        "kind": "SIGNAL_XREGION",
+        "region": "tyo",
+        "detail": "new tyo-mainnet-bam-dev-tee",
+        "structural": null
+      },
+      {
+        "ts": "2026-09-16T04:25:19Z",
+        "kind": "SIGNAL_XREGION",
+        "region": "tyo",
+        "detail": "new tyo-mainnet-bam-dev-tee",
+        "structural": null
+      },
+      {
+        "ts": "2026-09-16T03:52:12Z",
+        "kind": "SIGNAL_XREGION",
+        "region": "tyo",
+        "detail": "new tyo-mainnet-bam-dev-tee",
+        "structural": null
+      },
+      {
+        "ts": "2026-09-16T02:37:38Z",
+        "kind": "SIGNAL",
+        "region": "ams",
+        "detail": "new ams-mainnet-bam-dev",
+        "structural": null
+      },
+      {
+        "ts": "2026-09-16T01:03:43Z",
+        "kind": "CUTOVER",
+        "region": "ams",
+        "detail": "fra-mainnet-bam-2-tee → ams-mainnet-bam-1-tee",
+        "structural": false
       }
     ]
   },
   "verification": {
     "latest": {
-      "ts": "2026-09-21T05:21:14Z",
+      "ts": "2026-09-21T05:36:48Z",
       "explorerValidators": 383,
       "kobeRunningBam": 383,
       "inBoth": 383,
@@ -2719,7 +3832,7 @@
       "disputedStakeSol": 0,
       "kobeRunningBam": 385
     },
-    "readings": 3813,
+    "readings": 3814,
     "since": "2026-08-10T10:02:04Z",
     "series": [
       {
@@ -4253,7 +5366,7 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-09-21T05:21:14Z",
+        "ts": "2026-09-21T05:36:48Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
