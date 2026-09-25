@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-09-25T16:57:38.249Z",
+  "generatedAt": "2026-09-25T17:13:38.047Z",
   "schemaVersion": 5,
   "provenance": {
     "collector": "0fcd020edfd9d71e7c36d971dad47ba88442a520",
     "archive": "https://github.com/RYthaGOD/bamservatory-data",
     "inputs": {
-      "summary.csv": "sha256:39b1006579cf2ff3d512588ae9126c08ea6606957ebca23479ac619af1908ae4",
-      "nodes.csv": "sha256:00829909d2accbb0c89f888c6091429b07af0b93307f4b53dbcd84093e68a189",
+      "summary.csv": "sha256:f9c3cf1e6b16bdad2a51440177c0dc59e4ef7c799a06f1d2213aee8e1d081f2d",
+      "nodes.csv": "sha256:cf1f9a7686b622eef9907415c514bf628ab3f537005380c8e9f3d800dc968fd1",
       "detections.log": "sha256:bd7e9de6e85b62817683c5af3f38c3349da7a540df4870e2845e78f29095b91f",
       "verification.csv": "sha256:a2f4909c1a68ebd7ce41d4519a3aae00b4ada6cf462f5ee7c357bb9f2a0edad5",
       "validators.csv": {
         "tailReadOnly": true,
-        "snapshotTs": "2026-09-25T16:57:36Z",
+        "snapshotTs": "2026-09-25T17:13:36Z",
         "validators": 383
       }
     }
   },
   "window": {
     "from": "2026-06-20T15:08:27Z",
-    "to": "2026-09-25T16:57:36Z",
-    "snapshots": 109286,
+    "to": "2026-09-25T17:13:36Z",
+    "snapshots": 109302,
     "partialResponsesExcluded": [
       "2026-06-24T06:10:46Z",
       "2026-06-24T06:11:46Z",
@@ -118,7 +118,7 @@
     }
   },
   "decentralization": {
-    "nodeStakeHHI": 0.134564,
+    "nodeStakeHHI": 0.135976,
     "nodeNakamoto": 3,
     "regionNakamoto": 3,
     "validatorNakamoto": 26,
@@ -134,25 +134,25 @@
     "pct": {
       "min": 27.0474,
       "max": 35.9433,
-      "avg": 33.25687918749478,
+      "avg": 33.25718960145771,
       "cur": 35.9364
     },
     "hhi": {
       "min": 0.117198,
       "max": 0.159862,
-      "avg": 0.13370034157887073,
-      "cur": 0.134564
+      "avg": 0.13370049786010152,
+      "cur": 0.135976
     },
     "vals": {
       "min": 316,
       "max": 391,
-      "avg": 378.4239003384637,
+      "avg": 378.4244304650535,
       "cur": 383
     },
     "nodes": {
       "min": 12,
       "max": 21,
-      "avg": 15.819248972192918,
+      "avg": 15.819269911624545,
       "cur": 16
     }
   },
@@ -1845,9 +1845,9 @@
       "nodes": 16
     },
     {
-      "ts": "2026-09-25T16:57:36Z",
+      "ts": "2026-09-25T17:13:36Z",
       "pct": 35.9364,
-      "hhi": 0.134564,
+      "hhi": 0.135976,
       "vals": 383,
       "nodes": 16
     }
@@ -1870,9 +1870,9 @@
     {
       "node": "sqq-mainnet-bam-1-tee",
       "region": "sqq",
-      "vals": 22,
-      "stake": 17746588.24,
-      "share": 11.213463226217891
+      "vals": 23,
+      "stake": 18998022.55,
+      "share": 12.004201841744162
     },
     {
       "node": "sin-mainnet-bam-1-tee",
@@ -1910,18 +1910,18 @@
       "share": 3.2858321330569003
     },
     {
-      "node": "dub-mainnet-bam-2-tee",
-      "region": "dub",
-      "vals": 4,
-      "stake": 4869287.06,
-      "share": 3.076736251880752
-    },
-    {
       "node": "lon-mainnet-bam-2-tee",
       "region": "lon",
       "vals": 15,
       "stake": 3966934.25,
       "share": 2.5065703182844152
+    },
+    {
+      "node": "dub-mainnet-bam-2-tee",
+      "region": "dub",
+      "vals": 3,
+      "stake": 3617852.75,
+      "share": 2.285997636354484
     },
     {
       "node": "pit-mainnet-bam-2-tee",
@@ -1983,10 +1983,10 @@
     },
     {
       "region": "sqq",
-      "vals": 22,
-      "stake": 17746588.24,
+      "vals": 23,
+      "stake": 18998022.55,
       "nodes": 1,
-      "share": 11.213463226217891
+      "share": 12.004201841744162
     },
     {
       "region": "sin",
@@ -2024,18 +2024,18 @@
       "share": 3.2858321330569003
     },
     {
-      "region": "dub",
-      "vals": 4,
-      "stake": 4869287.06,
-      "nodes": 1,
-      "share": 3.076736251880752
-    },
-    {
       "region": "lon",
       "vals": 15,
       "stake": 3966934.25,
       "nodes": 1,
       "share": 2.5065703182844152
+    },
+    {
+      "region": "dub",
+      "vals": 3,
+      "stake": 3617852.75,
+      "nodes": 1,
+      "share": 2.285997636354484
     },
     {
       "region": "pit",
