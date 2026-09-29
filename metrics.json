@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-09-29T23:26:29.934Z",
+  "generatedAt": "2026-09-29T23:42:06.469Z",
   "schemaVersion": 5,
   "provenance": {
     "collector": "0fcd020edfd9d71e7c36d971dad47ba88442a520",
     "archive": "https://github.com/RYthaGOD/bamservatory-data",
     "inputs": {
-      "summary.csv": "sha256:abe2b014e05eb6beb6553bea3905e9197f9ef7db0049589334843184a985b25b",
-      "nodes.csv": "sha256:fcca0df6e928cce16aebc9ca6695c0abf216406e1c299d31fe94c959e7a9489a",
-      "detections.log": "sha256:28c672e52cbc582bd1ac55885a65199adcf837ca75d64a36704b6e73a82d2b99",
-      "verification.csv": "sha256:e2b7cd432a76c969f390429e385dee3cde1fa0cf5804e26b7227c288f3054527",
+      "summary.csv": "sha256:ea28e381392392e6b3deedca1107095af00bf9219855bf995ff4d648828102a7",
+      "nodes.csv": "sha256:931a35ee04cffabdacf54db08835c76e963ab4938a37c5831f9bc0a95684d60e",
+      "detections.log": "sha256:183ec4bf31297e47896a83d3ea965db864e8df12c574b61ac677dddb187e5109",
+      "verification.csv": "sha256:535f3b5223f84bdcb2301e2018841156c5293c9b60350509951641e1ccda5271",
       "validators.csv": {
         "tailReadOnly": true,
-        "snapshotTs": "2026-09-29T23:26:27Z",
+        "snapshotTs": "2026-09-29T23:42:01Z",
         "validators": 381
       }
     }
   },
   "window": {
     "from": "2026-06-20T15:08:27Z",
-    "to": "2026-09-29T23:26:27Z",
-    "snapshots": 115546,
+    "to": "2026-09-29T23:42:01Z",
+    "snapshots": 115562,
     "partialResponsesExcluded": [
       "2026-06-24T06:10:46Z",
       "2026-06-24T06:11:46Z",
@@ -137,25 +137,25 @@
     "pct": {
       "min": 27.0474,
       "max": 35.9762,
-      "avg": 33.36291278011018,
+      "avg": 33.363160389822525,
       "cur": 35.6576
     },
     "hhi": {
       "min": 0.117198,
       "max": 0.159862,
-      "avg": 0.13370391432189574,
+      "avg": 0.13370403011390153,
       "cur": 0.134777
     },
     "vals": {
       "min": 316,
       "max": 391,
-      "avg": 378.660944777767,
+      "avg": 378.6611971750374,
       "cur": 381
     },
     "nodes": {
       "min": 12,
       "max": 21,
-      "avg": 15.826491292206734,
+      "avg": 15.826510014776353,
       "cur": 16
     }
   },
@@ -1848,7 +1848,7 @@
       "nodes": 16
     },
     {
-      "ts": "2026-09-29T23:26:27Z",
+      "ts": "2026-09-29T23:42:01Z",
       "pct": 35.6576,
       "hhi": 0.134777,
       "vals": 381,
@@ -1948,14 +1948,14 @@
       "share": 1.7545302546361314
     },
     {
-      "node": "slc-mainnet-bam-1-tee",
+      "node": "slc-mainnet-bam-2-tee",
       "region": "slc",
       "vals": 9,
       "stake": 1187251.06,
       "share": 0.7549816927143956
     },
     {
-      "node": "dfw-mainnet-bam-2-tee",
+      "node": "dfw-mainnet-bam-1-tee",
       "region": "dfw",
       "vals": 3,
       "stake": 909257.89,
@@ -2523,7 +2523,7 @@
     "liveSignals": 242,
     "excludedFromPartialResponses": 63,
     "excludedFromIdentityArtifacts": 159,
-    "excludedFromRelabelling": 111,
+    "excludedFromRelabelling": 113,
     "identityArtifacts": [
       {
         "ts": "2026-07-08T02:07:48Z",
@@ -3773,6 +3773,16 @@
         "ts": "2026-09-22T23:31:35Z",
         "region": "tyo",
         "node": "tyo-mainnet-bam-2-tee"
+      },
+      {
+        "ts": "2026-09-29T23:30:00Z",
+        "region": "dfw",
+        "node": "dfw-mainnet-bam-1-tee"
+      },
+      {
+        "ts": "2026-09-29T23:31:00Z",
+        "region": "slc",
+        "node": "slc-mainnet-bam-2-tee"
       }
     ],
     "feed": [
@@ -3864,7 +3874,7 @@
   },
   "verification": {
     "latest": {
-      "ts": "2026-09-29T23:26:27Z",
+      "ts": "2026-09-29T23:42:02Z",
       "explorerValidators": 381,
       "kobeRunningBam": 381,
       "inBoth": 381,
@@ -3891,7 +3901,7 @@
       "disputedStakeSol": 10020.03,
       "kobeRunningBam": 382
     },
-    "readings": 4490,
+    "readings": 4491,
     "since": "2026-08-10T10:02:04Z",
     "series": [
       {
@@ -5395,7 +5405,7 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-09-29T23:26:27Z",
+        "ts": "2026-09-29T23:42:02Z",
         "onlyExplorer": 0,
         "disputedStakeSol": 0,
         "stakeMedianRelPct": 0
