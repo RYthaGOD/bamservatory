@@ -89,6 +89,7 @@ design, which is the reason this is now checked rather than assumed.
 | `headline` | object | Current-state figures. |
 | `decentralization` | object | Concentration measures at the latest snapshot. |
 | `stats` | object | Min/max/avg/current across the whole window. |
+| `daily` | array | One median per completed UTC day. The field to read for a daily series. |
 | `series` | array | Downsampled time series for charting. |
 | `nodes` | array | Every BAM node at the latest snapshot. |
 | `regions` | array | Nodes rolled up by derived region. |
@@ -267,6 +268,52 @@ Each interval is capped at 10 minutes when weighting. Beyond that the collector
 was down and nothing is known about the interval, so the samples either side of
 an outage must not dominate. `min` and `max` are unweighted: an extreme is an
 extreme however often it was sampled.
+
+### `daily`
+
+Array of `{ date, bamStakePct, captures }`, one row per **completed** UTC day,
+oldest first, from the archive's first day (2026-06-20). Added without a
+`schemaVersion` bump, since it is additive.
+
+| Field | Unit | Meaning |
+|---|---|---|
+| `date` | `YYYY-MM-DD` | The UTC day. |
+| `bamStakePct` | % of **all Solana stake** | Median of `bam_stake_percentage` over that day's captures — the same figure as `headline.bamStakePct`, one value per day. |
+| `captures` | count | How many captures the median is taken over. |
+
+**It counts the same captures as every other figure.** Partial responses and
+incoherent captures (see [`window`](#window)) are left out before the median is
+taken, so it is computed from exactly the set `stats` is.
+
+**A median, not a mean.** The faults documented on this page are short — one
+capture to about forty minutes — against roughly 1,440 captures a day, and a
+median does not let them pull the day. Measured across the whole archive,
+applying or skipping the exclusion rules moves a daily median by at most 0.0027
+percentage points. That is why this field does not inherit the known weakness of
+`stats.pct.min`, which a single episode can set. BAM's stake moves in steps —
+at epoch boundaries, and when a validator joins or leaves — so on a day
+containing a step the median is whichever level held for more of the day.
+
+**The current day is never included.** A row appears once its day has ended, so
+a consumer storing yesterday's value does not store a figure that will be revised
+an hour later. Every row is recomputed from the full capture record on each
+publish, so a past row changes only if a read rule changes, which bumps
+`schemaVersion`.
+
+**Read `captures` alongside the value.** Coverage was not uniform: the archive
+begins at 15:08Z on 2026-06-20 (553 captures), and from 2026-07-20 to 2026-08-07
+the collector ran at about a third of its normal rate (~480 a day instead of
+~1,440). A day with no captures has no row. A gap in dates means no data for
+that day, not a value of zero.
+
+**Whose number it is.** `bam_stake_percentage` is BAM's own published share
+(from its `/bam_stake` endpoint), recorded every minute. It is checked
+independently, every 15 minutes since 2026-08-10, by
+[`verification`](#verification). The stake BAM attributes to its validators
+matches their on-chain stake to within a few hundredths of a SOL in total, and
+the on-chain share's daily median
+typically agrees with this one to about 0.02 percentage points (0.29 at most).
+The difference is the network total each side divides by.
 
 ### `series`
 

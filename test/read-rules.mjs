@@ -52,9 +52,17 @@ const check = (label, actual, expected) => {
 // stats.js reads a capture directory. Only summary.csv drives the rules under
 // test; the rest has to exist for it to run at all, and is stubbed at the latest
 // timestamp so the topology block is well-formed rather than meaningful.
+//
+// An array of summary fixtures is joined in order under the first one's header,
+// for a test that needs captures from more than one day.
 function runStats(summaryFixture, detectionsFixture, nodesFixture) {
   const dir = fs.mkdtempSync(path.join(WORK, "dir-"));
-  const summary = fs.readFileSync(path.join(FIX, summaryFixture), "utf8");
+  const summary = Array.isArray(summaryFixture)
+    ? summaryFixture.map((f, i) => {
+        const lines = fs.readFileSync(path.join(FIX, f), "utf8").trim().split(/\r?\n/);
+        return (i ? lines.slice(1) : lines).join("\n");
+      }).join("\n") + "\n"
+    : fs.readFileSync(path.join(FIX, summaryFixture), "utf8");
   fs.writeFileSync(path.join(dir, "summary.csv"), summary);
 
   const rows = summary.trim().split(/\r?\n/);
@@ -285,6 +293,61 @@ console.log("── a capture that disagrees with itself is excluded ──");
     inc.every((t) => t >= "2026-08-22T09:55" && t <= "2026-08-22T10:06"), true);
   check("no capture here is called a partial response", m.window.partialResponsesExcluded, []);
   check("sixteen nodes throughout, so nothing was read as a smaller network", m.stats.nodes.min, 16);
+}
+
+// ── daily medians ────────────────────────────────────────────────────────────
+// `daily` is what the Solana Foundation's aggregator reads: one value per
+// completed UTC day. Two things about it must hold or it is a different number
+// from the one documented — it counts exactly the captures every other figure
+// counts, and it never publishes a day that has not ended.
+//
+// The expected value is recomputed here from the fixture itself, minus the
+// exclusions metrics.json lists, so the test does not trust stats.js to say
+// which captures it dropped.
+const expectedDaily = (fixtures, m) => {
+  const drop = new Set([...m.window.partialResponsesExcluded, ...m.window.incoherentCaptures]);
+  const last = m.window.to.slice(0, 10);
+  const byDay = new Map();
+  for (const f of fixtures)
+    for (const line of fs.readFileSync(path.join(FIX, f), "utf8").trim().split(/\r?\n/).slice(1)) {
+      const [ts, , pct] = line.split(",");
+      if (drop.has(ts) || ts.slice(0, 10) >= last) continue;
+      if (!byDay.has(ts.slice(0, 10))) byDay.set(ts.slice(0, 10), []);
+      byDay.get(ts.slice(0, 10)).push(Number(pct));
+    }
+  return [...byDay].map(([date, xs]) => {
+    const s = xs.sort((a, b) => a - b), h = s.length >> 1;
+    const med = s.length % 2 ? s[h] : (s[h - 1] + s[h]) / 2;
+    return { date, bamStakePct: Math.round(med * 1e6) / 1e6, captures: s.length };
+  });
+};
+
+// 2026-08-04 runs past midnight into 08-05 and holds two partial responses, both
+// on the 4th: the 0.88 boundary capture and the earlier 20:23:45Z one.
+console.log("── daily medians skip partial responses and the day in progress ──");
+{
+  const fx = "boundary-2026-08-04.csv";
+  const m = runStats(fx, null);
+  check("only the completed day is published", m.daily.map((d) => d.date), ["2026-08-04"]);
+  check("over the day's captures less its two partial responses", m.daily[0]?.captures,
+    fs.readFileSync(path.join(FIX, fx), "utf8").split("\n").filter((l) => l.startsWith("2026-08-04")).length - 2);
+  check("and the value is their median", m.daily, expectedDaily([fx], m));
+  check("the 0.88 boundary capture is not the day's value",
+    m.daily[0]?.bamStakePct !== undefined && m.daily[0].bamStakePct > 28.4591, true);
+}
+
+// The coherence rule in the same position. 2026-08-22 is followed by captures
+// from 2026-09-17 so that it is a completed day; its three incoherent captures
+// must not be counted in it.
+console.log("── daily medians skip incoherent captures ──");
+{
+  const fx = ["incoherent-2026-08-22.csv", "relabel-slow-2026-09-17.csv"];
+  const m = runStats(fx, null);
+  check("the three incoherent captures are still found", m.window.incoherentCaptures.length, 3);
+  check("2026-08-22 is published and 2026-09-17, still in progress, is not",
+    m.daily.map((d) => d.date), ["2026-08-22"]);
+  check("over 186 captures less those three", m.daily[0]?.captures, 183);
+  check("and the value is their median", m.daily, expectedDaily(fx, m));
 }
 
 console.log(fails ? `\nread rules: ${fails} check(s) FAILED` : "\nread rules: all checks passed");

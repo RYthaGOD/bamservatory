@@ -755,6 +755,43 @@ async function main() {
     return { min, max, avg: den > 0 ? num / den : latest[key], cur: latest[key] };
   };
 
+  // One value per completed UTC day, for consumers that store a daily series
+  // rather than a chart — the Solana Foundation's data aggregator among them.
+  //
+  // The median of that day's captures, over exactly the captures every other
+  // figure here counts: partial responses and incoherent captures are already
+  // gone from `summary`. A median rather than the time-weighted mean `stats`
+  // uses, because the faults this file documents are short — one capture to
+  // about forty minutes — against ~1,440 captures a day, and a median does not
+  // let them pull the day. Measured over the whole archive, applying or skipping
+  // the exclusion rules moves a daily median by at most 0.0027 percentage
+  // points, where it has moved the all-time minimum by several.
+  //
+  // The day in progress is left out, so a row is published once its day is
+  // over and a consumer storing yesterday's value is not storing a figure that
+  // will be revised an hour later.
+  //
+  // `captures` travels with each value because coverage was not uniform: the
+  // archive starts at 15:08Z on 2026-06-20, and from 2026-07-20 to 08-07 the
+  // collector ran at about a third of its rate. The count says how much each
+  // median rests on.
+  const daily = (() => {
+    const today = latest.ts.slice(0, 10);
+    const byDay = new Map();
+    for (const r of summary) {
+      const d = r.ts.slice(0, 10);
+      if (d >= today || !Number.isFinite(r.pct)) continue;
+      if (!byDay.has(d)) byDay.set(d, []);
+      byDay.get(d).push(r.pct);
+    }
+    return [...byDay].map(([date, xs]) => {
+      const s = xs.sort((a, b) => a - b);
+      const h = s.length >> 1;
+      const med = s.length % 2 ? s[h] : (s[h - 1] + s[h]) / 2;
+      return { date, bamStakePct: Math.round(med * 1e6) / 1e6, captures: s.length };
+    });
+  })();
+
   // downsample series for charts (~240 points max)
   const step = Math.max(1, Math.floor(summary.length / 240));
   const series = summary.filter((_, i) => i % step === 0 || i === summary.length - 1)
@@ -897,6 +934,8 @@ async function main() {
       unconventionalNodeNames: nodesLatest.unconventionalNames,
     },
     stats: { pct: reduceStat("pct"), hhi: reduceStat("hhi"), vals: reduceStat("vals"), nodes: reduceStat("nodes") },
+    // Additive, so schemaVersion stays where it is.
+    daily,
     series,
     nodes: nodesLatest.nodes,
     regions: nodesLatest.regions,
@@ -935,6 +974,8 @@ async function main() {
   console.log(`BAM stake:   ${(latest.stake / 1e6).toFixed(2)}M SOL  =  ${latest.pct.toFixed(2)}% of all Solana stake`);
   console.log(`topology:    ${latest.nodes} nodes, ${metrics.decentralization.regionCount} regions, ${latest.vals} validators`);
   console.log(`top node:    ${latest.topNode}  (${latest.topShare.toFixed(1)}% of BAM stake)`);
+  if (daily.length)
+    console.log(`daily:       ${daily.length} completed day(s), ${daily[0].date} → ${daily.at(-1).date}  (latest median ${daily.at(-1).bamStakePct}%)`);
   console.log(`busiest:     ${nodesLatest.busiestByVals.node}  (${nodesLatest.busiestByVals.vals} validators)`);
   console.log("");
   console.log("DECENTRALIZATION");
