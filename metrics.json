@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-10-08T18:02:49.171Z",
+  "generatedAt": "2026-10-08T18:18:49.852Z",
   "schemaVersion": 5,
   "provenance": {
     "collector": "0fcd020edfd9d71e7c36d971dad47ba88442a520",
     "archive": "https://github.com/RYthaGOD/bamservatory-data",
     "inputs": {
-      "summary.csv": "sha256:c9a899bfa721005a74aceac55f47e33d7dd932c6fc0ba39d6299d5f5b81fa2e3",
-      "nodes.csv": "sha256:95a186004a707f2481d184dc2ef346e8d76844ba5e2d64dc92c536f906d8eab8",
+      "summary.csv": "sha256:0201c3f33116698af6225f9eaec7134b4bafa7742b0753a658a871c652ce5b8f",
+      "nodes.csv": "sha256:5cf7b94f2df6c2b49d4afbf5f9e5d8e9b01f79e77672aad76032a02341ef7030",
       "detections.log": "sha256:fe828c4a7f7a009c2fa528f6b272afee45cc8c42b40e1666a94fc0c7c2ecbcf0",
-      "verification.csv": "sha256:20cfda03ce69839bd39dc05546cc4406486be78badea88814324606dce976404",
+      "verification.csv": "sha256:4519f0eefedf5e4b5f5aedc7839bdcc79687d026ea1f4d914e2753e70a8934aa",
       "validators.csv": {
         "tailReadOnly": true,
-        "snapshotTs": "2026-10-08T18:02:46Z",
-        "validators": 385
+        "snapshotTs": "2026-10-08T18:18:46Z",
+        "validators": 384
       }
     }
   },
   "window": {
     "from": "2026-06-20T15:08:27Z",
-    "to": "2026-10-08T18:02:46Z",
-    "snapshots": 128363,
+    "to": "2026-10-08T18:18:46Z",
+    "snapshots": 128379,
     "partialResponsesExcluded": [
       "2026-06-24T06:10:46Z",
       "2026-06-24T06:11:46Z",
@@ -111,57 +111,55 @@
     }
   },
   "headline": {
-    "bamStakeSOL": 164168361.58,
-    "bamStakePct": 37.4164,
-    "nodeCount": 16,
-    "validatorCount": 385,
+    "bamStakeSOL": 163648006.8,
+    "bamStakePct": 37.2978,
+    "nodeCount": 15,
+    "validatorCount": 384,
     "topNode": "ams-mainnet-bam-1-tee",
-    "topNodeShare": 27.282993,
+    "topNodeShare": 27.369745,
     "busiestByVals": {
       "node": "fra-mainnet-bam-1-tee",
       "region": "fra",
       "vals": 104,
       "stake": 23710053.3,
-      "share": 14.442522950441786
+      "share": 14.488446124203673
     }
   },
   "decentralization": {
-    "nodeStakeHHI": 0.141658,
+    "nodeStakeHHI": 0.14255,
     "nodeNakamoto": 3,
     "regionNakamoto": 3,
     "validatorNakamoto": 27,
-    "top1ValShare": 7.503434970473393,
-    "top5ValShare": 18.367821200904622,
-    "top10ValShare": 27.065917548301776,
+    "top1ValShare": 7.52729378994517,
+    "top5ValShare": 18.426225722546615,
+    "top10ValShare": 27.15197957764755,
     "regionCount": 15,
-    "unconventionalNodeNames": [
-      "tyo-mainnet-bam-dev-tee"
-    ]
+    "unconventionalNodeNames": []
   },
   "stats": {
     "pct": {
       "min": 27.0474,
       "max": 37.6461,
-      "avg": 33.65478876148785,
-      "cur": 37.4164
+      "avg": 33.65516443135031,
+      "cur": 37.2978
     },
     "hhi": {
       "min": 0.117198,
       "max": 0.159862,
-      "avg": 0.13393017343265176,
-      "cur": 0.141658
+      "avg": 0.13393102114679467,
+      "cur": 0.14255
     },
     "vals": {
       "min": 316,
       "max": 391,
-      "avg": 378.9661897092007,
-      "cur": 385
+      "avg": 378.9667381537671,
+      "cur": 384
     },
     "nodes": {
       "min": 12,
       "max": 21,
-      "avg": 15.838987548841416,
-      "cur": 16
+      "avg": 15.838937098748113,
+      "cur": 15
     }
   },
   "daily": [
@@ -2405,11 +2403,11 @@
       "nodes": 16
     },
     {
-      "ts": "2026-10-08T18:02:46Z",
-      "pct": 37.4164,
-      "hhi": 0.141658,
-      "vals": 385,
-      "nodes": 16
+      "ts": "2026-10-08T18:18:46Z",
+      "pct": 37.2978,
+      "hhi": 0.14255,
+      "vals": 384,
+      "nodes": 15
     }
   ],
   "nodes": [
@@ -2418,112 +2416,105 @@
       "region": "ams",
       "vals": 69,
       "stake": 44790042.21,
-      "share": 27.282992761942943
+      "share": 27.369745029649234
     },
     {
       "node": "fra-mainnet-bam-1-tee",
       "region": "fra",
       "vals": 104,
       "stake": 23710053.3,
-      "share": 14.442522950441786
+      "share": 14.488446124203673
     },
     {
       "node": "sqq-mainnet-bam-1-tee",
       "region": "sqq",
       "vals": 23,
       "stake": 19031648.9,
-      "share": 11.592762890288405
+      "share": 11.629624626040384
     },
     {
       "node": "tyo-mainnet-bam-2-tee",
       "region": "tyo",
       "vals": 41,
       "stake": 18086998.83,
-      "share": 11.017347468674341
+      "share": 11.052379544713627
     },
     {
       "node": "sin-mainnet-bam-1-tee",
       "region": "sin",
       "vals": 40,
       "stake": 16069935.35,
-      "share": 9.78869204416722
+      "share": 9.819817340432174
     },
     {
       "node": "iad-mainnet-bam-2-tee",
       "region": "iad",
       "vals": 9,
       "stake": 14074510.5,
-      "share": 8.573217374947188
+      "share": 8.60047780254416
     },
     {
       "node": "sea-mainnet-bam-2-tee",
       "region": "sea",
       "vals": 1,
       "stake": 5651979.88,
-      "share": 3.44279483894434
+      "share": 3.45374196128286
     },
     {
       "node": "ewr-mainnet-bam-1-tee",
       "region": "ewr",
       "vals": 22,
       "stake": 4005608.18,
-      "share": 2.4399391826811017
+      "share": 2.4476975052012864
     },
     {
       "node": "lon-mainnet-bam-1-tee",
       "region": "lon",
       "vals": 18,
       "stake": 3791990.84,
-      "share": 2.309818288538602
+      "share": 2.3171628630971415
     },
     {
       "node": "dub-mainnet-bam-1-tee",
       "region": "dub",
       "vals": 3,
       "stake": 3642437.66,
-      "share": 2.2187208453092544
+      "share": 2.225775755539128
     },
     {
       "node": "lax-mainnet-bam-1-tee",
       "region": "lax",
       "vals": 16,
       "stake": 3065328.07,
-      "share": 1.867185638153265
+      "share": 1.873122764983587
     },
     {
       "node": "pit-mainnet-bam-2-tee",
       "region": "pit",
       "vals": 11,
       "stake": 2914083.57,
-      "share": 1.7750579598752034
+      "share": 1.7807021465182495
     },
     {
       "node": "hkg-mainnet-bam-1-tee",
       "region": "hkg",
       "vals": 16,
       "stake": 2833616.7,
-      "share": 1.7260431136401164
+      "share": 1.7315314468143268
     },
     {
       "node": "slc-mainnet-bam-1-tee",
       "region": "slc",
       "vals": 9,
       "stake": 1202517.04,
-      "share": 0.7324901268145746
+      "share": 0.7348192400510914
     },
     {
       "node": "dfw-mainnet-bam-2-tee",
       "region": "dfw",
       "vals": 2,
       "stake": 777255.78,
-      "share": 0.47345040936763866
-    },
-    {
-      "node": "tyo-mainnet-bam-dev-tee",
-      "region": "tyo",
-      "vals": 1,
-      "stake": 520354.78,
-      "share": 0.3169641062140542
+      "share": 0.4749558489291082
     }
   ],
   "regions": [
@@ -2532,105 +2523,105 @@
       "vals": 69,
       "stake": 44790042.21,
       "nodes": 1,
-      "share": 27.282992761942943
+      "share": 27.369745029649234
     },
     {
       "region": "fra",
       "vals": 104,
       "stake": 23710053.3,
       "nodes": 1,
-      "share": 14.442522950441786
+      "share": 14.488446124203673
     },
     {
       "region": "sqq",
       "vals": 23,
       "stake": 19031648.9,
       "nodes": 1,
-      "share": 11.592762890288405
+      "share": 11.629624626040384
     },
     {
       "region": "tyo",
-      "vals": 42,
-      "stake": 18607353.61,
-      "nodes": 2,
-      "share": 11.334311574888396
+      "vals": 41,
+      "stake": 18086998.83,
+      "nodes": 1,
+      "share": 11.052379544713627
     },
     {
       "region": "sin",
       "vals": 40,
       "stake": 16069935.35,
       "nodes": 1,
-      "share": 9.78869204416722
+      "share": 9.819817340432174
     },
     {
       "region": "iad",
       "vals": 9,
       "stake": 14074510.5,
       "nodes": 1,
-      "share": 8.573217374947188
+      "share": 8.60047780254416
     },
     {
       "region": "sea",
       "vals": 1,
       "stake": 5651979.88,
       "nodes": 1,
-      "share": 3.44279483894434
+      "share": 3.45374196128286
     },
     {
       "region": "ewr",
       "vals": 22,
       "stake": 4005608.18,
       "nodes": 1,
-      "share": 2.4399391826811017
+      "share": 2.4476975052012864
     },
     {
       "region": "lon",
       "vals": 18,
       "stake": 3791990.84,
       "nodes": 1,
-      "share": 2.309818288538602
+      "share": 2.3171628630971415
     },
     {
       "region": "dub",
       "vals": 3,
       "stake": 3642437.66,
       "nodes": 1,
-      "share": 2.2187208453092544
+      "share": 2.225775755539128
     },
     {
       "region": "lax",
       "vals": 16,
       "stake": 3065328.07,
       "nodes": 1,
-      "share": 1.867185638153265
+      "share": 1.873122764983587
     },
     {
       "region": "pit",
       "vals": 11,
       "stake": 2914083.57,
       "nodes": 1,
-      "share": 1.7750579598752034
+      "share": 1.7807021465182495
     },
     {
       "region": "hkg",
       "vals": 16,
       "stake": 2833616.7,
       "nodes": 1,
-      "share": 1.7260431136401164
+      "share": 1.7315314468143268
     },
     {
       "region": "slc",
       "vals": 9,
       "stake": 1202517.04,
       "nodes": 1,
-      "share": 0.7324901268145746
+      "share": 0.7348192400510914
     },
     {
       "region": "dfw",
       "vals": 2,
       "stake": 777255.78,
       "nodes": 1,
-      "share": 0.47345040936763866
+      "share": 0.4749558489291082
     }
   ],
   "whales": [
@@ -2640,7 +2631,7 @@
       "node": "iad-mainnet-bam-2-tee",
       "region": "iad",
       "stake": 12318266.26,
-      "share": 7.503434970473393
+      "share": 7.52729378994517
     },
     {
       "pk": "5Cchr1XGEg7dbBXByV5NY2ad8jfxAM7HA3x8D56rq9Ux",
@@ -2648,7 +2639,7 @@
       "node": "sea-mainnet-bam-2-tee",
       "region": "sea",
       "stake": 5651979.88,
-      "share": 3.4427948372666535
+      "share": 3.453741959594487
     },
     {
       "pk": "9jxgosAfHgHzwnxsHw4RAZYaLVokMbnYtmiZBreynGFP",
@@ -2656,7 +2647,7 @@
       "node": "ams-mainnet-bam-1-tee",
       "region": "ams",
       "stake": 4612428.99,
-      "share": 2.8095724066928285
+      "share": 2.818506059227695
     },
     {
       "pk": "Fc6NNdS2j3EmrWbU6Uqt6wsKB5ef72NjaWfNxKYbULGD",
@@ -2664,7 +2655,7 @@
       "node": "sin-mainnet-bam-1-tee",
       "region": "sin",
       "stake": 3973469.94,
-      "share": 2.4203627907228573
+      "share": 2.4280588658014453
     },
     {
       "pk": "5EhGYUyQNrxgUbuYF4vbL2SZDT6RMfhq3yjeyevvULeC",
@@ -2672,7 +2663,7 @@
       "node": "tyo-mainnet-bam-2-tee",
       "region": "tyo",
       "stake": 3598006.07,
-      "share": 2.1916561957488923
+      "share": 2.198625047977817
     },
     {
       "pk": "krakeNd6ednDPEXxHAmoBs1qKVM8kLg79PvWF2mhXV1",
@@ -2680,7 +2671,7 @@
       "node": "dub-mainnet-bam-1-tee",
       "region": "dub",
       "stake": 3353416.38,
-      "share": 2.042669090370051
+      "share": 2.0491642053753116
     },
     {
       "pk": "GBQ2GvTzmjXMu97dr7WUnLKYTNim1aoZsYS53KYXAAAA",
@@ -2688,7 +2679,7 @@
       "node": "ams-mainnet-bam-1-tee",
       "region": "ams",
       "stake": 3004606.86,
-      "share": 1.8301984800455395
+      "share": 1.8360179980802476
     },
     {
       "pk": "6y7V8dL673XFzm9QyC5vvh3itWkp7wztahBd2yDqsyrK",
@@ -2696,7 +2687,7 @@
       "node": "sqq-mainnet-bam-1-tee",
       "region": "sqq",
       "stake": 2916667.66,
-      "share": 1.7766320077329452
+      "share": 1.7822811994041043
     },
     {
       "pk": "GSTampk6BJRKSDkzhaMM49R7qRx98MTPYYWvKbp83XKc",
@@ -2704,7 +2695,7 @@
       "node": "ams-mainnet-bam-1-tee",
       "region": "ams",
       "stake": 2502415.69,
-      "share": 1.524298387669963
+      "share": 1.5291452291759733
     },
     {
       "pk": "5ejbTALcBsKQ7Cj1iSuu2mY5jqbYHqh9gF5ERXLiYj1z",
@@ -2712,7 +2703,7 @@
       "node": "sqq-mainnet-bam-1-tee",
       "region": "sqq",
       "stake": 2502415.68,
-      "share": 1.5242983815786555
+      "share": 1.529145223065297
     },
     {
       "pk": "GQzMeEMwAR44ugoNCifTb5NdRKos1GduDUPeNh6AgV46",
@@ -2720,7 +2711,7 @@
       "node": "tyo-mainnet-bam-2-tee",
       "region": "tyo",
       "stake": 2502395.56,
-      "share": 1.5242861258676308
+      "share": 1.5291329283845474
     },
     {
       "pk": "BSVckjdW2f8kcXPGcrPPtV9kUDBZ8w8PjrrGVnxgEdwq",
@@ -2728,7 +2719,7 @@
       "node": "sqq-mainnet-bam-1-tee",
       "region": "sqq",
       "stake": 2502391.14,
-      "share": 1.5242834335096422
+      "share": 1.5291302274656153
     }
   ],
   "leadershipChanges": [
@@ -4575,34 +4566,34 @@
   },
   "verification": {
     "latest": {
-      "ts": "2026-10-08T18:02:46Z",
-      "explorerValidators": 385,
+      "ts": "2026-10-08T18:18:47Z",
+      "explorerValidators": 384,
       "kobeRunningBam": 383,
-      "inBoth": 383,
+      "inBoth": 382,
       "onlyExplorer": 2,
-      "onlyKobe": 0,
-      "disputedStakeSol": 655960.9,
-      "onchainMatched": 385,
-      "stakeReportedSol": 164168361.67,
-      "stakeOnchainSol": 164168361.58,
+      "onlyKobe": 1,
+      "disputedStakeSol": 1176315.68,
+      "onchainMatched": 384,
+      "stakeReportedSol": 163648006.89,
+      "stakeOnchainSol": 163648006.8,
       "stakeAbsDiffSol": 0.09,
       "stakeMaxRelPct": 0,
       "stakeMedianRelPct": 0,
       "kobeTotalValidators": 648,
       "chainValidators": 669,
-      "bamHeadlineStakeSol": 164168361.58,
-      "bamHeadlineSharePct": 37.4164,
-      "bamShareReportedPct": 37.4194,
-      "bamShareOnchainPct": 37.4194
+      "bamHeadlineStakeSol": 163648006.8,
+      "bamHeadlineSharePct": 37.2978,
+      "bamShareReportedPct": 37.2871,
+      "bamShareOnchainPct": 37.2871
     },
     "typical": {
-      "readings": 89,
+      "readings": 90,
       "hours": 24,
       "onlyExplorer": 1,
       "disputedStakeSol": 5051.35,
       "kobeRunningBam": 385
     },
-    "readings": 5283,
+    "readings": 5284,
     "since": "2026-08-10T10:02:04Z",
     "series": [
       {
@@ -6052,9 +6043,9 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-10-08T18:02:46Z",
+        "ts": "2026-10-08T18:18:47Z",
         "onlyExplorer": 2,
-        "disputedStakeSol": 655960.9,
+        "disputedStakeSol": 1176315.68,
         "stakeMedianRelPct": 0
       }
     ]
