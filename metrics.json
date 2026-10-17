@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-10-17T03:41:20.370Z",
+  "generatedAt": "2026-10-17T03:56:20.825Z",
   "schemaVersion": 5,
   "provenance": {
     "collector": "0fcd020edfd9d71e7c36d971dad47ba88442a520",
     "archive": "https://github.com/RYthaGOD/bamservatory-data",
     "inputs": {
-      "summary.csv": "sha256:ccf1f6e144085bb4a2a733e07a1e2cb7892f14af43cac492c6352bda75afa559",
-      "nodes.csv": "sha256:39dfbe7779542208c8c52a5de48f0a33098decc2f9f4aa77b888f786eede2177",
+      "summary.csv": "sha256:2d4c0b82cbe494682e2136b83d273e2f8cc9199e41ad1a49a61586a6741cc6fa",
+      "nodes.csv": "sha256:164566d427ff18c14f1e51f095ac38492df87eed466d3bb314e7a6810edcb853",
       "detections.log": "sha256:47074d1b842bbebf1d0100bf1b45b123f09d212304f3e12129a38f5f5ff57232",
-      "verification.csv": "sha256:101c3b555702f6cb610e58d7c76f789eda3945e7009e7c12b4b2f0cb8efa76d8",
+      "verification.csv": "sha256:88ffdd5c69c79563f3ff34de7310b150024f3d8b7fa77c76ebc5792a7e801368",
       "validators.csv": {
         "tailReadOnly": true,
-        "snapshotTs": "2026-10-17T03:41:17Z",
+        "snapshotTs": "2026-10-17T03:56:18Z",
         "validators": 385
       }
     }
   },
   "window": {
     "from": "2026-06-20T15:08:27Z",
-    "to": "2026-10-17T03:41:17Z",
-    "snapshots": 140461,
+    "to": "2026-10-17T03:56:18Z",
+    "snapshots": 140476,
     "partialResponsesExcluded": [
       "2026-06-24T06:10:46Z",
       "2026-06-24T06:11:46Z",
@@ -143,25 +143,25 @@
     "pct": {
       "min": 27.0474,
       "max": 38.009,
-      "avg": 33.939532217591314,
+      "avg": 33.939889329757186,
       "cur": 37.9584
     },
     "hhi": {
       "min": 0.117198,
       "max": 0.162224,
-      "avg": 0.13435377957428113,
+      "avg": 0.13435359334561595,
       "cur": 0.132258
     },
     "vals": {
       "min": 316,
       "max": 391,
-      "avg": 379.3485221086936,
+      "avg": 379.34902429279606,
       "cur": 385
     },
     "nodes": {
       "min": 12,
       "max": 21,
-      "avg": 15.90695947338783,
+      "avg": 15.907056599765449,
       "cur": 17
     }
   },
@@ -2451,7 +2451,7 @@
       "nodes": 17
     },
     {
-      "ts": "2026-10-17T03:41:17Z",
+      "ts": "2026-10-17T03:56:18Z",
       "pct": 37.9584,
       "hhi": 0.132258,
       "vals": 385,
@@ -4751,25 +4751,25 @@
   },
   "verification": {
     "latest": {
-      "ts": "2026-10-17T03:41:18Z",
+      "ts": "2026-10-17T03:56:18Z",
       "explorerValidators": 385,
-      "kobeRunningBam": 383,
-      "inBoth": 383,
-      "onlyExplorer": 2,
+      "kobeRunningBam": 384,
+      "inBoth": 384,
+      "onlyExplorer": 1,
       "onlyKobe": 0,
-      "disputedStakeSol": 80760.25,
-      "onchainMatched": 384,
-      "stakeReportedSol": 166036701.71,
-      "stakeOnchainSol": 166036701.67,
-      "stakeAbsDiffSol": 0.04,
+      "disputedStakeSol": 15122.56,
+      "onchainMatched": 385,
+      "stakeReportedSol": 166085873.79,
+      "stakeOnchainSol": 166085873.74,
+      "stakeAbsDiffSol": 0.05,
       "stakeMaxRelPct": 0.0001,
       "stakeMedianRelPct": 0,
       "kobeTotalValidators": 647,
-      "chainValidators": 671,
+      "chainValidators": 672,
       "bamHeadlineStakeSol": 166085873.74,
       "bamHeadlineSharePct": 37.9584,
-      "bamShareReportedPct": 37.9312,
-      "bamShareOnchainPct": 37.9312
+      "bamShareReportedPct": 37.9381,
+      "bamShareOnchainPct": 37.9381
     },
     "typical": {
       "readings": 93,
@@ -4778,7 +4778,7 @@
       "disputedStakeSol": 15122.56,
       "kobeRunningBam": 384
     },
-    "readings": 6061,
+    "readings": 6062,
     "since": "2026-08-10T10:02:04Z",
     "series": [
       {
@@ -6240,15 +6240,15 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-10-17T03:41:18Z",
-        "onlyExplorer": 2,
-        "disputedStakeSol": 80760.25,
+        "ts": "2026-10-17T03:56:18Z",
+        "onlyExplorer": 1,
+        "disputedStakeSol": 15122.56,
         "stakeMedianRelPct": 0
       }
     ]
   },
   "attestations": {
-    "checkedAt": "2026-10-16T03:46:16Z",
+    "checkedAt": "2026-10-17T03:46:20Z",
     "reachable": true,
     "available": false,
     "endpointsFound": []
