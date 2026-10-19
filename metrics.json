@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-10-19T21:04:39.646Z",
+  "generatedAt": "2026-10-19T21:20:38.482Z",
   "schemaVersion": 5,
   "provenance": {
     "collector": "0fcd020edfd9d71e7c36d971dad47ba88442a520",
     "archive": "https://github.com/RYthaGOD/bamservatory-data",
     "inputs": {
-      "summary.csv": "sha256:9accc696f8113ed3dcb59120677936e1237920fc88c31c1591e33f6f51fd94a7",
-      "nodes.csv": "sha256:f7119c5d50e0520006139c4300dde1282554382b0d449b2d4710712245434a6e",
+      "summary.csv": "sha256:d4e718fd642f3a3769301e16681e0ad968ded93120746726e8339bfe32f99b63",
+      "nodes.csv": "sha256:298e8fa556b3369f95b894b56eb4ee6368b5f8f952cc403e6289f4d92a3774da",
       "detections.log": "sha256:886599b3ec850f92053eebd5d95127d5a8bd2c18738695a97a560f10f2dd0a70",
-      "verification.csv": "sha256:46a47ba4e8aa4dc48b12a0fd66e842a2a71d197bdcfb274ff86616fbdcff772a",
+      "verification.csv": "sha256:c9caceb0e5ca4b6763cb6f82a40c23e2db9055c4e4483f8c18adce22fc95b1f4",
       "validators.csv": {
         "tailReadOnly": true,
-        "snapshotTs": "2026-10-19T21:04:37Z",
+        "snapshotTs": "2026-10-19T21:20:35Z",
         "validators": 381
       }
     }
   },
   "window": {
     "from": "2026-06-20T15:08:27Z",
-    "to": "2026-10-19T21:04:37Z",
-    "snapshots": 144384,
+    "to": "2026-10-19T21:20:35Z",
+    "snapshots": 144400,
     "partialResponsesExcluded": [
       "2026-06-24T06:10:46Z",
       "2026-06-24T06:11:46Z",
@@ -143,25 +143,25 @@
     "pct": {
       "min": 27.0474,
       "max": 38.0108,
-      "avg": 34.028529692994034,
+      "avg": 34.02887306091723,
       "cur": 37.7472
     },
     "hhi": {
       "min": 0.117198,
       "max": 0.162224,
-      "avg": 0.1343215586983158,
+      "avg": 0.1343215743438835,
       "cur": 0.134491
     },
     "vals": {
       "min": 316,
       "max": 391,
-      "avg": 379.4373987991288,
+      "avg": 379.4375430838017,
       "cur": 381
     },
     "nodes": {
       "min": 12,
       "max": 21,
-      "avg": 15.931755841672173,
+      "avg": 15.931854479289337,
       "cur": 17
     }
   },
@@ -2461,7 +2461,7 @@
       "nodes": 17
     },
     {
-      "ts": "2026-10-19T21:04:37Z",
+      "ts": "2026-10-19T21:20:35Z",
       "pct": 37.7472,
       "hhi": 0.134491,
       "vals": 381,
@@ -4840,34 +4840,34 @@
   },
   "verification": {
     "latest": {
-      "ts": "2026-10-19T21:03:37Z",
-      "explorerValidators": 380,
-      "kobeRunningBam": 376,
-      "inBoth": 376,
-      "onlyExplorer": 4,
+      "ts": "2026-10-19T21:19:37Z",
+      "explorerValidators": 381,
+      "kobeRunningBam": 378,
+      "inBoth": 378,
+      "onlyExplorer": 3,
       "onlyKobe": 0,
-      "disputedStakeSol": 152024.78,
-      "onchainMatched": 380,
-      "stakeReportedSol": 165045729.6,
-      "stakeOnchainSol": 165045729.63,
+      "disputedStakeSol": 8440.87,
+      "onchainMatched": 381,
+      "stakeReportedSol": 165199297.34,
+      "stakeOnchainSol": 165199297.37,
       "stakeAbsDiffSol": 0.03,
       "stakeMaxRelPct": 0.0006,
       "stakeMedianRelPct": 0,
       "kobeTotalValidators": 646,
-      "chainValidators": 668,
-      "bamHeadlineStakeSol": 165045729.63,
-      "bamHeadlineSharePct": 37.7121,
-      "bamShareReportedPct": 37.6997,
-      "bamShareOnchainPct": 37.6997
+      "chainValidators": 669,
+      "bamHeadlineStakeSol": 165199297.37,
+      "bamHeadlineSharePct": 37.7472,
+      "bamShareReportedPct": 37.7271,
+      "bamShareOnchainPct": 37.7271
     },
     "typical": {
       "readings": 93,
       "hours": 24,
-      "onlyExplorer": 2,
+      "onlyExplorer": 3,
       "disputedStakeSol": 95722.96,
       "kobeRunningBam": 382
     },
-    "readings": 6313,
+    "readings": 6314,
     "since": "2026-08-10T10:02:04Z",
     "series": [
       {
@@ -6329,9 +6329,9 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-10-19T21:03:37Z",
-        "onlyExplorer": 4,
-        "disputedStakeSol": 152024.78,
+        "ts": "2026-10-19T21:19:37Z",
+        "onlyExplorer": 3,
+        "disputedStakeSol": 8440.87,
         "stakeMedianRelPct": 0
       }
     ]
