@@ -20,7 +20,7 @@ and a conditional request against `ETag` avoids re-downloading it.
 
 ## Stability contract
 
-Pin on `schemaVersion` (currently `5`).
+Pin on `schemaVersion` (currently `6`).
 
 - **Adding** a field keeps the version.
 - **Removing** a field, or changing what an existing one means, bumps it.
@@ -32,6 +32,7 @@ look, rather than silently misreading a renamed number.
 
 | Version | Change |
 |---|---|
+| `6` | A collapse at the end of the series (under a quarter of the preceding median's nodes or validators, with no recovery yet) is excluded until the API recovers or an operator accepts it at the collector. While it is excluded, `window.to` and `headline` come from the last capture before it, and its timestamps are listed in `window.partialResponsesExcluded`. On 2026-10-21 this replaces a headline of 0.12% and 1 node with the last real capture. See [`partialResponsesExcluded`](#partialresponsesexcluded). |
 | `5` | A fleet relabelling spread across many captures no longer counts as events: a node is new only if its region gained one, rather than ending the capture with the same node count, validators and stake to the cent. `leadershipChanges`, `detections.liveSignals`, `detections.liveCutovers` and `detections.rolloverPrecursors` fall. New fields `detections.relabellings` and `detections.excludedFromRelabelling`. See [`detections`](#detections). |
 | `4` | Captures whose headline stake disagrees with the sum of their own node list are excluded from the series, and the partial-response threshold is applied inclusively. `stats.pct.min` rises from 28.4591 to 28.6328 and `stats.hhi.max` falls from 0.160019 to 0.159862 — both were set by the same single capture. New field `window.incoherentCaptures`. See [`stats`](#stats). |
 | `3` | Captures missing more than an eighth of the network are excluded from the series, and captures where the whole fleet changes identity at once no longer count as events. `stats.*.min` rises, `leadershipChanges` and `detections.live*` fall. See [`stats`](#stats) and [`detections`](#detections). |
@@ -154,8 +155,9 @@ A capture is excluded when it sits below 88% of the median of the sixty captures
 either side of it, in node count or validator count. Being low against what
 *follows* is what identifies it: a real change to BAM persists, so the series
 after it stays at the new level, while a partial read is followed by a return to
-where things were. The newest capture is never excluded, since nothing follows
-it yet to judge it against.
+where things were. The newest capture is never excluded by this test, since
+nothing follows it yet to judge it against. A collapse is the exception; see
+below.
 
 Both numbers were widened in `schemaVersion` 3, after an outage on 2026-08-12
 walked straight through the previous ones. The API degraded for about seven
@@ -182,6 +184,17 @@ published minimum stake share (28.4591%) and the published maximum concentration
 (`stats.hhi.max` 0.160019). Exactly one capture in 70,225 has ever landed on
 this boundary, which is why a strict comparison looked correct for as long as it
 did.
+
+The newest captures can still be excluded when they are a collapse, meaning
+fewer than a quarter of the nodes or validators in the median of the sixty
+captures before them. On 2026-10-21, from 01:22Z, four one-node, one-validator
+captures ended the series. The API then went empty, so nothing followed them and
+the test above could not see them. The headline published BAM at 0.12% of
+Solana stake. A trailing collapse is now excluded until the API recovers, when
+the two-sided test names the same rows, or until an operator accepts it at the
+collector (`collapse accepted by operator` in `partial.log`). While it is
+excluded, `window.to` and the headline come from the last capture before it.
+The data is then visibly stale instead of looking current and being false.
 
 #### `incoherentCaptures`
 
