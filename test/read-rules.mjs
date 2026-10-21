@@ -19,6 +19,9 @@
 //                          rollover-2026-06-24           must NOT be
 //   slow relabelling       relabel-slow-2026-09-17       must be recognised
 //                          rollover-2026-06-24 (+nodes)  its precursor must NOT be
+//   unrecovered collapse   collapse-tail-2026-10-21      must be excluded
+//                          (unless an operator accepted it)
+//                          halving-tail                  must be kept
 //
 // The second pair is the one that matters most. The 2026-06-24 rollover is the
 // single validated early-warning event this project has, and a rule that
@@ -55,7 +58,11 @@ const check = (label, actual, expected) => {
 //
 // An array of summary fixtures is joined in order under the first one's header,
 // for a test that needs captures from more than one day.
-function runStats(summaryFixture, detectionsFixture, nodesFixture) {
+//
+// `partialLog` is written as the collector's partial.log, and `stubTs` moves the
+// node and validator stubs to that capture — for a test where the newest row is
+// excluded and the headline is read from an earlier one.
+function runStats(summaryFixture, detectionsFixture, nodesFixture, { partialLog, stubTs } = {}) {
   const dir = fs.mkdtempSync(path.join(WORK, "dir-"));
   const summary = Array.isArray(summaryFixture)
     ? summaryFixture.map((f, i) => {
@@ -66,7 +73,8 @@ function runStats(summaryFixture, detectionsFixture, nodesFixture) {
   fs.writeFileSync(path.join(dir, "summary.csv"), summary);
 
   const rows = summary.trim().split(/\r?\n/);
-  const last = rows[rows.length - 1].split(",")[0];
+  const last = stubTs ?? rows[rows.length - 1].split(",")[0];
+  if (partialLog) fs.writeFileSync(path.join(dir, "partial.log"), partialLog);
   // Telling a rename from an arrival is the one rule here that reads node rows
   // at historical captures, so a test for it has to supply the real ones. The
   // stub below covers only the latest timestamp, which is all the topology
@@ -293,6 +301,56 @@ console.log("── a capture that disagrees with itself is excluded ──");
     inc.every((t) => t >= "2026-08-22T09:55" && t <= "2026-08-22T10:06"), true);
   check("no capture here is called a partial response", m.window.partialResponsesExcluded, []);
   check("sixteen nodes throughout, so nothing was read as a smaller network", m.stats.nodes.min, 16);
+}
+
+// ── a collapse with no recovery yet ──────────────────────────────────────────
+// From 01:22Z on 2026-10-21 the collector recorded the API's one-node,
+// one-validator view, and then the API went empty, so nothing followed it. The
+// window test needs captures after a row and could not see it; the headline was
+// read from the collapse and published BAM at 0.12% of Solana stake.
+//
+// The fixture is 70 real captures from the seed (2026-10-18, 17 nodes, 385
+// validators) followed by the collapse rows as they were recorded.
+const LAST_HEALTHY = "2026-10-18T06:08:23Z";
+const COLLAPSE_TS = ["2026-10-21T01:22:38Z", "2026-10-21T01:23:38Z", "2026-10-21T01:24:38Z", "2026-10-21T01:25:38Z"];
+console.log("── an unrecovered collapse at the end of the series is excluded ──");
+{
+  const m = runStats("collapse-tail-2026-10-21.csv", null, null, { stubTs: LAST_HEALTHY });
+  check("all four collapse captures are excluded", m.window.partialResponsesExcluded, COLLAPSE_TS);
+  check("the headline is read from the last real capture", m.headline.nodeCount, 17);
+  check("so it does not report 0.12%", m.headline.bamStakePct, 37.9101);
+  check("and the window ends there, so freshness can see the gap", m.window.to, LAST_HEALTHY);
+  check("the published minimum is not the collapse", m.stats.nodes.min, 17);
+}
+
+// A collapse can be real. The collector logs an operator's acceptance, and from
+// then on the smaller network is the network.
+console.log("── a collapse an operator accepted is kept ──");
+{
+  const m = runStats("collapse-tail-2026-10-21.csv", null, null, {
+    partialLog: "2026-10-21T01:24:38Z collapse accepted by operator — recording it as observed (1/17 nodes, 1/385 validators vs previous capture)\n",
+  });
+  check("nothing is excluded", m.window.partialResponsesExcluded, []);
+  check("the headline is the accepted network", m.headline.nodeCount, 1);
+  check("and the window runs to the newest capture", m.window.to, COLLAPSE_TS[3]);
+}
+
+// Once the API recovers, the window test names the same rows on its own, and
+// this rule has nothing left to do.
+console.log("── a collapse that recovered is excluded by the window test ──");
+{
+  const m = runStats(["collapse-tail-2026-10-21.csv", "collapse-recovered-2026-10-21.csv"], null);
+  check("the four collapse captures are excluded", m.window.partialResponsesExcluded, COLLAPSE_TS);
+  check("and the recovery is the headline", m.headline.nodeCount, 17);
+}
+
+// A genuine halving at the end of the series is a smaller network, not a broken
+// read, and stays in it — exactly as the collector records one after two holds.
+console.log("── a halving at the end of the series is kept ──");
+{
+  const m = runStats("halving-tail.csv", null);
+  check("nothing is excluded", m.window.partialResponsesExcluded, []);
+  check("the headline is the halved network", m.headline.nodeCount, 8);
 }
 
 // ── daily medians ────────────────────────────────────────────────────────────

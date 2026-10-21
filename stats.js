@@ -134,8 +134,9 @@ function loadSummary() {
   // whole justification; it is not a round number chosen for looking cautious.
   //
   // The newest capture is never testable — nothing follows it yet — so it is
-  // always kept. That is the right default for the row the headline is read
+  // kept by this test. That is the right default for the row the headline is read
   // from, and the collector now withholds partial responses at capture anyway.
+  // The exception is a collapse, handled after this loop.
   // The comparison is inclusive, and that is not a detail. The evidence above
   // places every known-broken read "at or under" 0.88, but this test read
   // strictly under it until 2026-08-31, so a capture landing exactly on the
@@ -202,6 +203,44 @@ function loadSummary() {
     }
     kept.push(r);
   }
+
+  // A collapse at the end of the series has no recovery to be measured against.
+  //
+  // The window test above needs captures after a row, so it can only exclude a
+  // broken read once the series has come back. On 2026-10-21 it had not: from
+  // 01:22Z the collector recorded the API's one-node, one-validator view as
+  // observed, the API then went empty, and the newest row — the one the
+  // headline is read from — stayed that collapse for hours. The dashboard
+  // published BAM at 0.12% of Solana stake, run by one node.
+  //
+  // So the trailing run is judged against what came before it alone, at the
+  // collector's own collapse line: under a quarter of the preceding median's
+  // nodes or validators. A real change that large is not something persistence
+  // can confirm — the collector no longer releases one on persistence either —
+  // so an unrecovered collapse is left out until an operator accepts it
+  // (flatten.awk logs that to partial.log) or the API recovers, at which point
+  // the window test takes over and names the same rows itself.
+  //
+  // Leaving them out makes the newest capture older, and that is the honest
+  // reading: the freshness check sees the gap and says so, where a headline
+  // built on the collapse looked current and was false.
+  const COLLAPSE = 0.25;
+  const acceptedAt = loadCollapseAcceptances();
+  let runStart = -1;
+  for (let i = 0; i < kept.length; i++) {
+    const ref = kept.slice(Math.max(0, (runStart >= 0 ? runStart : i) - W), runStart >= 0 ? runStart : i);
+    const collapsed = ref.length >= MIN_CTX &&
+      (kept[i].nodes < median(ref.map((x) => x.nodes)) * COLLAPSE ||
+       kept[i].vals < median(ref.map((x) => x.vals)) * COLLAPSE);
+    if (!collapsed) runStart = -1;
+    else if (runStart < 0) runStart = i;
+  }
+  if (runStart >= 0 && !acceptedAt.some((ts) => ts >= kept[runStart].ts)) {
+    const run = kept.splice(runStart);
+    excluded.push(...run.map((r) => r.ts));
+    console.log(`  excluded ${run.length} unrecovered collapse capture(s) at the end of the series, from ${run[0].ts}`);
+  }
+
   if (excluded.length) {
     console.log(`  excluded ${excluded.length} partial response(s): ${excluded.join(", ")}`);
   }
@@ -387,6 +426,17 @@ function loadWithheld() {
     // Every line opens with the capture's own timestamp.
     latest: last ? last.split(/\s+/)[0] : null,
   };
+}
+
+// Captures an operator confirmed as a real collapse, from the same log. Each
+// line opens with the capture's timestamp; loadSummary keeps any collapse run
+// that one of these falls in.
+function loadCollapseAcceptances() {
+  const p = path.join(DIR, "partial.log");
+  if (!fs.existsSync(p)) return [];
+  return fs.readFileSync(p, "utf8").split(/\r?\n/)
+    .filter((l) => l.includes("collapse accepted by operator"))
+    .map((l) => l.split(/\s+/)[0]);
 }
 
 // ---- 3b. cross-source verification ------------------------------------------
@@ -869,7 +919,12 @@ async function main() {
     //     The values shift slightly and the definition genuinely changed, so
     //     this bumps even though nothing was added or removed. A contract only
     //     means something if it is honoured when the change is inconvenient.
-    schemaVersion: 5,
+    //
+    // 6 — the newest captures can now be excluded: a collapse at the end of the
+    //     series, with nothing after it yet, is left out until the API recovers
+    //     or an operator accepts it. window.to and the headline then come from
+    //     the last capture before it.
+    schemaVersion: 6,
     provenance: {
       collector: process.env.BAM_NET_REF || null,
       // Both come from the environment and default to null rather than to a
