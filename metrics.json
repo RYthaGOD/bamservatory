@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-11-07T15:26:57.443Z",
+  "generatedAt": "2026-11-07T15:41:58.417Z",
   "schemaVersion": 6,
   "provenance": {
     "collector": "0fcd020edfd9d71e7c36d971dad47ba88442a520",
     "archive": "https://github.com/RYthaGOD/bamservatory-data",
     "inputs": {
-      "summary.csv": "sha256:f5c145db8ef223ca136b48e66ac00c1fc7dc60413d1ec513f4572a28235abac7",
-      "nodes.csv": "sha256:7b77551bb89804fba5e8e16d71b739f8d1bb7c7872b9f927dd91787c575890c8",
+      "summary.csv": "sha256:6195dd8583c2feab33c6e019b2d8226fbb4f0964a308e659c3193ec4bfb00b15",
+      "nodes.csv": "sha256:3f9e09a6d2fb2b6314223642f9904fb707ebd47717ec5a7a07c9a243dd5e2b9c",
       "detections.log": "sha256:e39ff9389cf61c8b4daf18ecf66083ee3b9416432d03c1d5c16f25cf51409fe3",
-      "verification.csv": "sha256:c6bd4cb343f460a0dc7bbebc542d7244f087df4c0812b39aedab6031e3dc1e03",
+      "verification.csv": "sha256:7be32c81d0ff401db16374a3b8f9e02498ec4808e94a91e4b897c7d7f6d1ec92",
       "validators.csv": {
         "tailReadOnly": true,
-        "snapshotTs": "2026-11-07T15:26:54Z",
+        "snapshotTs": "2026-11-07T15:41:55Z",
         "validators": 386
       }
     }
   },
   "window": {
     "from": "2026-06-20T15:08:27Z",
-    "to": "2026-11-07T15:26:54Z",
-    "snapshots": 170587,
+    "to": "2026-11-07T15:41:55Z",
+    "snapshots": 170602,
     "partialResponsesExcluded": [
       "2026-06-24T06:10:46Z",
       "2026-06-24T06:11:46Z",
@@ -181,25 +181,25 @@
     "pct": {
       "min": 2.0633,
       "max": 39.7347,
-      "avg": 34.45032213536876,
+      "avg": 34.450670003334956,
       "cur": 39.0637
     },
     "hhi": {
       "min": 0.116277,
       "max": 0.272993,
-      "avg": 0.13350457901700952,
+      "avg": 0.13350336632335683,
       "cur": 0.117422
     },
     "vals": {
       "min": 42,
       "max": 391,
-      "avg": 378.61444564249905,
+      "avg": 378.61500254415523,
       "cur": 386
     },
     "nodes": {
       "min": 5,
       "max": 21,
-      "avg": 16.031198341418293,
+      "avg": 16.031271393111112,
       "cur": 17
     }
   },
@@ -2594,7 +2594,7 @@
       "nodes": 17
     },
     {
-      "ts": "2026-11-07T15:26:54Z",
+      "ts": "2026-11-07T15:41:55Z",
       "pct": 39.0637,
       "hhi": 0.117422,
       "vals": 386,
@@ -5130,24 +5130,24 @@
   },
   "verification": {
     "latest": {
-      "ts": "2026-11-07T15:25:54Z",
-      "explorerValidators": 387,
-      "kobeRunningBam": 381,
-      "inBoth": 381,
-      "onlyExplorer": 6,
+      "ts": "2026-11-07T15:41:55Z",
+      "explorerValidators": 386,
+      "kobeRunningBam": 225,
+      "inBoth": 225,
+      "onlyExplorer": 161,
       "onlyKobe": 0,
-      "disputedStakeSol": 1145817.84,
+      "disputedStakeSol": 134117724.84,
       "onchainMatched": 385,
-      "stakeReportedSol": 169549196.17,
+      "stakeReportedSol": 169578575.86,
       "stakeOnchainSol": 169578575.89,
-      "stakeAbsDiffSol": 29379.72,
-      "stakeMaxRelPct": 3682.007,
-      "stakeMedianRelPct": 0.0586,
-      "kobeTotalValidators": 636,
+      "stakeAbsDiffSol": 0.03,
+      "stakeMaxRelPct": 0.0005,
+      "stakeMedianRelPct": 0,
+      "kobeTotalValidators": 634,
       "chainValidators": 663,
-      "bamHeadlineStakeSol": 169688967.29,
-      "bamHeadlineSharePct": 39.0432,
-      "bamShareReportedPct": 39.0558,
+      "bamHeadlineStakeSol": 169649308.82,
+      "bamHeadlineSharePct": 39.0637,
+      "bamShareReportedPct": 39.0626,
       "bamShareOnchainPct": 39.0626
     },
     "typical": {
@@ -5157,7 +5157,7 @@
       "disputedStakeSol": 139771.13,
       "kobeRunningBam": 380
     },
-    "readings": 8000,
+    "readings": 8001,
     "since": "2026-08-10T10:02:04Z",
     "series": [
       {
@@ -6619,10 +6619,10 @@
         "stakeMedianRelPct": 0
       },
       {
-        "ts": "2026-11-07T15:25:54Z",
-        "onlyExplorer": 6,
-        "disputedStakeSol": 1145817.84,
-        "stakeMedianRelPct": 0.0586
+        "ts": "2026-11-07T15:41:55Z",
+        "onlyExplorer": 161,
+        "disputedStakeSol": 134117724.84,
+        "stakeMedianRelPct": 0
       }
     ]
   },
